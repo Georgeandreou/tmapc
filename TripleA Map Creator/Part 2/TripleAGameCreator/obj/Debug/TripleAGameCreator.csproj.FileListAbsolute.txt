@@ -26,3 +26,9 @@ C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Visual C#\TripleA
 C:\Documents and Settings\Stephen\Desktop\TripleA Map Creator\Part 2\TripleAGameCreator\bin\Debug\TripleA Map Creator.exe.config
 C:\Documents and Settings\Stephen\Desktop\TripleA Map Creator\Part 2\TripleAGameCreator\obj\Debug\TripleA Map Creator.exe
 C:\Documents and Settings\Stephen\Desktop\TripleA Map Creator\Part 2\TripleAGameCreator\obj\Debug\TripleA Map Creator.pdb
+C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\TripleA Map Creator\TripleA Map Creator\Part 2\TripleAGameCreator\bin\Debug\TripleA Map Creator.exe.config
+C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\TripleA Map Creator\TripleA Map Creator\Part 2\TripleAGameCreator\obj\Debug\TripleA Map Creator.exe
+C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\TripleA Map Creator\TripleA Map Creator\Part 2\TripleAGameCreator\obj\Debug\TripleA Map Creator.pdb
+C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\TripleA Map Creator\TripleA Map Creator\Part 2\TripleAGameCreator\bin\Debug\TripleA Map Creator.exe.config
+C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\TripleA Map Creator\TripleA Map Creator\Part 2\TripleAGameCreator\obj\Debug\TripleA Map Creator.exe
+C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\TripleA Map Creator\TripleA Map Creator\Part 2\TripleAGameCreator\obj\Debug\TripleA Map Creator.pdb
