@@ -2631,7 +2631,7 @@ namespace TripleAGameCreator
                 lines.Add("                        <step name=\"gameInitDelegate\" delegate=\"initDelegate\" maxRunCount=\"1\"/>");
                 foreach (PlayerSequence cur in Step7Info.playerSequences.Values)
                 {
-                    lines.Add("                        <step name=\"" + cur.Name + "\" delegate=\"" + cur.Delegate.Name + "\" player=\"" + cur.player.Name.Replace(" ", "") + (cur.MaxRunCount > 0 ? "\" maxRunCount=\"" + cur.MaxRunCount : "\" display=\"Non Combat Move") + "\"/>");
+                    lines.Add("                        <step name=\"" + cur.Name + "\" delegate=\"" + cur.Delegate.Name + "\" player=\"" + cur.player.Name.Replace(" ", "") + (cur.MaxRunCount > 0 ? "\" maxRunCount=\"" + cur.MaxRunCount : (cur.Name.ToLower().Trim().Contains("noncombat") ? "\" display=\"Non Combat Move" : "")) + "\"/>");
                 }
                 lines.Add("                        <step name=\"endRoundStep\" delegate=\"endRound\"/>");
                 lines.Add("                </sequence>");
