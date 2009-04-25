@@ -53,9 +53,9 @@ namespace TripleAGameCreator
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 13);
+            this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Scan Range: ";
+            this.label1.Text = "Line Width:";
             // 
             // button1
             // 
@@ -69,9 +69,9 @@ namespace TripleAGameCreator
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(82, 10);
+            this.textBox1.Location = new System.Drawing.Point(79, 10);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(64, 20);
+            this.textBox1.Size = new System.Drawing.Size(67, 20);
             this.textBox1.TabIndex = 4;
             this.textBox1.Value = new decimal(new int[] {
             1,

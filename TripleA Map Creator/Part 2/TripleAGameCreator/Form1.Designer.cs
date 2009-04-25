@@ -2148,7 +2148,6 @@ namespace TripleAGameCreator
 
         public class FlickerFreePanel : Panel
         {
-            /*
             public FlickerFreePanel()
                 : base()
             {
@@ -2166,7 +2165,6 @@ namespace TripleAGameCreator
                     return params1;
                 }
             }
-             * */
         }
 
         private System.Windows.Forms.Label label1;
