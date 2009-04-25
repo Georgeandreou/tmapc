@@ -658,6 +658,7 @@ namespace TripleAGameCreator
                             {
                                 Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, cur.t1.Label.Location + new Size(cur.t1.Label.Size.Width / 2, 0), cur.t2.Label.Location + new Size(cur.t2.Label.Size.Width / 2, 0));
                             }
+                            TerritoryConnectionsImageDrawer.Refresh();
                         }
                     }
                     else if (tabControl1.SelectedIndex == 4)
