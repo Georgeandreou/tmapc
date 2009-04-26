@@ -1,13 +1,23 @@
 #summary A guide to creating a mod using the map creator.
 
-= Introduction =
+= Mod Creation Guide =
 
-Add your content here.
+This page is a guide to creating a mod from an existing xml file.
 
+1. Open the second part of the map creator.
 
-= Details =
+2. Press the 'Load' button in the bottom-left.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+3. Locate the xml file to base your mod off of.
+
+4. Locate the 'centers.txt' file if the program asks for it.
+
+5. If you have access to the map's image, locate it and continue.
+
+6. The program will now load all the contents of the xml file into the program.
+
+7. Go to each step that you want to change something on and edit the information.
+
+8. Click the 'Save' button in the bottom-left and select where you want to save the edited xml file.
+
+9. Click 'Save' and you're done!
