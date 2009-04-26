@@ -1,7 +1,7 @@
 #summary A guide to creating a map using the map creator.
 #labels Phase-Support
 
-= Introduction =
+= Map Creation Guide =
 
 This page is a guide to how to create a map using my program.
 
@@ -205,12 +205,3 @@ This page is a guide to how to create a map using my program.
 54. Congratulations!! You're Done!!!
 
 Note: If you want to save your progress in-between, click the 'Save' button in the bottom left of the window.
-
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
