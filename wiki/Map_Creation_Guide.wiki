@@ -1,4 +1,4 @@
-#summary A guide to creating a map.
+#summary A guide to creating a map using the map creator.
 #labels Phase-Support
 
 = Introduction =
