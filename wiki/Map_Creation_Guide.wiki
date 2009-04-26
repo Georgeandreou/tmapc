@@ -1,0 +1,216 @@
+#summary One-sentence summary of this page.
+#labels Phase-Support
+
+= Introduction =
+
+This page is a guide to how to create a map using my program.
+
+1. Make a new folder for your map to be in. (It doesn't matter where you make this folder.)
+
+2. Make a complete image of the map using an image editor like Windows Paint, Corel Draw, Adobe Photoshop, or any other image editor.
+    A. Open the image editor program
+    B. Use the paint can and fill in the entire image with white.
+    C. Draw all the border lines for the territories using the color black. (As in #000000)
+    D. Use the paint can and fill in all the sea territories with blue. (Actually, I don't think it matters what color you use for this)
+    E. Save the image file in your maps folder. (The one you made earlier.)
+
+3. Make a new folder named 'flags' in your maps folder.
+
+4. Make a new folder named 'units' in your maps folder.
+
+5. For every player that is not already included in the TripleA Game's images, do this:
+    A. Make an image for the players flag and save it in the 'flags' folder using the player's name as the image name.
+    B. Make a new folder the same name as the player in the 'units' folder you made earlier.
+    C. For every unit the player has, do this:
+        1. Make an image for the unit and save it using the units name as the file name and place it in the folder that was created in step 4-B.
+
+6. Open the first part of the map creator program.
+
+7. Click the 'Next' button.
+
+8. Click the 'Browse' button and locate the map's folder.
+
+9. In the 'Initial Units Scale' textbox, enter the amount to scale the units in the game. (It has to be one of the following: .50, .5625, .6666, .75, .8333, .875, 1.00, 1.25)
+
+10. In the 'Map Size' textbox, enter the size of the map's image.
+
+11. In the 'Has Relief Tiles' textbox, enter whether or not there are relief tiles for the map.
+
+12. In the 'Scroll Wrap' textbox, enter whether or not you want the map to have scroll wrap enabled.
+
+13. For every player in the map, do the following:
+    A. If you need to, click the 'New Player' button.
+    B. In the 'Player Name' textbox, enter the name of the player.
+    C. In the 'Player Color' textbox, enter the color you want for the territories that are owned by the player. (It needs to be a six digit color like: 028805, b16708, cad82e, cfadc8, fbaa29, 9ea8b4)
+
+14. Proceed to the next step.
+
+15. Click the 'Run Center Picker' button and follow the on-screen instructions.
+
+16. Proceed to the next step.
+
+17. Click the 'Run Polygon Grabber' button and follow the on-screen instructions.
+
+18. Proceed to the next step.
+
+19. Either click the 'Run Placement Picker' button and follow the on-screen instructions, or proceed to the next step and run the automatic placement finder.
+
+20. If you decided not to use the 'Placement Picker', then click the 'Run Auto-Placement Finder' button and follow the on-screen instructions.
+
+21. Proceed to the next step.
+
+22. Click the 'Run Tile Image Breaker' button and follow the on-screen instructions.
+
+23. Proceed to the next step.
+
+24. If you have relief tiles for the map, click the 'Run Relief Image Breaker' button and follow the on-screen instructions.
+
+25. Proceed to the next step.
+
+26. Either click the 'Run Image Shrinker' button and follow the on-screen instructions, or use another image editing program and shrink the map image yourself and save it as 'smallMap.jpeg' in your map's folder.
+
+27. Close the first part of the map creator and open the second part.
+
+28. In the 'Map Name' textbox, enter the name of the map.
+
+29. In the 'Map Version' textbox, enter the map version.
+
+30. In the 'Resource Name' textbox, enter the name of the resources.
+
+31. Click the first 'Browse' button, and locate the map's image file.
+
+32. Click the second 'Browse' button, and locate the map's centers.txt file.
+
+33. Enter the string that is used to automatically figure out which territories are water. (Examples: SZ, Sea Zone, Pacific, Atlantic, Water)
+
+34. Proceed to the next step.
+
+35. For every territory that is a capitol, impassable, victory city, or water, left click on it and supply the territory's information.
+
+36. Proceed to the next step.
+
+37. If you want the program to auto-find the connections do the following:
+    A. Click the 'Auto-Fill' button.
+    B. Click 'Yes'.
+    C. In the 'Scan Range' textbox enter the width of the lines in the map.
+    D. Click the 'Start' button.
+
+38. If you want to enter the connections yourself, do the following:
+    A. Click on the first territory in the connection.
+    B. Click on the second territory in the connection.
+    Note: If you want to remove a connection, right-click on one of the territories in the connection, and remake all the connections you want to keep from that territory.
+
+39. Proceed to the next step.
+
+40. For every player do the following:
+    A. If you need to, click the 'New Player' button.
+    B. In the 'Player Name' textbox, enter the name of the player.
+    C. In the 'Player Alliance' textbox, enter the alliance the player belongs to. (If you want the player to be independent, just make the alliance the same name as the player.)
+    D. In the 'Initial Resources' textbox, enter the amount of resources(IPCs) the player gets in the beginning.
+   
+41. Proceed to the next step.
+
+42. For every unit do the following:
+    A. If you need to, click the 'New Unit' button.
+    B. In the 'Unit Name' textbox, enter the name of the unit.
+    C. In the 'Buy Cost' textbox, enter the amount of resources(IPCs) needed to buy the unit.
+    D. In the 'Buy Quantity' textbox, enter the amount of units to receive when buying the unit. (Usually just 1, unless you are making it so you have to by two at a time.(This way you can make a unit cost .5 or something))
+
+43. Proceed to the next step.
+
+44. If you want the program to automatically enter the Gameplay Sequences, click the 'Auto-Fill' button and click 'Yes'.
+
+45. If you want to enter the Gameplay Sequences yourself, do the following for each sequence you want to add:
+    A. If you need to, click the 'New Gameplay Sequence' button.
+    B. In the 'Sequence Name' textbox, enter the name of the gameplay sequence.
+    C. In the 'Class Name' textbox, enter the name of the TripleA class the sequence uses.
+    D. In the 'Display' textbox, enter the text that is displayed when the gameplay sequence is in action.
+
+46. Proceed to the next step.
+
+47. If you want the program to automatically enter the Player Sequences, click the 'Auto-Fill' button and click 'Yes'.
+
+48. If you want to enter the Player Sequences yourself, do the following for each sequence you want to add:
+    A. If you need to, click the 'New Player Sequence' button.
+    B. In the 'Sequence Name' textbox, enter the name of the player sequence.
+    C. In the 'Gameplay Sequence' textbox, enter the name of the gameplay sequence to call when this player sequence runs.
+    D. In the 'Player' textbox, enter the player that this player sequence applies to.
+    E. In the 'Max Run Count' textbox, enter the maximum amount of times the sequence can be called for the whole game.
+
+46. Proceed to the next step.
+
+49. If you want the program to automatically enter the Technologies according to the default, click the 'Auto-Fill' button and click 'Yes'.
+
+50. If you want to enter the Technologies yourself, do the following:
+    A. If you need to, click the 'New Technology' button.
+    B. In the 'Technology Name' textbox, enter the name of the technology.
+    C. In the 'Player' textbox, enter the name of the player the technology applies to.
+    D. In the 'Already Enabled' textbox, enter whether or not the technology is enabled when the game first starts.
+
+51. Proceed to the next step.
+
+52. If you want the program to automatically enter the production frontiers(It just adds all the units to all the frontiers), click the 'Auto-Fill' button and click 'Yes'.
+
+53. If you want to enter the Production Frontiers yourself, do the following:
+    A. Go to each player's frontier tab, and do the following:
+        1. For each unit you want to add to the frontier, click the 'New Unit' button(If Needed) and enter the name of the unit in the textbox that appears.
+
+54. Proceed to the next step.
+
+55. If you want the program to automatically enter the unit attachments, click the 'Auto-Fill' button and click 'Yes'.
+
+56. If you want to enter the Unit Attachments yourself, do the following:
+    A. Go to each unit's attachments tab, and do the following:
+        1. For each attachment you want to add to the unit's attachments, do the following:
+            A. Click the 'New Attachment' button(If Needed)
+            B. Enter the name of the attachment in the 'Attachment Name' textbox
+            C. Enter the value of the attachment in the 'Value' textbox.
+
+57. Proceed to the next step.
+
+58. For each territory, click on the territory and enter the territory's production amount in the window that appears.
+
+59. Proceed to the next step.
+
+60. For each canal you want to add, do the following:
+    A. Click on the first water territory in the canal.
+    B. Click on the second water territory in the canal and click 'Yes'.
+
+61. Proceed to the next step.
+
+62. For each territory, click on the territory and enter the territory's new owner in the window that appears.
+
+63. Proceed to the next step.
+
+64. For each territory, click on the territory and enter the territory's units in the window that appears. (Example: infantry:2,artillery:2,armour:4,fighter:2)
+
+65. Proceed to the next step.
+
+66. If you want the program to automatically enter the In-Game Settings (It just enters what a normal game would contain), click the 'Auto-Fill' button and click 'Yes'.
+
+50. If you want to enter the In-Game Settings yourself, do the following for each Setting you want to add:
+    A. If you need to, click the 'New Setting' button.
+    B. In the 'Setting Name' textbox, enter the name of the setting.
+    C. In the 'Value' textbox, enter the value of the setting.
+    D. In the 'Editable' textbox, enter whether or not the setting should be editable by the user when the game is being played.
+    E. In the 'Min. N.' textbox, enter the lowest number that the player is allowed to set the value to. (Leave 0 if the setting value is not a number)
+    F. In the 'Max. N.' textbox, enter the highest number that the player is allowed to set the value to. (Leave 0 if the setting value is not a number)
+
+51. Proceed to the next step.
+
+52. Press the 'Browse' button, and select where you want to save the xml file.
+
+53. Click the 'Write To File' button.
+
+54. Congratulations!! You're Done!!!
+
+Note: If you want to save your progress in-between, click the 'Save' button in the bottom left of the window.
+
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
