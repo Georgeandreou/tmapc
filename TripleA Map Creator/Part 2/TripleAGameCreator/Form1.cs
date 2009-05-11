@@ -1,16 +1,3 @@
-/*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -645,34 +632,19 @@ namespace TripleAGameCreator
                         {
                             opened1 = true;
                             territoryChange = false;
-                            foreach (Control cur in TerritoryConnectionsImageDrawer.Controls)
-                            {
-                                if (!TerritoryDefinitionsImageDrawer.Controls.ContainsKey(cur.Text))
-                                {
-                                    TerritoryConnectionsImageDrawer.Controls.RemoveByKey(cur.Text);
-                                }
-                            }
+                            TerritoryConnectionsImageDrawer.Controls.Clear();
                             foreach (Territory cur in Step2Info.territories.Values)
                             {
-                                if (TerritoryDefinitionsImageDrawer.Controls.ContainsKey(cur.Label.Text))
-                                {
-                                    if (!TerritoryConnectionsImageDrawer.Controls.ContainsKey(cur.Label.Text))
-                                    {
-                                        Label l = new Label() { Name = cur.Label.Text, Text = cur.Label.Text, BackColor = cur.Label.BackColor, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
-                                        l.MouseClick += new MouseEventHandler(l_MouseClick);
-                                        TerritoryConnectionsImageDrawer.Controls.Add(l);
-                                    }
-                                }
+                                Label l = new Label() { Text = cur.Label.Text, BackColor = cur.Label.BackColor, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
+                                l.MouseClick += new MouseEventHandler(l_MouseClick);
+                                TerritoryConnectionsImageDrawer.Controls.Add(l);
                             }
-                            Step1Info.MapImageWL = new Bitmap(Step1Info.MapImage);
-                            TerritoryConnectionsImageDrawer.BackgroundImage = Step1Info.MapImageWL;
-                            TerritoryConnectionsImageDrawer.Size = TerritoryConnectionsImageDrawer.BackgroundImage.Size;
+                                TerritoryConnectionsImageDrawer.BackgroundImage = Step1Info.MapImageWL;
+                            TerritoryConnectionsImageDrawer.Size = TerritoryDefinitionsImageDrawer.BackgroundImage.Size;
                             foreach (Connection cur in Step3Info.connections.Values)
                             {
-                                if (TerritoryDefinitionsImageDrawer.Controls.ContainsKey(cur.t1.Name) || TerritoryDefinitionsImageDrawer.Controls.ContainsKey(cur.t2.Name))
-                                    Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, cur.t1.Label.Location + new Size(cur.t1.Label.Size.Width / 2, 0), cur.t2.Label.Location + new Size(cur.t2.Label.Size.Width / 2, 0));
+                                Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, cur.t1.Label.Location + new Size(cur.t1.Label.Size.Width / 2, 0), cur.t2.Label.Location + new Size(cur.t2.Label.Size.Width / 2, 0));
                             }
-                            TerritoryConnectionsImageDrawer.Refresh();
                         }
                     }
                     else if (tabControl1.SelectedIndex == 4)
@@ -749,29 +721,26 @@ namespace TripleAGameCreator
                         if (infochange2)
                         {
                             infochange2 = false;
+                            tabControl2.TabPages.Clear();
                             foreach (Player cur in Step4Info.players.Values)
                             {
-                                if(!tabControl2.TabPages.ContainsKey(cur.Name))
-                                    tabControl2.TabPages.Add(new TabPage(cur.Name) { AutoScroll = true,Name = cur.Name });
+                                tabControl2.TabPages.Add(new TabPage(cur.Name) { AutoScroll = true });
                             }
                             foreach (TabPage cur in tabControl2.TabPages)
                             {
-                                if (cur.Controls.Count < 6)
+                                Label c1 = new Label() { Text = "Units in frontier", AutoSize = true, Location = new Point(185, 14), Font = new Font(label19.Font, FontStyle.Regular) };
+                                Label c2 = new Label() { Text = "Units", AutoSize = true, Location = new Point(82, 41), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
+                                ComboBox c3 = new ComboBox() { Location = new Point(39, 59), Size = new Size(143, 21) };
+                                foreach (Unit cur2 in Step5Info.units.Values)
                                 {
-                                    Label c1 = new Label() { Text = "Units in frontier", AutoSize = true, Location = new Point(185, 14), Font = new Font(label19.Font, FontStyle.Regular) };
-                                    Label c2 = new Label() { Text = "Units", AutoSize = true, Location = new Point(82, 41), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
-                                    ComboBox c3 = new ComboBox() { Location = new Point(39, 59), Size = new Size(143, 21) };
-                                    foreach (Unit cur2 in Step5Info.units.Values)
-                                    {
-                                        c3.Items.Add(cur2.Name);
-                                    }
-                                    Button c4 = new Button() { Location = new Point(189, 57), Size = new Size(71, 23), Text = "Remove" };
-                                    c4.Click += new EventHandler(c4_Click);
-                                    Button c5 = new Button() { Location = new Point(39, 87), Size = new Size(82, 23), Text = "Add Attachment..." };
-                                    c5.Click += new EventHandler(c5_Click);
-                                    cur.Controls.AddRange(new Control[] { c1, c2, c3, c4, c5 });
-                                    cur.Tag = 0;
+                                    c3.Items.Add(cur2.Name);
                                 }
+                                Button c4 = new Button() { Location = new Point(189, 57), Size = new Size(71, 23), Text = "Remove" };
+                                c4.Click += new EventHandler(c4_Click);
+                                Button c5 = new Button() { Location = new Point(39, 87), Size = new Size(82, 23), Text = "Add Attachment..." };
+                                c5.Click += new EventHandler(c5_Click);
+                                cur.Controls.AddRange(new Control[] { c1, c2, c3, c4, c5 });
+                                cur.Tag = 0;
                             }
                         }
                     }
@@ -781,29 +750,26 @@ namespace TripleAGameCreator
                         if (infochange3)
                         {
                             infochange3 = false;
+                            tabControl3.TabPages.Clear();
                             foreach (Unit cur in Step5Info.units.Values)
                             {
-                                if(!tabControl3.TabPages.ContainsKey(cur.Name))
-                                    tabControl3.TabPages.Add(new TabPage(cur.Name) { AutoScroll = true,Name = cur.Name });
+                                tabControl3.TabPages.Add(new TabPage(cur.Name) { AutoScroll = true });
                             }
                             foreach (TabPage cur in tabControl3.TabPages)
                             {
-                                if (cur.Controls.Count < 8)
-                                {
-                                    Label c1 = new Label() { Text = "Unit Attachments", AutoSize = true, Location = new Point(198, 14), Font = new Font(label19.Font, FontStyle.Regular) };
-                                    Label c2 = new Label() { Text = "Attachment Name", AutoSize = true, Location = new Point(63, 43), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
-                                    Label c3 = new Label() { Text = "Values", AutoSize = true, Location = new Point(223, 43), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
+                                Label c1 = new Label() { Text = "Unit Attachments", AutoSize = true, Location = new Point(198, 14), Font = new Font(label19.Font, FontStyle.Regular) };
+                                Label c2 = new Label() { Text = "Attachment Name", AutoSize = true, Location = new Point(63, 43), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
+                                Label c3 = new Label() { Text = "Values", AutoSize = true, Location = new Point(223, 43), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
 
-                                    TextBox c4 = new TextBox() { Location = new Point(39, 59), Size = new Size(143, 20) };
-                                    TextBox c5 = new TextBox() { Location = new Point(196, 59), Size = new Size(92, 20) };
+                                TextBox c4 = new TextBox() { Location = new Point(39, 59), Size = new Size(143, 20) };
+                                TextBox c5 = new TextBox() { Location = new Point(196, 59), Size = new Size(92, 20) };
 
-                                    Button c6 = new Button() { Location = new Point(294, 57), Size = new Size(71, 23), Text = "Remove" };
-                                    c6.Click += new EventHandler(c4_Click2);
-                                    Button c7 = new Button() { Location = new Point(39, 87), Size = new Size(116, 23), Text = "Add Attachment..." };
-                                    c7.Click += new EventHandler(c5_Click2);
-                                    cur.Controls.AddRange(new Control[] { c1, c2, c3, c4, c5, c6, c7 });
-                                    cur.Tag = 0;
-                                }
+                                Button c6 = new Button() { Location = new Point(294, 57), Size = new Size(71, 23), Text = "Remove" };
+                                c6.Click += new EventHandler(c4_Click2);
+                                Button c7 = new Button() { Location = new Point(39, 87), Size = new Size(116, 23), Text = "Add Attachment..." };
+                                c7.Click += new EventHandler(c5_Click2);
+                                cur.Controls.AddRange(new Control[] { c1, c2, c3, c4, c5, c6, c7 });
+                                cur.Tag = 0;
                             }
                         }
                     }
@@ -814,7 +780,7 @@ namespace TripleAGameCreator
                         TerritoryProductionsImageDrawer.Controls.Clear();
                         foreach (Territory cur in Step2Info.territories.Values)
                         {
-                            Label l = new Label() { Name = cur.Production.ToString(),Text = cur.Production.ToString(), Tag = cur.Name, BackColor = cur.Label.BackColor, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location + new Size(((int)(cur.Label.Size.Width / 2)), 0) };
+                            Label l = new Label() { Text = cur.Production.ToString(), Tag = cur.Name, BackColor = cur.Label.BackColor, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location + new Size(((int)(cur.Label.Size.Width / 2)), 0) };
                             l.MouseClick += new MouseEventHandler(l_MouseClick);
                             TerritoryProductionsImageDrawer.Controls.Add(l);
                         }
@@ -855,10 +821,10 @@ namespace TripleAGameCreator
                         {
                             Label l;
                             if (cur.IsWater || cur.Owner.Name.ToLower() == "neutral" || cur.Owner.Name.Trim().Length == 0)
-                                l = new Label() { Name = cur.IsWater ? "None" : "Neutral", Text = cur.IsWater ? "None" : "Neutral", Tag = cur.Name, BackColor = cur.Owner.Name.ToLower().Trim() == "neutral" || (!cur.IsWater && cur.Owner.Name.Trim().Length == 0) ? Color.White : cur.Label.BackColor, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
+                                l = new Label() { Text = cur.IsWater ? "None" : "Neutral", Tag = cur.Name, BackColor = cur.Owner.Name.ToLower().Trim() == "neutral" || (!cur.IsWater && cur.Owner.Name.Trim().Length == 0) ? Color.White : cur.Label.BackColor, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
                             else
                             {
-                                l = new Label() { Name = cur.Owner.Name, Text = cur.Owner.Name, Tag = cur.Name, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
+                                l = new Label() { Text = cur.Owner.Name, Tag = cur.Name, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
                                 int index = 0;
                                 bool found = false;
                                 foreach (Player cur2 in Step4Info.players.Values)
@@ -928,7 +894,7 @@ namespace TripleAGameCreator
                                 l.Tag += "|" + l.Text;
                             }
                             else
-                                l = new Label() { Name = cur.Name, Text = cur.Name, Tag = cur.Name, BackColor = cur.Label.BackColor, Font = TerritoryOwnershipImageDrawer.Controls[cur.Name].Font, AutoSize = true, Location = cur.Label.Location };
+                                l = new Label() { Text = cur.Name, Tag = cur.Name, BackColor = cur.Label.BackColor, Font = TerritoryOwnershipImageDrawer.Controls[cur.Name].Font, AutoSize = true, Location = cur.Label.Location };
                             l.MouseClick += new MouseEventHandler(l_MouseClick);
                             UnitPlacementsImageDrawer.Controls.Add(l);
                         }
@@ -1149,12 +1115,11 @@ namespace TripleAGameCreator
                     if (MessageBox.Show("Do you want to remove this territory label?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                     {
                         TerritoryDefinitionsImageDrawer.Controls.Remove((Control)sender);
-                        Step2Info.territories.Remove(((Control)sender).Text);
                         List<Connection> ToRemove = new List<Connection>();
-                        foreach (Connection cur in Step3Info.connections.Values)
+                        foreach (String cur in Step3Info.connections.Keys)
                         {
-                            if (cur.t1.Name == ((Control)sender).Text || cur.t2.Name == ((Control)sender).Text)
-                                ToRemove.Add(cur);
+                            if (cur.Contains(((Control)sender).Text))
+                                ToRemove.Add(Step3Info.connections[cur]);
                         }
                         for (int i = 0; i < ToRemove.Count; i++)
                         {
@@ -1184,8 +1149,7 @@ namespace TripleAGameCreator
                             {
                                 Step3Info.connections.Add(L1.Text + "|" + L2.Text, new Connection() { t1 = Step2Info.territories[L1.Text], t2 = Step2Info.territories[L2.Text] });
                                 Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, L1.Location + new Size(L1.Size.Width / 2, 0), L2.Location + new Size(L2.Size.Width / 2, 0));
-                                TerritoryConnectionsImageDrawer.Invalidate(new Rectangle(L1.Location.X < L2.Location.X ? L1.Location.X : L2.Location.X, L1.Location.Y < L2.Location.Y ? L1.Location.Y : L2.Location.Y, L1.Location.X < L2.Location.X ? (L2.Location.X + L2.Width) - L1.Location.X : (L1.Location.X + L1.Size.Width) - L2.Location.X, L1.Location.Y < L2.Location.Y ? (L2.Location.Y + L2.Size.Height) - L1.Location.Y : (L1.Location.Y + L1.Size.Height) - L2.Location.Y));
-                                TerritoryConnectionsImageDrawer.Update();
+                                TerritoryConnectionsImageDrawer.Refresh();
                             }
                         }
                         catch { }
@@ -1195,6 +1159,8 @@ namespace TripleAGameCreator
                 else
                 {
                     Step1Info.MapImageWL = new Bitmap(Step1Info.MapImage);
+                    TerritoryConnectionsImageDrawer.BackgroundImage = Step1Info.MapImageWL;
+                    TerritoryConnectionsImageDrawer.Size = TerritoryDefinitionsImageDrawer.BackgroundImage.Size;
                     List<Connection> ToRemove = new List<Connection>();
                     foreach (String cur in Step3Info.connections.Keys)
                     {
@@ -1206,12 +1172,10 @@ namespace TripleAGameCreator
                         Connection cur = ToRemove[i];
                         Step3Info.connections.Remove(cur.t1.Name + "|" + cur.t2.Name);
                     }
-                    TerritoryConnectionsImageDrawer.BackgroundImage = Step1Info.MapImageWL;
                     foreach (Connection cur in Step3Info.connections.Values)
                     {
                         Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, cur.t1.Label.Location + new Size(cur.t1.Label.Size.Width / 2, 0), cur.t2.Label.Location + new Size(cur.t2.Label.Size.Width / 2, 0));
                     }
-                    TerritoryConnectionsImageDrawer.Refresh();
                 }
             }
             else if (tabControl1.SelectedIndex == 10)
@@ -1873,7 +1837,7 @@ namespace TripleAGameCreator
                             String name = cur2.Substring(0, cur2.IndexOf('('));
                             String sPoint = cur2.Substring(cur2.IndexOf('(') + 1, cur2.LastIndexOf(")") - (cur2.IndexOf("(") + 1));
                             Point point = new Point(Convert.ToInt32(sPoint.Substring(0, sPoint.IndexOf(","))), Convert.ToInt32(sPoint.Substring(sPoint.IndexOf(",") + 1, sPoint.Length - sPoint.IndexOf(",") - 1)));
-                            labels.Add(new Label() { Name = name.Trim(), Text = name.Trim(), BackColor = textBox8.Text.Trim().Length > 0 && name.Contains(textBox8.Text) ? Color.DodgerBlue : Color.LightGreen, Font = new Font(label1.Font, FontStyle.Bold), Location = new Point(point.X - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(name, new Font(label1.Font, FontStyle.Bold)).Width / 2), point.Y) });
+                            labels.Add(new Label() { Text = name.Trim(), BackColor = textBox8.Text.Trim().Length > 0 && name.Contains(textBox8.Text) ? Color.DodgerBlue : Color.LightGreen, Font = new Font(label1.Font, FontStyle.Bold), Location = new Point(point.X - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(name, new Font(label1.Font, FontStyle.Bold)).Width / 2), point.Y) });
                         }
                         foreach (Label cur2 in labels)
                         {
@@ -1888,7 +1852,7 @@ namespace TripleAGameCreator
                     catch { }
                     Size taS = new Size();
                     OpenFileDialog open2 = new OpenFileDialog();
-                    open2.Title = "Please select the complete map image file for the map. (Optional)";
+                    open2.Title = "Please select the map's image file. (Click cancel to use blank image)";
                     open2.Filter = "Png Files|*.png|All files (*.*)|*.*";
                     if (open2.ShowDialog(this) == DialogResult.OK)
                         imageLoc = open2.FileName;
@@ -2201,7 +2165,7 @@ namespace TripleAGameCreator
                     Step1Info.LoadedFile = d4.FileName;
                 }
             }
-            catch(OutOfMemoryException ex)
+            catch
             {
                 MessageBox.Show("An error occured when trying to load the Xml file. Make sure the xml file has no errors.", "Error Loading Xml File");
             }
@@ -2403,7 +2367,7 @@ namespace TripleAGameCreator
         public void AddProductionFrontier(ProductionFrontier frontierToAdd)
         {
             infochange2 = false;
-            TabPage cur = new TabPage(frontierToAdd.Name) { Name = frontierToAdd.Name };
+            TabPage cur = new TabPage(frontierToAdd.Name);
             cur.Text = frontierToAdd.Name;
             cur.AutoScroll = true;
             cur.VerticalScroll.Value = 0;
@@ -2458,7 +2422,7 @@ namespace TripleAGameCreator
         public void AddUnitAttachment(Unit unitWA)
         {
             infochange3 = false;
-            TabPage cur = new TabPage(unitWA.Name) { Name = unitWA.Name };
+            TabPage cur = new TabPage(unitWA.Name);
             cur.Text = unitWA.Name;
             cur.AutoScroll = true;
             cur.VerticalScroll.Value = 0;
@@ -2654,7 +2618,7 @@ namespace TripleAGameCreator
                 lines.Add("                        <step name=\"gameInitDelegate\" delegate=\"initDelegate\" maxRunCount=\"1\"/>");
                 foreach (PlayerSequence cur in Step7Info.playerSequences.Values)
                 {
-                    lines.Add("                        <step name=\"" + cur.Name + "\" delegate=\"" + cur.Delegate.Name + "\" player=\"" + cur.player.Name.Replace(" ", "") + (cur.MaxRunCount > 0 ? "\" maxRunCount=\"" + cur.MaxRunCount : (cur.Name.ToLower().Trim().Contains("noncombat") ? "\" display=\"Non Combat Move" : "")) + "\"/>");
+                    lines.Add("                        <step name=\"" + cur.Name + "\" delegate=\"" + cur.Delegate.Name + "\" player=\"" + cur.player.Name.Replace(" ", "") + (cur.MaxRunCount > 0 ? "\" maxRunCount=\"" + cur.MaxRunCount : "\" display=\"Non Combat Move") + "\"/>");
                 }
                 lines.Add("                        <step name=\"endRoundStep\" delegate=\"endRound\"/>");
                 lines.Add("                </sequence>");
@@ -2857,7 +2821,7 @@ namespace TripleAGameCreator
             {
                 olocaiton = Form1.MousePosition;
                 String s = RetrieveString("Enter New Territory's Name");
-                Label l = new Label() { Name = s,Text = s, BackColor = Color.LightGreen, Font = new Font(label1.Font, FontStyle.Bold), AutoSize = true, Location = GetPosition() - new Size((int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(s, new Font(label1.Font, FontStyle.Bold)).Width / 2), 5) };
+                Label l = new Label() { Text = s, BackColor = Color.LightGreen, Font = new Font(label1.Font, FontStyle.Bold), AutoSize = true, Location = GetPosition() - new Size((int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(s, new Font(label1.Font, FontStyle.Bold)).Width / 2), 5) };
                 l.MouseClick += new MouseEventHandler(l_MouseClick);
                 if (l.Text.Length > 0)
                     TerritoryDefinitionsImageDrawer.Controls.Add(l);
@@ -2894,11 +2858,10 @@ namespace TripleAGameCreator
                                 catch { }
                             }
                         }
-                        foreach (Connection cur in Step3Info.connections.Values)
-                        {
-                            Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, cur.t1.Label.Location + new Size(cur.t1.Label.Size.Width / 2, 0), cur.t2.Label.Location + new Size(cur.t2.Label.Size.Width / 2, 0));
-                        }
-                        TerritoryConnectionsImageDrawer.Refresh();
+                        force = true;
+                        surpress1 = true;
+                        tabControl1_Selecting(new object(), new TabControlCancelEventArgs(new TabPage(), 0, false, TabControlAction.Selecting));
+                        surpress1 = false;
                         finder.connections.Clear();
                     }
                 }
