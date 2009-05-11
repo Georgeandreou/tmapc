@@ -1,17 +1,4 @@
-﻿/*
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */ 
-namespace TripleAGameCreator
+﻿namespace TripleAGameCreator
 {
     partial class Automatic_Connection_Finder
     {
@@ -53,9 +40,9 @@ namespace TripleAGameCreator
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(61, 13);
+            this.label1.Size = new System.Drawing.Size(73, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Line Width:";
+            this.label1.Text = "Scan Range: ";
             // 
             // button1
             // 
@@ -69,9 +56,9 @@ namespace TripleAGameCreator
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(79, 10);
+            this.textBox1.Location = new System.Drawing.Point(82, 10);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(67, 20);
+            this.textBox1.Size = new System.Drawing.Size(64, 20);
             this.textBox1.TabIndex = 4;
             this.textBox1.Value = new decimal(new int[] {
             1,
