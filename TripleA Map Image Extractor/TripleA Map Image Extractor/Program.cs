@@ -12,60 +12,75 @@ namespace TripleA_Map_Image_Extractor
         [STAThread]
         static void Main(string[] args)
         {
-            Size mapSize = new Size();
-            FolderBrowserDialog open = new FolderBrowserDialog();
-            open.ShowNewFolderButton = true;
-            WriteLine("Please specify the folder containing the base tiles for the map.");
-            open.Description = "Please specify the folder containing the base tiles for the map. You can usually find it in the 'baseTiles' folder in the folder where the map was placed.";
-            if (open.ShowDialog() != DialogResult.Cancel)
+            try
             {
-                mapSize = getMapSize(new DirectoryInfo(open.SelectedPath));
-                barW.progressBar1.Value = 0;
-                List<FileInfo> files = new List<FileInfo>(new DirectoryInfo(open.SelectedPath).GetFiles());
-                List<FileInfo> images = new List<FileInfo>();
-                foreach (FileInfo cur in files)
-                {
-                    if (cur.Extension.ToLower() == ".png")
-                    {
-                        images.Add(cur);
-                    }
-                }
+                barW.Opacity = 0;
                 barW.Show();
-                barW.progressBar1.Maximum = images.Count;
-                WriteLine("The program will now form the base tiles into one image...");
-                Image fullImage = new Bitmap(mapSize.Width, mapSize.Height);
-                Graphics grphx = Graphics.FromImage(fullImage);
-                foreach (FileInfo image in images)
+                Size mapSize = new Size();
+                FolderBrowserDialog open = new FolderBrowserDialog();
+                open.ShowNewFolderButton = true;
+                WriteLine("Please specify the folder containing the base tiles for the map.");
+                open.Description = "Please specify the folder containing the base tiles for the map. You can usually find it in the 'baseTiles' folder in the map's folder.";
+                if (open.ShowDialog() != DialogResult.Cancel)
                 {
-                    barW.progressBar1.Value++;
-                    int x = Convert.ToInt32(image.Name.Substring(0, image.Name.IndexOf("_")));
-                    int y = Convert.ToInt32(image.Name.Substring(image.Name.IndexOf("_") + 1, image.Name.Substring(image.Name.IndexOf("_") + 1).IndexOf(".")));
-                    Image imageToPaste = Image.FromFile(image.FullName);
-                    Point pasteLoc = new Point(x * 256, y * 256);
-                    WriteLine("Drawing base tile " + x + "," + y + " to the map image...");
-                    grphx.DrawImage(imageToPaste, pasteLoc);
-                    imageToPaste.Dispose();
-                }
-                WriteLine("Done forming image. Please select save location.");
-                SaveFileDialog save = new SaveFileDialog();
-                save.DefaultExt = ".png";
-                save.Filter = "Png Image Files|*.png|All files (*.*)|*.*";
-                save.Title = "Please select location to save map image file to.";
-                if (save.ShowDialog() != DialogResult.Cancel)
-                {
-                    fullImage.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Png);
-                    WriteLine("Map image saved to " + save.FileName);
+                    if (new DirectoryInfo(open.SelectedPath).GetDirectories().Length > 0)
+                    {
+                        foreach (DirectoryInfo cur in new DirectoryInfo(open.SelectedPath).GetDirectories())
+                        {
+                            if (cur.Name.ToLower() == "basetiles")
+                                open.SelectedPath = cur.FullName;
+                        }
+                    }
+                    mapSize = getMapSize(new DirectoryInfo(open.SelectedPath));
+                    barW.progressBar1.Value = 0;
+                    List<FileInfo> files = new List<FileInfo>(new DirectoryInfo(open.SelectedPath).GetFiles());
+                    List<FileInfo> images = new List<FileInfo>();
+                    foreach (FileInfo cur in files)
+                    {
+                        if (cur.Extension.ToLower() == ".png")
+                        {
+                            images.Add(cur);
+                        }
+                    }
+                    barW.Opacity = 100;
+                    barW.progressBar1.Maximum = images.Count;
+                    WriteLine("The program will now form the base tiles into one image...");
+                    Image fullImage = new Bitmap(mapSize.Width, mapSize.Height);
+                    Graphics grphx = Graphics.FromImage(fullImage);
+                    foreach (FileInfo image in images)
+                    {
+                        barW.progressBar1.Value++;
+                        int x = Convert.ToInt32(image.Name.Substring(0, image.Name.IndexOf("_")));
+                        int y = Convert.ToInt32(image.Name.Substring(image.Name.IndexOf("_") + 1, image.Name.Substring(image.Name.IndexOf("_") + 1).IndexOf(".")));
+                        Image imageToPaste = Image.FromFile(image.FullName);
+                        Point pasteLoc = new Point(x * 256, y * 256);
+                        WriteLine("Drawing base tile " + x + "," + y + " to the map image...");
+                        grphx.DrawImage(imageToPaste, pasteLoc);
+                        imageToPaste.Dispose();
+                    }
+                    barW.Opacity = 0;
+                    WriteLine("Done forming image. Please select save location.");
+                    SaveFileDialog save = new SaveFileDialog();
+                    save.DefaultExt = ".png";
+                    save.Filter = "Png Image Files|*.png|All files (*.*)|*.*";
+                    save.Title = "Please select location to save map image file to.";
+                    if (save.ShowDialog() != DialogResult.Cancel)
+                    {
+                        fullImage.Save(save.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        WriteLine("Map image saved to " + save.FileName);
+                    }
+                    else
+                    {
+                        WriteLine("Save location not specified. The program will now shut down.");
+                    }
                 }
                 else
                 {
-                    WriteLine("Save location not specified. The program will now shut down.");
+                    WriteLine("Folder not specified. The program will now shut down.");
                 }
+                barW.Opacity = 0;
             }
-            else
-            {
-                WriteLine("Folder not specified. The program will now shut down.");
-            }
-            barW.Hide();
+            catch { MessageBox.Show("An error occured when running the Map Image Extractor. Make sure you selected the correct folder and try again.", "Error Occurred"); }
         }
         public static Size getMapSize(DirectoryInfo baseTilesFolder)
         {
@@ -114,6 +129,7 @@ namespace TripleA_Map_Image_Extractor
         }
         public static void WriteLine(string line)
         {
+            Console.WriteLine(line);
         }
     }
 }
