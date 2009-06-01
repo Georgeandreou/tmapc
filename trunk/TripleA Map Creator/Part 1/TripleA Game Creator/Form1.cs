@@ -217,7 +217,7 @@ namespace TripleA_Game_Creator
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to exit? All progress will be lost.", "Confirmation", MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to exit?", "Confirmation", MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
                 e.Cancel = true;
         }
 
@@ -242,12 +242,63 @@ namespace TripleA_Game_Creator
             change += 25;
             button8.Location += new Size(0, 25);
             button11.Location += new Size(0, 25);
-            tabPage2.Controls.AddRange(new Control[] { new TextBox() { Size = textBox1.Size, Location = new Point(textBox1.Location.X, textBox1.Location.Y + change) }, new TextBox() { Size = textBox2.Size, Location = new Point(textBox2.Location.X, textBox2.Location.Y + change) } });
+            TextBox t1 = new TextBox() { Size = textBox2.Size, Location = new Point(textBox2.Location.X, textBox2.Location.Y + change) };
+            t1.TextChanged += new EventHandler(t1_TextChanged);
+            t1.DoubleClick += new EventHandler(t1_DoubleClick);
+            Button b1 = new Button { Font = button3.Font, Text = button3.Text, Size = button3.Size, Location = new Point(button3.Location.X, button3.Location.Y + change) };
+            b1.Click += new EventHandler(b1_Click);
+            b1.Tag = t1;
+            tabPage2.Controls.AddRange(new Control[] { new TextBox() { Size = textBox1.Size, Location = new Point(textBox1.Location.X, textBox1.Location.Y + change) },t1,b1});
+        }
+
+        void t1_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                ((TextBox)sender).BackColor = ColorTranslator.FromHtml(((TextBox)sender).Text);
+            }
+            catch { ((TextBox)sender).BackColor = Color.FromKnownColor(KnownColor.Control); }
+        }
+
+        void b1_Click(object sender, EventArgs e)
+        {
+            ColorDialog chooser = new ColorDialog();
+            chooser.AllowFullOpen = true;
+            chooser.AnyColor = true;
+            chooser.FullOpen = true;
+            chooser.SolidColorOnly = true;
+            try
+            {
+               chooser.Color = ColorTranslator.FromHtml(((Button)sender).Text);
+            }
+            catch { }
+            if (chooser.ShowDialog() != DialogResult.Cancel)
+            {
+                ((TextBox)((Button)sender).Tag).Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+            }
+        }
+        void t1_DoubleClick(object sender, EventArgs e)
+        {
+            ColorDialog chooser = new ColorDialog();
+            chooser.AllowFullOpen = true;
+            chooser.AnyColor = true;
+            chooser.FullOpen = true;
+            chooser.SolidColorOnly = true;
+            try
+            {
+                chooser.Color = ColorTranslator.FromHtml(((TextBox)sender).Text);
+            }
+            catch { }
+            if (chooser.ShowDialog() != DialogResult.Cancel)
+            {
+                ((TextBox)sender).Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+            }
         }
         private void button7_Click(object sender, EventArgs e)
         {
             if (change > 0)
             {
+                tabPage2.Controls.RemoveAt(tabPage2.Controls.Count - 1);
                 tabPage2.Controls.RemoveAt(tabPage2.Controls.Count - 1);
                 tabPage2.Controls.RemoveAt(tabPage2.Controls.Count - 1);
                 change -= 25;
@@ -277,7 +328,7 @@ namespace TripleA_Game_Creator
                                 playerName = cur.Text;
                             else
                             {
-                                lines.Add("color." + playerName + "=" + cur.Text);
+                                lines.Add("color." + playerName + "=" + cur.Text.Replace("#",""));
                                 playerName = "";
                             }
                         }
@@ -528,7 +579,7 @@ namespace TripleA_Game_Creator
                 {
                     File.Copy(cur, cutPath + new FileInfo(cur).Name, true);
                 }
-                System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder");
+                System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder " + getUnitScale(new DirectoryInfo(textBox3.Text)).ToString());
             }
         }
 
@@ -701,6 +752,87 @@ namespace TripleA_Game_Creator
             }
             if (File.Exists(file))
                 System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/ImageShrinker");
+        }
+        public static double getUnitScale(DirectoryInfo mapFolder)
+        {
+            double result = 0;
+            if (File.Exists(mapFolder.FullName + @"\map.properties"))
+            {
+                string[] lines = File.ReadAllLines(mapFolder.FullName + @"\map.properties");
+                foreach (string cur in lines)
+                {
+                    if (cur.ToLower().Contains("units.scale="))
+                    {
+                        result = Convert.ToDouble(cur.ToLower().Substring(cur.ToLower().IndexOf(".scale=") + 7));
+                    }
+                }
+            }
+            else
+            {
+                OpenFileDialog open = new OpenFileDialog();
+                open.CheckFileExists = true;
+                open.DefaultExt = ".properties";
+                open.Filter = "Map Properties Files|*.properties|All files (*.*)|*.*";
+                open.InitialDirectory = mapFolder.Parent.FullName;
+                open.Multiselect = false;
+                open.Title = "Please select the map.properties file for the map.";
+                if (open.ShowDialog() != DialogResult.Cancel)
+                {
+                    string[] lines = File.ReadAllLines(open.FileName);
+                    foreach (string cur in lines)
+                    {
+                        if (cur.ToLower().Contains("units.scale="))
+                        {
+                            result = Convert.ToDouble(cur.ToLower().Substring(cur.ToLower().IndexOf(".scale=") + 7));
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            ColorDialog chooser = new ColorDialog();
+            chooser.AllowFullOpen = true;
+            chooser.AnyColor = true;
+            chooser.FullOpen = true;
+            chooser.SolidColorOnly = true;
+            try
+            {
+                chooser.Color = ColorTranslator.FromHtml(textBox2.Text);
+            }
+            catch { }
+            if (chooser.ShowDialog() != DialogResult.Cancel)
+            {
+                textBox2.Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+            }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                ((TextBox)sender).BackColor = ColorTranslator.FromHtml(((TextBox)sender).Text);
+            }
+            catch { ((TextBox)sender).BackColor = Color.FromKnownColor(KnownColor.Control); }
+        }
+        private void textBox2_DoubleClick(object sender, EventArgs e)
+        {
+            ColorDialog chooser = new ColorDialog();
+            chooser.AllowFullOpen = true;
+            chooser.AnyColor = true;
+            chooser.FullOpen = true;
+            chooser.SolidColorOnly = true;
+            try
+            {
+                chooser.Color = ColorTranslator.FromHtml(textBox2.Text);
+            }
+            catch { }
+            if (chooser.ShowDialog() != DialogResult.Cancel)
+            {
+                textBox2.Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+            }
         }
     }
 }

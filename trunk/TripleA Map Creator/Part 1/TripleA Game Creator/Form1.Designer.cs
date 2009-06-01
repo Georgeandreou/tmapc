@@ -28,6 +28,7 @@ namespace TripleA_Game_Creator
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -48,6 +49,7 @@ namespace TripleA_Game_Creator
             this.label14 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
@@ -95,6 +97,7 @@ namespace TripleA_Game_Creator
             this.label0 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -185,6 +188,7 @@ namespace TripleA_Game_Creator
             this.tabPage2.Controls.Add(this.label14);
             this.tabPage2.Controls.Add(this.label12);
             this.tabPage2.Controls.Add(this.label11);
+            this.tabPage2.Controls.Add(this.button3);
             this.tabPage2.Controls.Add(this.button8);
             this.tabPage2.Controls.Add(this.button11);
             this.tabPage2.Controls.Add(this.label10);
@@ -228,6 +232,7 @@ namespace TripleA_Game_Creator
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(88, 21);
             this.comboBox2.TabIndex = 11;
+            this.toolTip1.SetToolTip(this.comboBox2, "Set this to true if you want the map to wrap-around when scrolling.");
             // 
             // comboBox1
             // 
@@ -240,6 +245,7 @@ namespace TripleA_Game_Creator
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(88, 21);
             this.comboBox1.TabIndex = 11;
+            this.toolTip1.SetToolTip(this.comboBox1, "Set this to true if the map has relief tiles.");
             // 
             // panel4
             // 
@@ -257,6 +263,7 @@ namespace TripleA_Game_Creator
             this.button12.Size = new System.Drawing.Size(75, 22);
             this.button12.TabIndex = 9;
             this.button12.Text = "Browse";
+            this.toolTip1.SetToolTip(this.button12, "Use this button to browse for the map folder.");
             this.button12.UseVisualStyleBackColor = true;
             this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
@@ -266,6 +273,7 @@ namespace TripleA_Game_Creator
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(169, 20);
             this.textBox7.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.textBox7, "This is where you enter the size of the map image.");
             // 
             // textBox4
             // 
@@ -273,6 +281,8 @@ namespace TripleA_Game_Creator
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(169, 20);
             this.textBox4.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.textBox4, "This is where you enter the units scale amount. It has to be one of the menu opti" +
+                    "ons on the game like 0.5625, 0.75, or 1.00.");
             // 
             // textBox3
             // 
@@ -280,6 +290,8 @@ namespace TripleA_Game_Creator
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(169, 20);
             this.textBox3.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.textBox3, "This is where you enter the map folder containing all the units images the flag i" +
+                    "mages and the map image file.");
             // 
             // label15
             // 
@@ -326,13 +338,26 @@ namespace TripleA_Game_Creator
             this.label11.TabIndex = 7;
             this.label11.Text = "Map Folder:";
             // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Location = new System.Drawing.Point(370, 226);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(30, 23);
+            this.button3.TabIndex = 6;
+            this.button3.Text = "*";
+            this.toolTip1.SetToolTip(this.button3, "Select a color using the color chooser window.");
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(370, 226);
+            this.button8.Location = new System.Drawing.Point(406, 226);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(71, 23);
             this.button8.TabIndex = 6;
             this.button8.Text = "Remove Player...";
+            this.toolTip1.SetToolTip(this.button8, "Remove this player.");
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button7_Click);
             // 
@@ -343,6 +368,7 @@ namespace TripleA_Game_Creator
             this.button11.Size = new System.Drawing.Size(85, 23);
             this.button11.TabIndex = 5;
             this.button11.Text = "New Player...";
+            this.toolTip1.SetToolTip(this.button11, "Press this button to add another player.");
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.button6_Click);
             // 
@@ -370,6 +396,7 @@ namespace TripleA_Game_Creator
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(137, 20);
             this.textBox1.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.textBox1, "This is where you enter the player name.");
             // 
             // textBox2
             // 
@@ -377,6 +404,10 @@ namespace TripleA_Game_Creator
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.textBox2, "This is where you enter the color for the player. It has to be a six digit number" +
+                    " like: #fbaa29");
+            this.textBox2.DoubleClick += new System.EventHandler(this.textBox2_DoubleClick);
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label20
             // 
@@ -965,6 +996,8 @@ namespace TripleA_Game_Creator
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ToolTip toolTip1;
 
     }
 }

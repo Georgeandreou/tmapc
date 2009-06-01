@@ -129,6 +129,9 @@ Note: All of the images must be in .png format
 
 Note: When creating the map image, remember that the borders between territories must be completely black, the inside of land territories must be completely white, and the inside of sea territories must be colored.</value>
   </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="button14.Text" xml:space="preserve">
     <value>                              Instructions for using the 'Center Picker' 
 

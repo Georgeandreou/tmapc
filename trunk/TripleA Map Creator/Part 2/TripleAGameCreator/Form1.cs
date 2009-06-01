@@ -94,8 +94,12 @@ namespace TripleAGameCreator
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            Next();
-            DisplayStepTabPage();
+            try
+            {
+                Next();
+                DisplayStepTabPage();
+            }
+            catch { }
             //MessageBox.Show(Step2Info.territories.Count.ToString() + "/" + Step3Info.connections.Count.ToString());
             //MessageBox.Show(TerritoryDefinitionsImageDrawer.Controls.Count.ToString() + "/" + TerritoryConnectionsImageDrawer.Controls.Count.ToString());
         }
@@ -332,25 +336,29 @@ namespace TripleAGameCreator
                         String className = "";
                         foreach (Control cur in tabPage6.Controls)
                         {
-                            cur.Text = cur.Text.Trim();
-                            if (cur is TextBox)
+                            try
                             {
-                                if (toAddName == "")
+                                cur.Text = cur.Text.Trim();
+                                if (cur is TextBox)
                                 {
-                                    toAddName = cur.Text;
-                                }
-                                else if (className == "")
-                                {
-                                    className = cur.Text;
-                                }
-                                else
-                                {
-                                    //MessageBox.Show(toAddName + "," + className + "," + cur.Text);
-                                    Step6Info.gameplaySequences.Add(toAddName, new GameplaySequence() { Name = toAddName, Class = className, Display = cur.Text });
-                                    toAddName = "";
-                                    className = "";
+                                    if (toAddName == "")
+                                    {
+                                        toAddName = cur.Text;
+                                    }
+                                    else if (className == "")
+                                    {
+                                        className = cur.Text;
+                                    }
+                                    else
+                                    {
+                                        //MessageBox.Show(toAddName + "," + className + "," + cur.Text);
+                                        Step6Info.gameplaySequences.Add(toAddName, new GameplaySequence() { Name = toAddName, Class = className, Display = cur.Text });
+                                        toAddName = "";
+                                        className = "";
+                                    }
                                 }
                             }
+                            catch { smallErrorOccured = true; }
                         }
                     }
                     else if (oldStepIndex == 7)
@@ -361,31 +369,34 @@ namespace TripleAGameCreator
                             String _player = "";
                             foreach (Control cur in tabPage7.Controls)
                             {
-                                cur.Text = cur.Text.Trim();
-                                if (cur is TextBox || cur is ComboBox)
+                                try
                                 {
-                                    if (toAddName == "")
+                                    cur.Text = cur.Text.Trim();
+                                    if (cur is TextBox || cur is ComboBox)
                                     {
-                                        toAddName = cur.Text;
+                                        if (toAddName == "")
+                                        {
+                                            toAddName = cur.Text;
+                                        }
+                                        else if (gameplaySequence == "")
+                                        {
+                                            gameplaySequence = cur.Text;
+                                        }
+                                        else if (_player == "")
+                                        {
+                                            _player = cur.Text;
+                                        }
+                                        else
+                                        {
+                                            //MessageBox.Show(toAddName + "," + gameplaySequence + "," + _player + "," + cur.Text);
+                                            Step7Info.playerSequences.Add(toAddName, new PlayerSequence() { Name = toAddName, Delegate = Step6Info.gameplaySequences[gameplaySequence], player = Step4Info.players[_player], MaxRunCount = Convert.ToInt32(cur.Text) });
+                                            toAddName = "";
+                                            gameplaySequence = "";
+                                            _player = "";
+                                        }
                                     }
-                                    else if (gameplaySequence == "")
-                                    {
-                                        gameplaySequence = cur.Text;
-                                    }
-                                    else if (_player == "")
-                                    {
-                                        _player = cur.Text;
-                                    }
-                                    else
-                                    {
-                                        //MessageBox.Show(toAddName + "," + gameplaySequence + "," + _player + "," + cur.Text);
-                                        Step7Info.playerSequences.Add(toAddName, new PlayerSequence() { Name = toAddName, Delegate = Step6Info.gameplaySequences[gameplaySequence], player = Step4Info.players[_player], MaxRunCount = Convert.ToInt32(cur.Text) });
-                                        toAddName = "";
-                                        gameplaySequence = "";
-                                        _player = "";
-                                    }
-
                                 }
+                                catch{ smallErrorOccured = true; }
                             }
                     }
                     else if (oldStepIndex == 8)
@@ -395,24 +406,28 @@ namespace TripleAGameCreator
                         String _player = "";
                         foreach (Control cur in tabPage8.Controls)
                         {
-                            cur.Text = cur.Text.Trim();
-                            if (cur is TextBox || cur is ComboBox)
+                            try
                             {
-                                if (toAddName == "")
+                                cur.Text = cur.Text.Trim();
+                                if (cur is TextBox || cur is ComboBox)
                                 {
-                                    toAddName = cur.Text;
-                                }
-                                else if (_player == "")
-                                {
-                                    _player = cur.Text;
-                                }
-                                else
-                                {
-                                    Step8Info.technologies.Add(toAddName + "|" + _player, new Technology() { Name = toAddName, player = Step4Info.players[_player], AlreadyEnabled = Convert.ToBoolean(cur.Text) });
-                                    toAddName = "";
-                                    _player = "";
+                                    if (toAddName == "")
+                                    {
+                                        toAddName = cur.Text;
+                                    }
+                                    else if (_player == "")
+                                    {
+                                        _player = cur.Text;
+                                    }
+                                    else
+                                    {
+                                        Step8Info.technologies.Add(toAddName + "|" + _player, new Technology() { Name = toAddName, player = Step4Info.players[_player], AlreadyEnabled = Convert.ToBoolean(cur.Text) });
+                                        toAddName = "";
+                                        _player = "";
+                                    }
                                 }
                             }
+                            catch { smallErrorOccured = true; }
                         }
                     }
                     else if (oldStepIndex == 9)
@@ -422,16 +437,20 @@ namespace TripleAGameCreator
                         List<Unit> units = new List<Unit>();
                         foreach (TabPage cur in tabControl2.TabPages)
                         {
-                            units.Clear();
-                            toAddName = cur.Text;
-                            foreach (Control cur2 in cur.Controls)
+                            try
                             {
-                                if (cur2 is ComboBox)
+                                units.Clear();
+                                toAddName = cur.Text;
+                                foreach (Control cur2 in cur.Controls)
                                 {
-                                    units.Add(Step5Info.units[cur2.Text.ToLower()]);
+                                    if (cur2 is ComboBox)
+                                    {
+                                        units.Add(Step5Info.units[cur2.Text.ToLower()]);
+                                    }
                                 }
+                                Step9Info.ProductionFrontiers.Add(toAddName, new ProductionFrontier() { Name = toAddName, UnitsInFrontier = units });
                             }
-                            Step9Info.ProductionFrontiers.Add(toAddName, new ProductionFrontier() { Name = toAddName, UnitsInFrontier = units });
+                            catch { smallErrorOccured = true; }
                         }
                     }
                     else if (oldStepIndex == 10)
@@ -440,39 +459,43 @@ namespace TripleAGameCreator
                         String toAddName = "";
                         foreach (TabPage cur in tabControl3.TabPages)
                         {
-                            toAddName = cur.Text;
-                            Step5Info.units[toAddName.ToLower()].attachment = new UnitAttachment();
-                            foreach (Control cur2 in cur.Controls)
+                            try
                             {
-                                if (cur2 is TextBox)
+                                toAddName = cur.Text;
+                                Step5Info.units[toAddName.ToLower()].attachment = new UnitAttachment();
+                                foreach (Control cur2 in cur.Controls)
                                 {
-                                    if (curOption.Name == "")
+                                    if (cur2 is TextBox)
                                     {
-                                        curOption.Name = cur2.Text;
-                                    }
-                                    else
-                                    {
-                                        //MessageBox.Show(toAddName + "," + curOption.Name + "," + cur2.Text);
-                                        if (Step5Info.units[toAddName.ToLower()].attachment.options.Count == 0)
+                                        if (curOption.Name == "")
                                         {
-                                            Step5Info.units[toAddName.ToLower()].attachment = new UnitAttachment() { options = new List<UnitOption>() { new UnitOption() { Name = curOption.Name, Value = cur2.Text } } };
+                                            curOption.Name = cur2.Text;
                                         }
                                         else
                                         {
-                                            Step5Info.units[toAddName.ToLower()].attachment.options.Add(new UnitOption() { Name = curOption.Name, Value = cur2.Text });
+                                            //MessageBox.Show(toAddName + "," + curOption.Name + "," + cur2.Text);
+                                            if (Step5Info.units[toAddName.ToLower()].attachment.options.Count == 0)
+                                            {
+                                                Step5Info.units[toAddName.ToLower()].attachment = new UnitAttachment() { options = new List<UnitOption>() { new UnitOption() { Name = curOption.Name, Value = cur2.Text } } };
+                                            }
+                                            else
+                                            {
+                                                Step5Info.units[toAddName.ToLower()].attachment.options.Add(new UnitOption() { Name = curOption.Name, Value = cur2.Text });
+                                            }
+                                            curOption.Name = "";
                                         }
-                                        curOption.Name = "";
                                     }
                                 }
                             }
+                            catch { smallErrorOccured = true; }
                         }
                     }
                     else if (oldStepIndex == 11)
                     {
                         foreach (Control cur in TerritoryProductionsImageDrawer.Controls)
                         {
-                            cur.Text = cur.Text.Trim();
-                            Step2Info.territories[(String)cur.Tag].Production = Convert.ToInt32(cur.Text);
+                                cur.Text = cur.Text.Trim();
+                                Step2Info.territories[(String)cur.Tag].Production = Convert.ToInt32(cur.Text);
                         }
                     }
                     else if (oldStepIndex == 13)
@@ -498,7 +521,7 @@ namespace TripleAGameCreator
                                     UnitPlacementsImageDrawer.Controls[cur.Name].AccessibleName = cur.Units[0].unitOwner.Name;
                                 }
                             }
-                            catch{}
+                            catch { smallErrorOccured = true; }
                             cur.Units.Clear();
                         }
                         foreach (Control cur in UnitPlacementsImageDrawer.Controls)
@@ -548,7 +571,7 @@ namespace TripleAGameCreator
                                     catch { }
                                 }
                             }
-                            catch { }
+                            catch { /*smallErrorOccured = true;*/ }
                         }
                     }
                     else if (oldStepIndex == 15)
@@ -560,34 +583,38 @@ namespace TripleAGameCreator
                         int minN = -1;
                         foreach (Control cur in tabPage15.Controls)
                         {
-                            cur.Text = cur.Text.Trim();
-                            if (cur is TextBox || cur is ComboBox)
+                            try
                             {
-                                if (toAddName == "")
+                                cur.Text = cur.Text.Trim();
+                                if (cur is TextBox || cur is ComboBox)
                                 {
-                                    toAddName = cur.Text;
-                                }
-                                else if (value == "")
-                                {
-                                    value = cur.Text;
-                                }
-                                else if (editable == null)
-                                {
-                                    editable = Convert.ToBoolean(cur.Text);
-                                }
-                                else if (minN == -1)
-                                {
-                                    minN = Convert.ToInt32(cur.Text);
-                                }
-                                else
-                                {
-                                    Step15Info.Settings.Add(toAddName, new Setting() { Name = toAddName, Editable = (bool)editable, Value = value, IntMin = minN, IntMax = Convert.ToInt32(cur.Text) });
-                                    toAddName = "";
-                                    value = "";
-                                    editable = null;
-                                    minN = -1;
+                                    if (toAddName == "")
+                                    {
+                                        toAddName = cur.Text;
+                                    }
+                                    else if (value == "")
+                                    {
+                                        value = cur.Text;
+                                    }
+                                    else if (editable == null)
+                                    {
+                                        editable = Convert.ToBoolean(cur.Text);
+                                    }
+                                    else if (minN == -1)
+                                    {
+                                        minN = Convert.ToInt32(cur.Text);
+                                    }
+                                    else
+                                    {
+                                        Step15Info.Settings.Add(toAddName, new Setting() { Name = toAddName, Editable = (bool)editable, Value = value, IntMin = minN, IntMax = Convert.ToInt32(cur.Text) });
+                                        toAddName = "";
+                                        value = "";
+                                        editable = null;
+                                        minN = -1;
+                                    }
                                 }
                             }
+                            catch { smallErrorOccured = true; }
                         }
                     }
                 }
@@ -631,7 +658,6 @@ namespace TripleAGameCreator
                         if ((territoryChange || force || !opened1))
                         {
                             opened1 = true;
-                            territoryChange = false;
                             TerritoryConnectionsImageDrawer.Controls.Clear();
                             foreach (Territory cur in Step2Info.territories.Values)
                             {
@@ -658,12 +684,24 @@ namespace TripleAGameCreator
                     else if (tabControl1.SelectedIndex == 6 )
                     {
                         //button27.Enabled = true;
-                        if (infochange1)
+                        if (true)//infochange1)
                         {
                             infochange1 = false;
                             comboBox16.Items.Clear();
                             comboBox17.Items.Clear();
                             bool isFirst = false;
+                            foreach (Control cur2 in tabControl1.TabPages[tabControl1.SelectedIndex].Controls)
+                            {
+                                if (cur2 is ComboBox)
+                                {
+                                    isFirst = !isFirst;
+                                    if (isFirst)
+                                    {
+                                        ((ComboBox)cur2).Items.Clear();
+                                    }
+                                }
+                            }
+                            isFirst = false;
                             foreach (GameplaySequence cur in Step6Info.gameplaySequences.Values)
                             {
                                 foreach (Control cur2 in tabControl1.TabPages[tabControl1.SelectedIndex].Controls)
@@ -675,6 +713,18 @@ namespace TripleAGameCreator
                                         {
                                             ((ComboBox)cur2).Items.Add(cur.Name);
                                         }
+                                    }
+                                }
+                            }
+                            isFirst = true;
+                            foreach (Control cur2 in tabControl1.TabPages[tabControl1.SelectedIndex].Controls)
+                            {
+                                if (cur2 is ComboBox)
+                                {
+                                    isFirst = !isFirst;
+                                    if (isFirst)
+                                    {
+                                        ((ComboBox)cur2).Items.Clear();
                                     }
                                 }
                             }
@@ -718,65 +768,102 @@ namespace TripleAGameCreator
                     else if (tabControl1.SelectedIndex == 8)
                     {
                         //button27.Enabled = true;
-                        if (infochange2)
+                        if (true)//infochange2)
                         {
                             infochange2 = false;
-                            tabControl2.TabPages.Clear();
+                            List<string> listOfTabPagesJustAdded = new List<string>();
                             foreach (Player cur in Step4Info.players.Values)
                             {
-                                tabControl2.TabPages.Add(new TabPage(cur.Name) { AutoScroll = true });
+                                bool foundOne = false;
+                                foreach (TabPage cur2 in tabControl2.TabPages)
+                                {
+                                    if (cur2.Text.ToLower() == cur.Name.ToLower())
+                                        foundOne = true;
+                                }
+                                if (!foundOne)
+                                {
+                                    tabControl2.TabPages.Add(new TabPage(cur.Name) { AutoScroll = true });
+                                    listOfTabPagesJustAdded.Add(cur.Name);
+                                }
+                            }
+                            for (int i = 0; i < tabControl2.TabPages.Count; i++)
+                            {
+                                TabPage cur = tabControl2.TabPages[i];
+                                if (!Step4Info.players.ContainsKey(cur.Text))
+                                    tabControl2.TabPages.RemoveAt(i);
                             }
                             foreach (TabPage cur in tabControl2.TabPages)
                             {
-                                Label c1 = new Label() { Text = "Units in frontier", AutoSize = true, Location = new Point(185, 14), Font = new Font(label19.Font, FontStyle.Regular) };
-                                Label c2 = new Label() { Text = "Units", AutoSize = true, Location = new Point(82, 41), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
-                                ComboBox c3 = new ComboBox() { Location = new Point(39, 59), Size = new Size(143, 21) };
-                                foreach (Unit cur2 in Step5Info.units.Values)
+                                if (listOfTabPagesJustAdded.Contains(cur.Text))
                                 {
-                                    c3.Items.Add(cur2.Name);
+                                    Label c1 = new Label() { Text = "Units in frontier", AutoSize = true, Location = new Point(185, 14), Font = new Font(label19.Font, FontStyle.Regular) };
+                                    Label c2 = new Label() { Text = "Units", AutoSize = true, Location = new Point(82, 41), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
+                                    ComboBox c3 = new ComboBox() { Location = new Point(39, 59), Size = new Size(143, 21) };
+                                    foreach (Unit cur2 in Step5Info.units.Values)
+                                    {
+                                        c3.Items.Add(cur2.Name);
+                                    }
+                                    Button c4 = new Button() { Location = new Point(189, 57), Size = new Size(71, 23), Text = "Remove" };
+                                    c4.Click += new EventHandler(c4_Click);
+                                    Button c5 = new Button() { Location = new Point(39, 87), Size = new Size(82, 23), Text = "Add Attachment..." };
+                                    c5.Click += new EventHandler(c5_Click);
+                                    cur.Controls.AddRange(new Control[] { c1, c2, c3, c4, c5 });
+                                    cur.Tag = 0;
                                 }
-                                Button c4 = new Button() { Location = new Point(189, 57), Size = new Size(71, 23), Text = "Remove" };
-                                c4.Click += new EventHandler(c4_Click);
-                                Button c5 = new Button() { Location = new Point(39, 87), Size = new Size(82, 23), Text = "Add Attachment..." };
-                                c5.Click += new EventHandler(c5_Click);
-                                cur.Controls.AddRange(new Control[] { c1, c2, c3, c4, c5 });
-                                cur.Tag = 0;
                             }
                         }
                     }
                     else if (tabControl1.SelectedIndex == 9)
                     {
                         //button27.Enabled = true;
-                        if (infochange3)
+                        if (true)//infochange3)
                         {
                             infochange3 = false;
-                            tabControl3.TabPages.Clear();
+                            List<string> listOfTabPagesJustAdded = new List<string>();
                             foreach (Unit cur in Step5Info.units.Values)
                             {
-                                tabControl3.TabPages.Add(new TabPage(cur.Name) { AutoScroll = true });
+                                bool foundOne = false;
+                                foreach (TabPage cur2 in tabControl3.TabPages)
+                                {
+                                    if (cur2.Text.ToLower() == cur.Name.ToLower())
+                                        foundOne = true;
+                                }
+                                if (!foundOne)
+                                {
+                                    tabControl3.TabPages.Add(new TabPage(cur.Name) { AutoScroll = true });
+                                    listOfTabPagesJustAdded.Add(cur.Name);
+                                }
+                            }
+                            for(int i = 0;i < tabControl3.TabPages.Count;i++)
+                            {
+                                TabPage cur = tabControl3.TabPages[i];
+                                if (!Step5Info.units.ContainsKey(cur.Text.ToLower()))
+                                    tabControl3.TabPages.RemoveAt(i);
                             }
                             foreach (TabPage cur in tabControl3.TabPages)
                             {
-                                Label c1 = new Label() { Text = "Unit Attachments", AutoSize = true, Location = new Point(198, 14), Font = new Font(label19.Font, FontStyle.Regular) };
-                                Label c2 = new Label() { Text = "Attachment Name", AutoSize = true, Location = new Point(63, 43), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
-                                Label c3 = new Label() { Text = "Values", AutoSize = true, Location = new Point(223, 43), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
+                                if (listOfTabPagesJustAdded.Contains(cur.Text))
+                                {
+                                    Label c1 = new Label() { Text = "Unit Attachments", AutoSize = true, Location = new Point(198, 14), Font = new Font(label19.Font, FontStyle.Regular) };
+                                    Label c2 = new Label() { Text = "Attachment Name", AutoSize = true, Location = new Point(63, 43), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
+                                    Label c3 = new Label() { Text = "Values", AutoSize = true, Location = new Point(223, 43), Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))) };
 
-                                TextBox c4 = new TextBox() { Location = new Point(39, 59), Size = new Size(143, 20) };
-                                TextBox c5 = new TextBox() { Location = new Point(196, 59), Size = new Size(92, 20) };
+                                    TextBox c4 = new TextBox() { Location = new Point(39, 59), Size = new Size(143, 20) };
+                                    TextBox c5 = new TextBox() { Location = new Point(196, 59), Size = new Size(92, 20) };
 
-                                Button c6 = new Button() { Location = new Point(294, 57), Size = new Size(71, 23), Text = "Remove" };
-                                c6.Click += new EventHandler(c4_Click2);
-                                Button c7 = new Button() { Location = new Point(39, 87), Size = new Size(116, 23), Text = "Add Attachment..." };
-                                c7.Click += new EventHandler(c5_Click2);
-                                cur.Controls.AddRange(new Control[] { c1, c2, c3, c4, c5, c6, c7 });
-                                cur.Tag = 0;
+                                    Button c6 = new Button() { Location = new Point(294, 57), Size = new Size(71, 23), Text = "Remove" };
+                                    c6.Click += new EventHandler(c4_Click2);
+                                    Button c7 = new Button() { Location = new Point(39, 87), Size = new Size(116, 23), Text = "Add Attachment..." };
+                                    c7.Click += new EventHandler(c5_Click2);
+                                    cur.Controls.AddRange(new Control[] { c1, c2, c3, c4, c5, c6, c7 });
+                                    cur.Tag = 0;
+                                }
                             }
                         }
                     }
                     else if (tabControl1.SelectedIndex == 10 && (territoryChange || force || !opened2))
                     {
                         opened2 = true;
-                        territoryChange = false;
                         TerritoryProductionsImageDrawer.Controls.Clear();
                         foreach (Territory cur in Step2Info.territories.Values)
                         {
@@ -790,7 +877,6 @@ namespace TripleAGameCreator
                     else if (tabControl1.SelectedIndex == 11 && (territoryChange || force || !opened3))
                     {
                         opened3 = true;
-                        territoryChange = false;
                         CanalsImageDrawer.Controls.Clear();
                         foreach (Territory cur in Step2Info.territories.Values)
                         {
@@ -815,7 +901,6 @@ namespace TripleAGameCreator
                     else if (tabControl1.SelectedIndex == 12 && (territoryChange || force || !opened4))
                     {
                         opened4 = true;
-                        territoryChange = false;
                         TerritoryOwnershipImageDrawer.Controls.Clear();
                         foreach (Territory cur in Step2Info.territories.Values)
                         {
@@ -913,8 +998,18 @@ namespace TripleAGameCreator
                 e.Cancel = true;
                 MessageBox.Show("An error occured while trying to process the data you entered. Please make sure you entered everything correctly and try again.", "Error Parsing Data");
             }
+            if (smallErrorOccured)
+            {
+                smallErrorOccured = false;
+                if (MessageBox.Show("An error occured while trying to process some of the data you entered. Some of the information may not have been applied. Do you want to go back and fix it?", "Error Parsing Data", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                {
+                    Back();
+                    e.Cancel = true;
+                }
+            }
             force = false;
         }
+        bool smallErrorOccured = false;
         bool refresh = false;
         public int FindOccurences(string s, string toFind)
         {
@@ -953,7 +1048,7 @@ namespace TripleAGameCreator
             remove.Location += new Size(0, 25);
             add.Location += new Size(0, 25);
             ComboBox cb1 = new ComboBox() { Size = cBox.Size, Location = new Point(cBox.Location.X, cBox.Location.Y + change6) };
-            cb1.Items.AddRange(getObjectArray(cBox.Items));
+            cb1.Items.AddRange(getUnits());
             tabControl2.TabPages[tabControl2.SelectedIndex].Controls.Add(cb1);
         }
         void c4_Click(object sender, EventArgs e)
@@ -1011,7 +1106,7 @@ namespace TripleAGameCreator
             }
             remove.Location += new Size(0, 25);
             add.Location += new Size(0, 25);
-            TextBox c1 = new TextBox() { Size = new Size(143, 20), Location = new Point(39, 34 + change6 - tabControl3.TabPages[tabControl3.SelectedIndex].VerticalScroll.Value) };
+            TextBox c1 = new TextBox() { Size = new Size(143, 20), Location = new Point(39, 59 + change6 - tabControl3.TabPages[tabControl3.SelectedIndex].VerticalScroll.Value) };
             TextBox c2 = new TextBox() { Size = tBox.Size, Location = new Point(tBox.Location.X, tBox.Location.Y + 25) };
              tabControl3.TabPages[tabControl3.SelectedIndex].Controls.AddRange(new Control[]{c1, c2});
         }
@@ -1112,9 +1207,10 @@ namespace TripleAGameCreator
                 }
                 else
                 {
-                    if (MessageBox.Show("Do you want to remove this territory label?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                    if (MessageBox.Show("Are you sure you want to remove this territory?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                     {
                         TerritoryDefinitionsImageDrawer.Controls.Remove((Control)sender);
+                        Step2Info.territories.Remove(((Control)sender).Text);
                         List<Connection> ToRemove = new List<Connection>();
                         foreach (String cur in Step3Info.connections.Keys)
                         {
@@ -1570,10 +1666,19 @@ namespace TripleAGameCreator
             button14.Location += new Size(0, 25);
             ComboBox cb1 = new ComboBox() { Size = comboBox16.Size, Location = new Point(comboBox16.Location.X, comboBox16.Location.Y + change4 - tabPage7.VerticalScroll.Value) };
             ComboBox cb2 = new ComboBox() { Size = comboBox17.Size, Location = new Point(comboBox17.Location.X, comboBox17.Location.Y + change4 - tabPage7.VerticalScroll.Value) };
-            cb1.Items.AddRange(getObjectArray(comboBox16.Items));
-            cb2.Items.AddRange(getObjectArray(comboBox17.Items));
+            cb1.Items.AddRange(getGameplaySequences());
+            cb2.Items.AddRange(getGameplaySequences());
             //MessageBox.Show("AFChange4:" + change4.ToString() + ",Base Box Loc:" + comboBox16.Location + ", Combined Y:" + (comboBox16.Location.Y + change4).ToString());
             tabPage7.Controls.AddRange(new Control[] { new TextBox() { Size = textBox15.Size, Location = new Point(textBox15.Location.X, textBox15.Location.Y + change4 - tabPage7.VerticalScroll.Value) }, cb1, cb2, new TextBox() { Size = textBox18.Size, Location = new Point(textBox18.Location.X, textBox18.Location.Y + change4 - tabPage7.VerticalScroll.Value) } });
+        }
+        public object[] getGameplaySequences()
+        {
+            List<object> result = new List<object>();
+            foreach (GameplaySequence cur in Step6Info.gameplaySequences.Values)
+            {
+                result.Add(cur.Name);
+            }
+            return result.ToArray();
         }
         public Object[] getObjectArray(ComboBox.ObjectCollection collection)
         {
@@ -1620,35 +1725,8 @@ namespace TripleAGameCreator
             //Thread t = new Thread(new ThreadStart(do1));
             //Form1.CheckForIllegalCrossThreadCalls = false;
             //t.Start();
-            ClearInfo();
             do1();
             Stop();
-        }
-        public void ClearInfo()
-        {
-            foreach (TabPage cur in tabControl1.TabPages)
-            {
-                cur.VerticalScroll.Value = 0;
-            }
-            Step1Info.CentersLocation = "";
-            Step1Info.LoadedFile = "";
-            Step1Info.MapImage = new Bitmap(1, 1);
-            Step1Info.MapImageLocation = "";
-            Step1Info.MapImageWL = new Bitmap(1, 1);
-            Step1Info.MapName = "";
-            Step1Info.MapVersion = "";
-            Step1Info.ResourceName = "";
-            Step1Info.WaterTerritoryFilter = "";
-            Step2Info.territories.Clear();
-            Step3Info.connections.Clear();
-            Step4Info.players.Clear();
-            Step5Info.units.Clear();
-            Step6Info.gameplaySequences.Clear();
-            Step7Info.playerSequences.Clear();
-            Step8Info.technologies.Clear();
-            Step9Info.ProductionFrontiers.Clear();
-            Step12Info.Canals.Clear();
-            Step15Info.Settings.Clear();
         }
         int n2 = 1;
         void t2_Tick(object sender, EventArgs e)
@@ -1679,6 +1757,7 @@ namespace TripleAGameCreator
                 d4.Filter = "Xml files|*.xml|All files (*.*)|*.*";
                 if (d4.ShowDialog(this) != DialogResult.Cancel)
                 {
+                    string imageSelectStartFolder = new FileInfo(d4.FileName).DirectoryName;
                     Control oldControl = getControl("label" + stepIndex);
                     Control newControl = getControl("label1");
                     oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
@@ -1694,122 +1773,102 @@ namespace TripleAGameCreator
                     string centerLocation = "";
                     string imageLoc = "";
                     string text = File.ReadAllText(d4.FileName);
-                    if (File.Exists(d4.FileName.Substring(0, d4.FileName.LastIndexOf(@"\")) + "/centers.txt"))
+                    if (File.Exists(new FileInfo(d4.FileName).DirectoryName + @"\centers.txt"))
                     {
-                        centerLocation = d4.FileName.Substring(0, d4.FileName.LastIndexOf(@"\")) + "/centers.txt";
+                        centerLocation = new FileInfo(d4.FileName).DirectoryName + @"\centers.txt";
+                        imageSelectStartFolder = new FileInfo(d4.FileName).DirectoryName;
                     }
                     else
                     {
                         bool found = false;
-                        foreach (DirectoryInfo cur in (new FileInfo(d4.FileName).Directory.Parent.GetDirectories()))
+                        string mn = "";
+                        if (text.Contains("name=\"mapName\""))
+                        {
+                            string mnss = text.Substring(text.IndexOf("name=\"mapName\""));
+                            mn = mnss.Substring(mnss.IndexOf(" value=\"") + 8, mnss.Substring(mnss.IndexOf(" value=\"") + 8).IndexOf("\""));
+                        }
+                        DirectoryInfo mapsFolder = null;
+                        foreach (DirectoryInfo cur in new FileInfo(d4.FileName).Directory.Parent.GetDirectories())
                         {
                             if (cur.Name.ToLower() == "maps")
                             {
-                                foreach (DirectoryInfo cur2 in cur.GetDirectories())
+                                mapsFolder = cur;
+                            }
+                        }
+                        if (mapsFolder == null)
+                        {
+                            foreach (DirectoryInfo cur in new FileInfo(d4.FileName).Directory.Parent.Parent.GetDirectories())
+                            {
+                                if (cur.Name.ToLower() == "maps")
                                 {
-                                    if (cur2.Name.Replace(" ", "").Replace("_", "") == new FileInfo(d4.FileName).Name.Replace(" ", "").Replace("_", ""))
-                                    {
-                                        found = true;
-                                        centerLocation = cur2.FullName + "/centers.txt";
-                                    }
+                                    mapsFolder = cur;
+                                }
+                            }
+                        }
+                        if (mapsFolder == null)
+                        {
+                            foreach (DirectoryInfo cur in new FileInfo(d4.FileName).Directory.Parent.Parent.Parent.GetDirectories())
+                            {
+                                if (cur.Name.ToLower() == "maps")
+                                {
+                                    mapsFolder = cur;
+                                }
+                            }
+                        }
+                        if (mapsFolder == null)
+                        {
+                            foreach (DirectoryInfo cur in new FileInfo(d4.FileName).Directory.Parent.Parent.Parent.Parent.GetDirectories())
+                            {
+                                if (cur.Name.ToLower() == "maps")
+                                {
+                                    mapsFolder = cur;
+                                }
+                            }
+                        }
+
+                        if (!found)
+                        {
+                            foreach (DirectoryInfo cur2 in mapsFolder.GetDirectories())
+                            {
+                                if (cur2.Name.ToLower() == mn.ToLower())
+                                {
+                                    found = true;
+                                    centerLocation = cur2.FullName + "/centers.txt";
+                                    imageSelectStartFolder = new DirectoryInfo(cur2.FullName).FullName;
                                 }
                             }
                         }
                         if (!found)
                         {
-                            string mn = "";
-                            if (text.Contains("name=\"mapName\""))
+                            foreach (DirectoryInfo cur2 in mapsFolder.GetDirectories())
                             {
-                                string mnss = text.Substring(text.IndexOf("name=\"mapName\""));
-                                mn = mnss.Substring(mnss.IndexOf(" value=\"") + 8, mnss.Substring(mnss.IndexOf(" value=\"") + 8).IndexOf("\""));
-                            }
-                            foreach (DirectoryInfo cur in (new FileInfo(d4.FileName).Directory.Parent.GetDirectories()))
-                            {
-                                if (cur.Name.ToLower() == "maps")
+                                if (cur2.Name.Replace(" ", "").Replace("_", "") == new FileInfo(d4.FileName).Name.Replace(" ", "").Replace("_", ""))
                                 {
-                                    foreach (DirectoryInfo cur2 in cur.GetDirectories())
-                                    {
-                                        if (cur2.Name.ToLower() == mn)
-                                        {
-                                            found = true;
-                                            centerLocation = cur2.FullName + "/centers.txt";
-                                        }
-                                    }
+                                    found = true;
+                                    centerLocation = cur2.FullName + "/centers.txt";
+                                    imageSelectStartFolder = new DirectoryInfo(cur2.FullName).FullName;
                                 }
                             }
                         }
                         if (!found)
                         {
-                            string mn = "";
-                            if (text.Contains("name=\"mapName\""))
+                            DirectoryInfo newestTripleAVersion = new DirectoryInfo(@"C:\Program Files\TripleA\").GetDirectories()[0];
+                            foreach (DirectoryInfo cur in new DirectoryInfo(@"C:\Program Files\TripleA\").GetDirectories())
                             {
-                                string mnss = text.Substring(text.IndexOf("name=\"mapName\""));
-                                mn = mnss.Substring(mnss.IndexOf(" value=\"") + 8, mnss.Substring(mnss.IndexOf(" value=\"") + 8).IndexOf("\""));
-                            }
-                            foreach (DirectoryInfo cur in (new FileInfo(d4.FileName).Directory.Parent.Parent.GetDirectories()))
-                            {
-                                if (cur.Name.ToLower() == "maps")
+                                try
                                 {
-                                    foreach (DirectoryInfo cur2 in cur.GetDirectories())
-                                    {
-                                        if (cur2.Name.ToLower() == mn)
-                                        {
-                                            found = true;
-                                            centerLocation = cur2.FullName + "/centers.txt";
-                                        }
-                                    }
+                                    if (Convert.ToInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > Convert.ToInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
+                                        newestTripleAVersion = cur;
                                 }
+                                catch { }
                             }
-                        }
-                        if (!found)
-                        {
-                            foreach (DirectoryInfo cur in (new FileInfo(d4.FileName).Directory.Parent.Parent.GetDirectories()))
+                            string homeFolder = newestTripleAVersion.FullName;
+
+                            if (File.Exists(homeFolder + @"\Maps\" + mn + @"\centers.txt"))
                             {
-                                if (cur.Name.ToLower() == "maps")
-                                {
-                                    foreach (DirectoryInfo cur2 in cur.GetDirectories())
-                                    {
-                                        if (cur2.Name.Replace(" ", "").Replace("_", "") == new FileInfo(d4.FileName).Name.Replace(" ", "").Replace("_", ""))
-                                        {
-                                            found = true;
-                                            centerLocation = cur2.FullName + "/centers.txt";
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (!found)
-                        {
-                            foreach (DirectoryInfo cur in (new FileInfo(d4.FileName).Directory.Parent.GetDirectories()))
-                            {
-                                if (cur.Name.ToLower() == "maps")
-                                {
-                                    foreach (DirectoryInfo cur2 in cur.GetDirectories())
-                                    {
-                                        if (new FileInfo(d4.FileName).Name.Replace(" ", "").Replace("_", "").Contains(cur2.Name.Replace(" ", "").Replace("_", "")))
-                                        {
-                                            found = true;
-                                            centerLocation = cur2.FullName + "/centers.txt";
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (!found)
-                        {
-                            foreach (DirectoryInfo cur in (new FileInfo(d4.FileName).Directory.Parent.Parent.GetDirectories()))
-                            {
-                                if (cur.Name.ToLower() == "maps")
-                                {
-                                    foreach (DirectoryInfo cur2 in cur.GetDirectories())
-                                    {
-                                        if (new FileInfo(d4.FileName).Name.Replace(" ", "").Replace("_", "").Contains(cur2.Name.Replace(" ", "").Replace("_", "")))
-                                        {
-                                            found = true;
-                                            centerLocation = cur2.FullName + "/centers.txt";
-                                        }
-                                    }
-                                }
+                                found = true;
+                                centerLocation = homeFolder + @"\Maps\" + mn + @"\centers.txt";
+                                imageSelectStartFolder = new DirectoryInfo(homeFolder + @"\Maps\" + mn).FullName;
                             }
                         }
                         if (!found)
@@ -1818,7 +1877,10 @@ namespace TripleAGameCreator
                             open.Title = "Unable to locate the centers file. Please select the 'centers.txt' file for the map.";
                             open.Filter = "Text Files|*.txt|All files (*.*)|*.*";
                             if (open.ShowDialog(this) == DialogResult.OK)
+                            {
                                 centerLocation = open.FileName;
+                                imageSelectStartFolder = new FileInfo(open.FileName).DirectoryName;
+                            }
                             else
                             {
                                 Stop();
@@ -1826,6 +1888,7 @@ namespace TripleAGameCreator
                             }
                         }
                     }
+                    ClearAllDataAndControls();
                     try
                     {
                         List<Label> labels = new List<Label>();
@@ -1852,6 +1915,7 @@ namespace TripleAGameCreator
                     catch { }
                     Size taS = new Size();
                     OpenFileDialog open2 = new OpenFileDialog();
+                    open2.InitialDirectory = imageSelectStartFolder;
                     open2.Title = "Please select the map's image file. (Click cancel to use blank image)";
                     open2.Filter = "Png Files|*.png|All files (*.*)|*.*";
                     if (open2.ShowDialog(this) == DialogResult.OK)
@@ -1891,18 +1955,6 @@ namespace TripleAGameCreator
                     TerritoryConnectionsImageDrawer.BackgroundImage = Step1Info.MapImageWL;
                     TerritoryDefinitionsImageDrawer.BackgroundImage = ita;
                     TerritoryDefinitionsImageDrawer.Size = TerritoryDefinitionsImageDrawer.BackgroundImage.Size;
-                    ClearPlayers();
-                    ClearUnits();
-                    ClearGameplayDelegates();
-                    ClearPlayerDelegates();
-                    ClearProductionFrontiers();
-                    ClearTechs();//
-                    ClearUnitAttachments();
-                    ClearInGameSettings();
-                    tplayers.Clear();
-                    tunits.Clear();
-                    pfts.Clear();
-                    Step12Info.Canals.Clear();
                     int index = 0;
                     while(index < text.Length)
                     {
@@ -1993,7 +2045,7 @@ namespace TripleAGameCreator
                         }
                         if (cur.Contains("<option ") && cur.Contains("name=\"") && unitTName2.Length > 0)
                         {
-                            tunits[unitTName2].attachment.options.Add(new UnitOption() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), Value = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\"")) });
+                            tunits[unitTName2.ToLower()].attachment.options.Add(new UnitOption() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), Value = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\"")) });
                         }
                         if (cur.Contains("<resourceGiven ") && cur.Contains("player=\""))
                         {
@@ -2144,7 +2196,7 @@ namespace TripleAGameCreator
                                     Step2Info.territories[tn].Units.Add(new Unit() { Name = ut });
                             }
                         }
-                        if (cur.Contains("<property ") && !(cur.Contains("<property ") && cur.Contains("name=\"notes\" value=\"")))
+                        if (cur.Contains("<property ") && !(cur.Contains("name=\"notes\" value=\"")/* || cur.Contains("name=\"mapName\" value=\"")*/))
                         {
                             sta = new Setting() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), Value = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\"")) };
                             if (cur.Contains(" editable=\""))
@@ -2157,9 +2209,13 @@ namespace TripleAGameCreator
                             sta.IntMin = Convert.ToInt32(cur.Substring(cur.IndexOf("min=\"") + 5, cur.Substring(cur.IndexOf("min=\"") + 5).IndexOf("\"")));
                             sta.IntMax = Convert.ToInt32(cur.Substring(cur.IndexOf("max=\"") + 5, cur.Substring(cur.IndexOf("max=\"") + 5).IndexOf("\"")));
                         }
-                        if (cur.Contains("</property>") && !(cur.Contains("<property") && cur.Contains("name=\"notes\" value=\"")))
+                        if (cur.Contains("</property>") && !(cur.Contains("name=\"notes\" value=\"")/* || cur.Contains("name=\"mapName\" value=\"")*/))
                         {
                             AddInGameSetting(sta);
+                        }
+                        if (cur.Contains("name=\"notes\" value=\""))
+                        {
+                            mapNotesTextBox.Text = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\""));
                         }
                     }
                     Step1Info.LoadedFile = d4.FileName;
@@ -2170,6 +2226,63 @@ namespace TripleAGameCreator
                 MessageBox.Show("An error occured when trying to load the Xml file. Make sure the xml file has no errors.", "Error Loading Xml File");
             }
             Stop();
+        }
+        private void ClearAllDataAndControls()
+        {
+            ClearAllControls();
+            ClearAllData();
+        }
+        private void ClearAllData()
+        {
+            foreach (TabPage cur in tabControl1.TabPages)
+            {
+                cur.VerticalScroll.Value = 0;
+            }
+
+            Step1Info.CentersLocation = "";
+            Step1Info.LoadedFile = "";
+            Step1Info.MapImage = new Bitmap(1, 1);
+            Step1Info.MapImageLocation = "";
+            Step1Info.MapImageWL = new Bitmap(1, 1);
+            Step1Info.MapName = "";
+            Step1Info.MapVersion = "";
+            Step1Info.ResourceName = "";
+            Step1Info.WaterTerritoryFilter = "";
+                Step2Info.territories.Clear();
+            Step3Info.connections.Clear();
+            Step4Info.players.Clear();
+            Step5Info.units.Clear();
+            Step6Info.gameplaySequences.Clear();
+            Step7Info.playerSequences.Clear();
+            Step8Info.technologies.Clear();
+            Step9Info.ProductionFrontiers.Clear();
+            Step12Info.Canals.Clear();
+            Step15Info.Settings.Clear();
+            Step16Info.Notes = "";
+            tplayers.Clear();
+            tunits.Clear();
+            pfts.Clear();
+            Step12Info.Canals.Clear();
+            territoryChange = true;
+            infochange1 = true;
+            infochange2 = true;
+            infochange3 = true;
+            opened1 = false;
+            opened2 = false;
+            opened3 = false;
+            opened4 = false;
+            opened5 = false;
+        }
+        private void ClearAllControls()
+        {
+            ClearPlayers();
+            ClearUnits();
+            ClearGameplayDelegates();
+            ClearPlayerDelegates();
+            ClearProductionFrontiers();
+            ClearTechs();
+            ClearUnitAttachments();
+            ClearInGameSettings();
         }
         public void Stop()
         {
@@ -2362,7 +2475,18 @@ namespace TripleAGameCreator
             panel8.Size += new Size(0, 25);
             button13.Location += new Size(0, 25);
             button14.Location += new Size(0, 25);
-            tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = delName, Size = textBox15.Size, Location = new Point(textBox15.Location.X, textBox15.Location.Y + change4) }, new ComboBox() { Text = delDelegate, Size = comboBox16.Size, Location = new Point(comboBox16.Location.X, comboBox16.Location.Y + change4) }, new ComboBox() { Text = player, Size = comboBox17.Size, Location = new Point(comboBox17.Location.X, comboBox17.Location.Y + change4) }, new TextBox() { Text = delMaxRun, Size = textBox18.Size, Location = new Point(textBox18.Location.X, textBox18.Location.Y + change4) } });
+            ComboBox cb1 = new ComboBox() { Text = delDelegate, Size = comboBox16.Size, Location = new Point(comboBox16.Location.X, comboBox16.Location.Y + change4)};
+            cb1.Items.AddRange(getGameplayDelegates());
+            tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = delName, Size = textBox15.Size, Location = new Point(textBox15.Location.X, textBox15.Location.Y + change4) }, cb1, new ComboBox() { Text = player, Size = comboBox17.Size, Location = new Point(comboBox17.Location.X, comboBox17.Location.Y + change4) }, new TextBox() { Text = delMaxRun, Size = textBox18.Size, Location = new Point(textBox18.Location.X, textBox18.Location.Y + change4) } });
+        }
+        public object[] getGameplayDelegates()
+        {
+            List<object> result = new List<object>();
+            foreach (GameplaySequence cur in Step6Info.gameplaySequences.Values)
+            {
+                result.Add(cur);
+            }
+            return result.ToArray();
         }
         public void AddProductionFrontier(ProductionFrontier frontierToAdd)
         {
@@ -2380,7 +2504,9 @@ namespace TripleAGameCreator
             int ch = 0;
             foreach (Unit cur2 in frontierToAdd.UnitsInFrontier)
             {
-                cur.Controls.Add(new ComboBox() { Text = cur2.Name, Location = comboBox3.Location + new Size(0, ch), Size = comboBox3.Size });
+                ComboBox cb1 = new ComboBox() { Text = cur2.Name, Location = comboBox3.Location + new Size(0, ch), Size = comboBox3.Size };
+                cb1.Items.AddRange(frontierToAdd.UnitsInFrontier.ToArray());
+                cur.Controls.Add(cb1);
                 ch += 25;
             }
             cur.Tag = ch - 25;
@@ -2411,13 +2537,22 @@ namespace TripleAGameCreator
             int ch = 0;
             foreach (Technology cur in techsTA)
             {
-                tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name, Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, new ComboBox() { Text = cur.player.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size }, new ComboBox() { Text = cur.AlreadyEnabled.ToString(), Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size } });
+                ComboBox cb1 = new ComboBox() { Text = cur.player.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                foreach (Player cur2 in Step4Info.players.Values)
+                    cb1.Items.Add(cur2);
+                ComboBox cb2 = new ComboBox() { Text = cur.AlreadyEnabled.ToString(), Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                cb2.Items.AddRange(getTrueFalseItems());
+                tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name, Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                 ch += 25;
             }
             change5 = ch - 25;
             button17.Location = new Point(423, (66 + ch) - 25);
             button18.Location = new Point(62, (93 + ch) - 25);
             panel9.Size = new Size(5, (36 + ch) - 25);
+        }
+        public object[] getTrueFalseItems()
+        {
+            return new List<string>() { "True", "False" }.ToArray();
         }
         public void AddUnitAttachment(Unit unitWA)
         {
@@ -2455,7 +2590,9 @@ namespace TripleAGameCreator
             panel16.Size += new Size(0, 25);
             button23.Location += new Size(0, 25);
             button24.Location += new Size(0, 25);
-            tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = sta.Name, Size = textBox19.Size, Location = new Point(textBox19.Location.X, textBox19.Location.Y + change6) }, new TextBox() { Text = sta.Value.ToString(), Size = textBox21.Size, Location = new Point(textBox21.Location.X, textBox21.Location.Y + change6) }, new ComboBox() { Text = sta.Editable.ToString(), Size = comboBox5.Size, Location = new Point(comboBox5.Location.X, comboBox5.Location.Y + change6) }, new TextBox() { Text = sta.IntMin.ToString(), Size = textBox20.Size, Location = new Point(textBox20.Location.X, textBox20.Location.Y + change6) }, new TextBox() { Text = sta.IntMax.ToString(), Size = textBox22.Size, Location = new Point(textBox22.Location.X, textBox22.Location.Y + change6) } });
+            ComboBox cb1 = new ComboBox() { Text = sta.Editable.ToString(), Size = comboBox5.Size, Location = new Point(comboBox5.Location.X, comboBox5.Location.Y + change6) };
+            cb1.Items.AddRange(getTrueFalseItems());
+            tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = sta.Name, Size = textBox19.Size, Location = new Point(textBox19.Location.X, textBox19.Location.Y + change6) }, new TextBox() { Text = sta.Value.ToString(), Size = textBox21.Size, Location = new Point(textBox21.Location.X, textBox21.Location.Y + change6) }, cb1, new TextBox() { Text = sta.IntMin.ToString(), Size = textBox20.Size, Location = new Point(textBox20.Location.X, textBox20.Location.Y + change6) }, new TextBox() { Text = sta.IntMax.ToString(), Size = textBox22.Size, Location = new Point(textBox22.Location.X, textBox22.Location.Y + change6) } });
         }
         private void button16_Click(object sender, EventArgs e)
         {
@@ -2516,10 +2653,18 @@ namespace TripleAGameCreator
             button18.Location += new Size(0, 25);
             ComboBox cb1 = new ComboBox() { Size = comboBox2.Size, Location = new Point(comboBox2.Location.X, comboBox2.Location.Y + change5 - tabPage8.VerticalScroll.Value) };
             ComboBox cb2 = new ComboBox() { Size = comboBox1.Size, Location = new Point(comboBox1.Location.X, comboBox1.Location.Y + change5 - tabPage8.VerticalScroll.Value) };
-            cb1.Items.AddRange(getObjectArray(comboBox2.Items));
-            cb2.Items.Add("True");
-            cb2.Items.Add("False");
+            cb1.Items.AddRange(getPlayers());
+            cb2.Items.AddRange(getTrueFalseItems());
             tabPage8.Controls.AddRange(new Control[] { new TextBox() { Size = textBox16.Size, Location = new Point(textBox16.Location.X, textBox16.Location.Y + change5 - tabPage8.VerticalScroll.Value) }, cb1, cb2 });
+        }
+        public object[] getPlayers()
+        {
+            List<object> result = new List<object>();
+            foreach (Player cur in Step4Info.players.Values)
+            {
+                result.Add(cur.Name);
+            }
+            return result.ToArray();
         }
         int change6 = 0;
         private void button23_Click(object sender, EventArgs e)
@@ -2547,19 +2692,19 @@ namespace TripleAGameCreator
             button23.Location += new Size(0, 25);
             button24.Location += new Size(0, 25);
             ComboBox cb1 = new ComboBox() { Size = comboBox5.Size, Location = new Point(comboBox5.Location.X, comboBox5.Location.Y + change6) };
-            cb1.Items.Add("True");
-            cb1.Items.Add("False");
+            cb1.Items.AddRange(getTrueFalseItems());
             tabPage15.Controls.AddRange(new Control[] { new TextBox() { Size = textBox19.Size, Location = new Point(textBox19.Location.X, textBox19.Location.Y + change6 - tabPage15.VerticalScroll.Value) }, new TextBox() { Size = textBox21.Size, Location = new Point(textBox21.Location.X, textBox21.Location.Y + change6 - tabPage15.VerticalScroll.Value) }, cb1, new TextBox() { Size = textBox20.Size, Location = new Point(textBox20.Location.X, textBox20.Location.Y + change6 - tabPage15.VerticalScroll.Value), Text = "0" }, new TextBox() { Size = textBox22.Size, Location = new Point(textBox22.Location.X, textBox22.Location.Y + change6 - tabPage15.VerticalScroll.Value) } });
         }
 
         private void button26_Click(object sender, EventArgs e)
         {
-            Write();
+            force = true;
+            surpress2 = true;
+            tabControl1_Selecting(new object(), new TabControlCancelEventArgs(new TabPage(), 0, false, TabControlAction.Selecting));
+            surpress2 = false;
+            Save();
         }
-        public void Write()
-        {
-            Write(textBox23.Text);
-        }
+
         public void Write(string fileLoc)
         {
             try
@@ -2769,6 +2914,7 @@ namespace TripleAGameCreator
                 }
                 if(foundMapName == false)
                 lines.Add("                <property name=\"mapName\" value=\"" + Step1Info.MapName + "\" editable=\"false\"/>");
+                lines.Add("                <property name=\"notes\" value=\"" + mapNotesTextBox.Text + "\"/>");
                 lines.Add("        </propertyList>");
                 lines.Add("</game>");
                 File.WriteAllLines(fileLoc, lines.ToArray());
@@ -2786,7 +2932,7 @@ namespace TripleAGameCreator
             d.DefaultExt = ".xml";
             if (d.ShowDialog(this) != DialogResult.Cancel)
             {
-                textBox23.Text = d.FileName;
+                mapNotesTextBox.Text = d.FileName;
             }
         }
         public List<Technology> used = new List<Technology>();
@@ -2832,6 +2978,15 @@ namespace TripleAGameCreator
         {
             AutoFill();
         }
+        public object[] getUnits()
+        {
+            List<object> result = new List<object>();
+            foreach (Unit cur in Step5Info.units.Values)
+            {
+                result.Add(cur.Name);
+            }
+            return result.ToArray();
+        }
         Automatic_Connection_Finder finder = new Automatic_Connection_Finder();
         public void AutoFill()//4,5,6,7,8,9,14
         {
@@ -2842,6 +2997,7 @@ namespace TripleAGameCreator
                     finder.main = this;
                     if (finder.ShowDialog(this) != DialogResult.None && finder.connections.Count > 0)
                     {
+                        Step1Info.MapImageWL = new Bitmap(Step1Info.MapImage);
                         Step3Info.connections.Clear();
                         foreach (Automatic_Connection_Finder.Connection cur in finder.connections)
                         {
@@ -2864,6 +3020,7 @@ namespace TripleAGameCreator
                         surpress1 = false;
                         finder.connections.Clear();
                     }
+                    TerritoryConnectionsImageDrawer.Refresh();
                 }
                 if (tabControl1.SelectedIndex == 4)
                 {
@@ -2934,16 +3091,11 @@ namespace TripleAGameCreator
                     tabPage7.VerticalScroll.Value = 0;
                     tabPage7.HorizontalScroll.Value = 0;
                     List<Control> toDelete = new List<Control>();
-                    int count = 0;
                     foreach (Control cur in tabPage7.Controls)
                     {
                         if (cur is TextBox || cur is ComboBox)
                         {
                             toDelete.Add(cur);
-                        }
-                        else if (cur is TextBox || cur is ComboBox)
-                        {
-                            count++;
                         }
                     }
                     for (int i = 0; i < toDelete.Count; i++)
@@ -2958,27 +3110,65 @@ namespace TripleAGameCreator
                         {
                             if (cur2.Name.ToLower().Contains("bid"))
                             {
-                                tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name.Replace(" ", "").ToLower() + cur2.Name.Substring(0, 1).ToUpper() + cur2.Name.Substring(1).Replace("_", ""), Location = textBox15.Location + new Size(0, ch), Size = textBox15.Size }, new ComboBox() { Text = cur2.Name, Location = comboBox16.Location + new Size(0, ch), Size = comboBox16.Size }, new ComboBox() { Text = cur.Name, Location = comboBox17.Location + new Size(0, ch), Size = comboBox17.Size }, new TextBox() { Text = "1", Location = textBox18.Location + new Size(0, ch), Size = textBox18.Size } });
+                                ComboBox cb1 = new ComboBox() { Text = cur2.Name, Location = comboBox16.Location + new Size(0, ch), Size = comboBox16.Size };
+                                foreach (GameplaySequence cur3 in Step6Info.gameplaySequences.Values)
+                                {
+                                    cb1.Items.Add(cur3.Name);
+                                }
+                                ComboBox cb2 = new ComboBox() { Text = cur.Name, Location = comboBox17.Location + new Size(0, ch), Size = comboBox17.Size };
+                                foreach (Player cur3 in Step4Info.players.Values)
+                                {
+                                    cb2.Items.Add(cur3.Name);
+                                }
+                                tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name.Replace(" ", "").ToLower() + cur2.Name.Substring(0, 1).ToUpper() + cur2.Name.Substring(1).Replace("_", ""), Location = textBox15.Location + new Size(0, ch), Size = textBox15.Size }, cb1, cb2, new TextBox() { Text = "1", Location = textBox18.Location + new Size(0, ch), Size = textBox18.Size } });
                                 ch += 25;
                             }
                             else
                             {
                                 if (!cur2.Name.ToLower().Contains("move") && !cur2.Name.ToLower().Contains("battle"))
                                 {
-                                    tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name.Replace(" ", "").ToLower() + cur2.Name.Substring(0, 1).ToUpper() + cur2.Name.Substring(1).Replace("_", ""), Location = textBox15.Location + new Size(0, ch), Size = textBox15.Size }, new ComboBox() { Text = cur2.Name, Location = comboBox16.Location + new Size(0, ch), Size = comboBox16.Size }, new ComboBox() { Text = cur.Name, Location = comboBox17.Location + new Size(0, ch), Size = comboBox17.Size }, new TextBox() { Text = "1000", Location = textBox18.Location + new Size(0, ch), Size = textBox18.Size } });
+                                    ComboBox cb1 = new ComboBox() { Text = cur2.Name, Location = comboBox16.Location + new Size(0, ch), Size = comboBox16.Size };
+                                    foreach (GameplaySequence cur3 in Step6Info.gameplaySequences.Values)
+                                    {
+                                        cb1.Items.Add(cur3.Name);
+                                    }
+                                    ComboBox cb2 = new ComboBox() { Text = cur.Name, Location = comboBox17.Location + new Size(0, ch), Size = comboBox17.Size };
+                                    foreach (Player cur3 in Step4Info.players.Values)
+                                    {
+                                        cb2.Items.Add(cur3.Name);
+                                    }
+                                    tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name.Replace(" ", "").ToLower() + cur2.Name.Substring(0, 1).ToUpper() + cur2.Name.Substring(1).Replace("_", ""), Location = textBox15.Location + new Size(0, ch), Size = textBox15.Size }, cb1,cb2, new TextBox() { Text = "1000", Location = textBox18.Location + new Size(0, ch), Size = textBox18.Size } });
                                     ch += 25;
                                 }
                                 else if (cur2.Name.ToLower().Contains("move"))
                                 {
                                     sw = !sw;
-                                    tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name.Replace(" ", "").ToLower() + "CombatMove", Location = textBox15.Location + new Size(0, ch), Size = textBox15.Size }, new ComboBox() { Text = cur2.Name, Location = comboBox16.Location + new Size(0, ch), Size = comboBox16.Size }, new ComboBox() { Text = cur.Name, Location = comboBox17.Location + new Size(0, ch), Size = comboBox17.Size }, new TextBox() { Text = "1000", Location = textBox18.Location + new Size(0, ch), Size = textBox18.Size } });
+                                    ComboBox cb1 = new ComboBox() { Text = cur2.Name, Location = comboBox16.Location + new Size(0, ch), Size = comboBox16.Size };
+                                    foreach (GameplaySequence cur3 in Step6Info.gameplaySequences.Values)
+                                    {
+                                        cb1.Items.Add(cur3.Name);
+                                    }
+                                    ComboBox cb2 = new ComboBox() { Text = cur.Name, Location = comboBox17.Location + new Size(0, ch), Size = comboBox17.Size };
+                                    foreach (Player cur3 in Step4Info.players.Values)
+                                    {
+                                        cb2.Items.Add(cur3.Name);
+                                    }
+                                    tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name.Replace(" ", "").ToLower() + "CombatMove", Location = textBox15.Location + new Size(0, ch), Size = textBox15.Size }, cb1, cb2, new TextBox() { Text = "1000", Location = textBox18.Location + new Size(0, ch), Size = textBox18.Size } });
                                     ch += 25;
                                 }
                                 else
                                 {
-                                    tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name.Replace(" ", "").ToLower() + cur2.Name.Substring(0, 1).ToUpper() + cur2.Name.Substring(1).Replace("_", ""), Location = textBox15.Location + new Size(0, ch), Size = textBox15.Size }, new ComboBox() { Text = cur2.Name, Location = comboBox16.Location + new Size(0, ch), Size = comboBox16.Size }, new ComboBox() { Text = cur.Name, Location = comboBox17.Location + new Size(0, ch), Size = comboBox17.Size }, new TextBox() { Text = "1000", Location = textBox18.Location + new Size(0, ch), Size = textBox18.Size } });
-                                    ch += 25;
-                                    tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name.Replace(" ", "").ToLower() + "NonCombatMove", Location = textBox15.Location + new Size(0, ch), Size = textBox15.Size }, new ComboBox() { Text = "move", Location = comboBox16.Location + new Size(0, ch), Size = comboBox16.Size }, new ComboBox() { Text = cur.Name, Location = comboBox17.Location + new Size(0, ch), Size = comboBox17.Size }, new TextBox() { Text = "1000", Location = textBox18.Location + new Size(0, ch), Size = textBox18.Size } });
+                                    ComboBox cb1 = new ComboBox() { Text = cur2.Name, Location = comboBox16.Location + new Size(0, ch), Size = comboBox16.Size };
+                                    foreach (GameplaySequence cur3 in Step6Info.gameplaySequences.Values)
+                                    {
+                                        cb1.Items.Add(cur3.Name);
+                                    }
+                                    ComboBox cb2 = new ComboBox() { Text = cur.Name, Location = comboBox17.Location + new Size(0, ch), Size = comboBox17.Size };
+                                    foreach (Player cur3 in Step4Info.players.Values)
+                                    {
+                                        cb2.Items.Add(cur3.Name);
+                                    }
+                                    tabPage7.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name.Replace(" ", "").ToLower() + cur2.Name.Substring(0, 1).ToUpper() + cur2.Name.Substring(1).Replace("_", ""), Location = textBox15.Location + new Size(0, ch), Size = textBox15.Size }, cb1, cb2, new TextBox() { Text = "1000", Location = textBox18.Location + new Size(0, ch), Size = textBox18.Size } });
                                     ch += 25;
                                 }
                             }
@@ -2988,7 +3178,7 @@ namespace TripleAGameCreator
                     button13.Location = new Point(485, (65 + ch) - 25);
                     button14.Location = new Point(18, (93 + ch) - 25);
                     panel8.Size = new Size(5, (36 + ch) - 25);
-                }
+                }   
                 else if (tabControl1.SelectedIndex == 7)
                 {
                     tabPage8.VerticalScroll.Value = 0;
@@ -3006,17 +3196,36 @@ namespace TripleAGameCreator
                         tabPage8.Controls.Remove(toDelete[i]);
                     }
                     int ch = 0;
+                    object[] units = getUnits();
                     foreach (Player cur in Step4Info.players.Values)
                     {
-                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "heavyBomber", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size }, new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size } });
+                        ComboBox cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        ComboBox cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "heavyBomber", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
-                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "jetPower", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size }, new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size } });
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(units);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "jetPower", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
-                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "superSub", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size }, new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size } });
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(units);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "superSub", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
-                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "rocket", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size }, new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size } });
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(units);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "rocket", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
-                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "longRangeAir", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size }, new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size } });
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(units);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "longRangeAir", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                     }
                     change5 = ch - 25;
@@ -3024,43 +3233,45 @@ namespace TripleAGameCreator
                     button18.Location = new Point(62, (93 + ch) - 25);
                     panel9.Size = new Size(5, (36 + ch) - 25);
                 }
-                else if (tabControl1.SelectedIndex == 8)
+                else if (tabControl1.SelectedIndex == 8) 
                 {
-                    foreach (TabPage cur in tabControl2.TabPages)
+                    TabPage cur = tabControl2.TabPages[tabControl2.SelectedIndex];
+
+                    cur.VerticalScroll.Value = 0;
+                    cur.HorizontalScroll.Value = 0;
+                    List<Control> toDelete = new List<Control>();
+                    Button b1 = null;
+                    Button b2 = null;
+                    foreach (Control cur2 in cur.Controls)
                     {
-                        cur.VerticalScroll.Value = 0;
-                        cur.HorizontalScroll.Value = 0;
-                        List<Control> toDelete = new List<Control>();
-                        Button b1 = null;
-                        Button b2 = null;
-                        foreach (Control cur2 in cur.Controls)
+                        if (cur2 is TextBox || cur2 is ComboBox)
                         {
-                            if (cur2 is TextBox || cur2 is ComboBox)
-                            {
-                                toDelete.Add(cur2);
-                            }
-                            else if (cur2 is Button)
-                            {
-                                if (b1 == null)
-                                    b1 = (Button)cur2;
-                                else
-                                    b2 = (Button)cur2;
-                            }
+                            toDelete.Add(cur2);
                         }
-                        for (int i = 0; i < toDelete.Count; i++)
+                        else if (cur2 is Button)
                         {
-                            cur.Controls.Remove(toDelete[i]);
+                            if (b1 == null)
+                                b1 = (Button)cur2;
+                            else
+                                b2 = (Button)cur2;
                         }
-                        int ch = 0;
-                        foreach (Unit cur2 in Step5Info.units.Values)
-                        {
-                            cur.Controls.Add(new ComboBox() { Text = cur2.Name, Location = comboBox3.Location + new Size(0, ch), Size = comboBox3.Size } );
-                            ch += 25;
-                        }
-                        cur.Tag = ch - 25;
-                        b1.Location = new Point(189, (57 + ch) - 25);
-                        b2.Location = new Point(39, (87 + ch) - 25);
                     }
+                    for (int i = 0; i < toDelete.Count; i++)
+                    {
+                        cur.Controls.Remove(toDelete[i]);
+                    }
+                    int ch = 0;
+                    object[] units = getUnits();
+                    foreach (Unit cur2 in Step5Info.units.Values)
+                    {
+                        ComboBox cb1 = new ComboBox() { Text = cur2.Name, Location = comboBox3.Location + new Size(0, ch), Size = comboBox3.Size };
+                        cb1.Items.AddRange(units);
+                        cur.Controls.Add(cb1);
+                        ch += 25;
+                    }
+                    cur.Tag = ch - 25;
+                    b1.Location = new Point(189, (57 + ch) - 25);
+                    b2.Location = new Point(39, (87 + ch) - 25);
                 }
                 else if (tabControl1.SelectedIndex == 9)
                 {
@@ -3092,7 +3303,7 @@ namespace TripleAGameCreator
                         int ch = 0;
                         if (cur.Text.ToLower().Contains("infantry"))
                         {
-                            cur.Controls.AddRange(new Control[]{ new TextBox() { Text = "movement", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "1", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size }});
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "movement", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "1", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "attack", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "1", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
@@ -3235,7 +3446,7 @@ namespace TripleAGameCreator
                         {
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isFactory", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
-                        }   
+                        }
                         cur.Tag = ch;
                         b1.Location = new Point(294, (57 + ch) - 25);
                         b2.Location = new Point(39, (87 + ch) - 25);
@@ -3254,19 +3465,32 @@ namespace TripleAGameCreator
                     for (int i = 0; i < toDelete.Count; i++)
                     {
                         tabPage15.Controls.Remove(toDelete[i]);
-                    }
-
+                    } 
                     int ch = 0;
-                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Heavy Bomber Dice Rolls", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "2", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size}, new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size }, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size}, new TextBox() { Text = "10", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size}});
+                    ComboBox cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+
+
+                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Heavy Bomber Dice Rolls", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "2", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "10", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
-                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Always on AA", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size }, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Always on AA", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
-                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Battleships repair at end of round", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size }, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Battleships repair at end of round", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
-                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Territory Turn Limit", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size }, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Territory Turn Limit", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
-                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Low Luck", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size }, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Low Luck", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
+                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
                     foreach (Player cur in Step4Info.players.Values)
                     {
                         tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name + " bid", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "0", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size }, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "1000", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
@@ -3411,6 +3635,7 @@ namespace TripleAGameCreator
     }
     public class Step16Info
     {
+        public static string Notes = "";
     }
     public class Territory
     {
