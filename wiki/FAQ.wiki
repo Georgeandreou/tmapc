@@ -1,0 +1,19 @@
+#summary A list of frequently asked questions about the Map Creator.
+
+= Frequently Asked Questions =
+
+*Will I be able to play the maps I create with other people online?*
+
+Yes, the maps you create can be used in online games as long as the other players have access to your map too and have added it to their 'maps' folder.
+
+*What if an error occurs when I'm trying to make a map?*
+
+You can post the error on the 'Issues' page located here or post a message on the TripleA forum located here: http://triplea.sourceforge.net/mywiki/Forum.
+
+*How do I add the map to the TripleA program after I am done creating it?*
+
+You can find information for doing that here: http://sites.google.com/site/tripleamapcollection/guide
+
+*Where can I find the source code for the map creator?*
+
+You can find the source code on the "Source" page above.
