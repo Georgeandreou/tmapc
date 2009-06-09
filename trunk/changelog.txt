@@ -1,0 +1,49 @@
+Changes for 1.0.0.6
+
+* Fix problem where Part 1 would not copy the needed 'misc' folder when finding units' placements
+
+* Add a halfway finished tab page to Part 1 informing the user to start Part 2
+
+* Fix tool-tips for Part 1
+
+* Fix problem where program would crash if the directory C:\Program Files\TripleA\ did not exist (SDW)
+
+* Fix problem where the screen would flicker after adding a connection (SDW)
+
+* Make it so the territory definition, connection, ownership, unit placements, and attachments are organized by owner (SDW)
+
+
+
+Changes for 1.0.0.5
+
+* Fix multiple errors with mod creation
+
+* Add error catching to the Image Extractor
+
+* Add a player color selection window to Part 1
+
+* Add the ability to automatically supply the unit's scale when running the Auto Placement Finder
+
+
+
+Changes for 1.0.0.4
+
+* Add a Map Image Extraction Utility and a Mod Creation Guide
+
+
+
+Changes for 1.0.0.3
+
+* Fix a few small errors with the Part 2
+
+
+
+Changes for 1.0.0.2
+
+* Fix a small error with the Automatic Connection Finder
+
+
+
+Changes for 1.0.0.1
+
+* Fix a small error with the Xml writing

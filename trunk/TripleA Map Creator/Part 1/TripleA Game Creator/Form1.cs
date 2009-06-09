@@ -142,7 +142,7 @@ namespace TripleA_Game_Creator
                     }
                     Control oldControl = getControl("label" + stepIndex);
                     oldStepIndex = stepIndex;
-                    if (stepIndex < 9)
+                    if (stepIndex < 10)
                         stepIndex++;
                     Control newControl = getControl("label" + stepIndex);
                     oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
@@ -168,7 +168,7 @@ namespace TripleA_Game_Creator
                     }
                     Control oldControl = getControl("label" + stepIndex);
                     oldStepIndex = stepIndex;
-                    if (stepIndex < 9)
+                    if (stepIndex < 10)
                         stepIndex++;
                     Control newControl = getControl("label" + stepIndex);
                     oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
@@ -181,7 +181,7 @@ namespace TripleA_Game_Creator
                     catch { }
                 }
             }
-            else if(stepIndex < 8)
+            else if (stepIndex < 8)
             {
                 foreach (Control cur in tabControl1.TabPages[stepIndex].Controls)
                 {
@@ -193,12 +193,23 @@ namespace TripleA_Game_Creator
                 }
                 Control oldControl = getControl("label" + stepIndex);
                 oldStepIndex = stepIndex;
-                if (stepIndex < 8)
+                if (stepIndex < 10)
                     stepIndex++;
                 Control newControl = getControl("label" + stepIndex);
                 oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
                 newControl.Font = new Font(newControl.Font, FontStyle.Bold);
             }
+            else
+            {
+                Control oldControl = getControl("label" + stepIndex);
+                oldStepIndex = stepIndex;
+                if (stepIndex < 10)
+                    stepIndex++;
+                Control newControl = getControl("label" + stepIndex);
+                oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
+                newControl.Font = new Font(newControl.Font, FontStyle.Bold);
+            }
+
         }
         public Control getControl(string name)
         {
@@ -248,6 +259,7 @@ namespace TripleA_Game_Creator
             Button b1 = new Button { Font = button3.Font, Text = button3.Text, Size = button3.Size, Location = new Point(button3.Location.X, button3.Location.Y + change) };
             b1.Click += new EventHandler(b1_Click);
             b1.Tag = t1;
+            toolTip1.SetToolTip(b1, "Select a color using the color chooser window.");
             tabPage2.Controls.AddRange(new Control[] { new TextBox() { Size = textBox1.Size, Location = new Point(textBox1.Location.X, textBox1.Location.Y + change) },t1,b1});
         }
 
@@ -579,6 +591,14 @@ namespace TripleA_Game_Creator
                 {
                     File.Copy(cur, cutPath + new FileInfo(cur).Name, true);
                 }
+                if (Directory.Exists(textBox3.Text + @"\misc"))
+                {
+                    Directory.CreateDirectory(cutPath + @"\misc");
+                    foreach (FileInfo cur in new DirectoryInfo(textBox3.Text + @"\misc").GetFiles())
+                    {
+                        File.Copy(cur.FullName, cutPath + @"\misc\" + cur.Name);
+                    }
+                }
                 System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder " + getUnitScale(new DirectoryInfo(textBox3.Text)).ToString());
             }
         }
@@ -833,6 +853,15 @@ namespace TripleA_Game_Creator
             {
                 textBox2.Text = ColorTranslator.ToHtml(chooser.Color).ToString();
             }
+        }
+
+        private void button23_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + @"\TripleA Map Creator Part 2.exe"))
+                System.Diagnostics.Process.Start((new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + @"\TripleA Map Creator Part 2.exe"));
+            else
+                MessageBox.Show("Unable to find Part 2 of the Map Creator. The program will now close.");
+            Environment.Exit(0);
         }
     }
 }

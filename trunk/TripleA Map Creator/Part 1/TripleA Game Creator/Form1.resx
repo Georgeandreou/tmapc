@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="button4.Text" xml:space="preserve">
+    <value>                              Congratulations!! You're about halfway done!!
+
+Now all you have to do is open Part 2 of the program and finish your map. You should find Part 2 in the same folder as this program. 
+
+                                          :D :D Good Luck!! :D :D
+
+</value>
+  </data>
   <data name="button5.Text" xml:space="preserve">
     <value>Before you use this program, make sure:
 
@@ -201,4 +210,7 @@ When a window opens that asks you to select the large image, select the map imag
 When a window opens that asks for the scale, enter the amount to scale down the image.
 </value>
   </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>
