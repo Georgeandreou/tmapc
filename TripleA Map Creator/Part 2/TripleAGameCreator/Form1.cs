@@ -1667,7 +1667,7 @@ namespace TripleAGameCreator
             ComboBox cb1 = new ComboBox() { Size = comboBox16.Size, Location = new Point(comboBox16.Location.X, comboBox16.Location.Y + change4 - tabPage7.VerticalScroll.Value) };
             ComboBox cb2 = new ComboBox() { Size = comboBox17.Size, Location = new Point(comboBox17.Location.X, comboBox17.Location.Y + change4 - tabPage7.VerticalScroll.Value) };
             cb1.Items.AddRange(getGameplaySequences());
-            cb2.Items.AddRange(getGameplaySequences());
+            cb2.Items.AddRange(getPlayers());
             //MessageBox.Show("AFChange4:" + change4.ToString() + ",Base Box Loc:" + comboBox16.Location + ", Combined Y:" + (comboBox16.Location.Y + change4).ToString());
             tabPage7.Controls.AddRange(new Control[] { new TextBox() { Size = textBox15.Size, Location = new Point(textBox15.Location.X, textBox15.Location.Y + change4 - tabPage7.VerticalScroll.Value) }, cb1, cb2, new TextBox() { Size = textBox18.Size, Location = new Point(textBox18.Location.X, textBox18.Location.Y + change4 - tabPage7.VerticalScroll.Value) } });
         }
@@ -1749,6 +1749,7 @@ namespace TripleAGameCreator
         }
         public void do1()
         {
+            bool errorOccured = false;
             Step1Info.LoadedFile = "";
             try
             {
@@ -1852,8 +1853,34 @@ namespace TripleAGameCreator
                         }
                         if (!found)
                         {
-                            DirectoryInfo newestTripleAVersion = new DirectoryInfo(@"C:\Program Files\TripleA\").GetDirectories()[0];
-                            foreach (DirectoryInfo cur in new DirectoryInfo(@"C:\Program Files\TripleA\").GetDirectories())
+                            string parentHomeFolder = @"C:\Program Files\TripleA\";
+                            if (!new DirectoryInfo(parentHomeFolder).Exists)
+                            {
+                                FolderBrowserDialog od = new FolderBrowserDialog();
+                                od.Description = "Please locate the TripleA Program's folder. (Where you installed TripleA)";
+                                od.ShowNewFolderButton = false;
+                                if (Directory.Exists(@"C:\Program Files\"))
+                                    od.SelectedPath = @"C:\Program Files\";
+                                if (od.ShowDialog() != DialogResult.Cancel)
+                                {
+                                    if (!new DirectoryInfo(od.SelectedPath).Exists)
+                                        return;
+                                    foreach (DirectoryInfo d in new DirectoryInfo(od.SelectedPath).GetDirectories())
+                                    {
+                                        if (d.Name.ToLower() == "bin" || d.Name.ToLower() == "maps")
+                                        {
+                                            od.SelectedPath = d.Parent.Parent.FullName;
+                                            break;
+                                        }
+                                    }
+                                    parentHomeFolder = od.SelectedPath;
+                                }
+                                else return;
+                            }
+                            if (!new DirectoryInfo(parentHomeFolder).Exists)
+                                return;
+                            DirectoryInfo newestTripleAVersion = new DirectoryInfo(parentHomeFolder).GetDirectories()[0];
+                            foreach (DirectoryInfo cur in new DirectoryInfo(parentHomeFolder).GetDirectories())
                             {
                                 try
                                 {
@@ -1964,259 +1991,264 @@ namespace TripleAGameCreator
                         else
                             break;
                         //MessageBox.Show(cur);
-                        if (cur.Contains("<info ") && cur.Contains("name=\""))
+                        try
                         {
-                            textBox1.Text = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""));
-                            textBox2.Text = cur.Substring(cur.IndexOf("version=\"") + 9, cur.Substring(cur.IndexOf("version=\"") + 9).IndexOf("\""));
-                        }
-                        if (cur.Contains("<territory ") && cur.Contains("name=\""))
-                        {
-                            if (cur.Contains(" water=\"true\""))
+                            if (cur.Contains("<info ") && cur.Contains("name=\""))
+                            {
+                                textBox1.Text = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""));
+                                textBox2.Text = cur.Substring(cur.IndexOf("version=\"") + 9, cur.Substring(cur.IndexOf("version=\"") + 9).IndexOf("\""));
+                            }
+                            if (cur.Contains("<territory ") && cur.Contains("name=\""))
+                            {
+                                if (cur.Contains(" water=\"true\""))
+                                {
+                                    try
+                                    {
+                                        Step2Info.territories[cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""))].IsWater = true;
+                                        TerritoryDefinitionsImageDrawer.Controls[cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""))].BackColor = Color.DodgerBlue;
+                                        TerritoryDefinitionsImageDrawer.Controls[cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""))].Tag = ((string)TerritoryDefinitionsImageDrawer.Controls[cur.Substring(cur.IndexOf("<territory name=\"") + 17, cur.Substring(cur.IndexOf("<territory name=\"") + 17).IndexOf("\""))].Tag) + "Water";
+                                    }
+                                    catch { }
+                                }
+                            }
+                            if (cur.Contains("<connection ") && cur.Contains("t1=\""))
                             {
                                 try
                                 {
-                                    Step2Info.territories[cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""))].IsWater = true;
-                                    TerritoryDefinitionsImageDrawer.Controls[cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""))].BackColor = Color.DodgerBlue;
-                                    TerritoryDefinitionsImageDrawer.Controls[cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""))].Tag = ((string)TerritoryDefinitionsImageDrawer.Controls[cur.Substring(cur.IndexOf("<territory name=\"") + 17, cur.Substring(cur.IndexOf("<territory name=\"") + 17).IndexOf("\""))].Tag) + "Water";
+                                    string L1name = cur.Substring(cur.IndexOf("t1=\"") + 4, cur.Substring(cur.IndexOf("t1=\"") + 4).IndexOf("\""));
+                                    string L2name = cur.Substring(cur.IndexOf(" t2=\"") + 5, cur.Substring(cur.IndexOf(" t2=\"") + 5).IndexOf("\""));
+                                    Label l1 = (Label)TerritoryDefinitionsImageDrawer.Controls[L1name];
+                                    Label l2 = (Label)TerritoryDefinitionsImageDrawer.Controls[L2name];
+                                    Step3Info.connections.Add(l1.Text + "|" + l2.Text, new Connection() { t1 = Step2Info.territories[l1.Text], t2 = Step2Info.territories[l2.Text] });
+                                    Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, l1.Location + new Size(l1.Size.Width / 2, 0), l2.Location + new Size(l2.Size.Width / 2, 0));
                                 }
                                 catch { }
                             }
-                        }
-                        if (cur.Contains("<connection ") && cur.Contains("t1=\""))
-                        {
-                            try
+                            if (cur.Contains("<resource ") && cur.Contains("name=\""))
                             {
-                                string L1name = cur.Substring(cur.IndexOf("t1=\"") + 4, cur.Substring(cur.IndexOf("t1=\"") + 4).IndexOf("\""));
-                                string L2name = cur.Substring(cur.IndexOf(" t2=\"") + 5, cur.Substring(cur.IndexOf(" t2=\"") + 5).IndexOf("\""));
-                                Label l1 = (Label)TerritoryDefinitionsImageDrawer.Controls[L1name];
-                                Label l2 = (Label)TerritoryDefinitionsImageDrawer.Controls[L2name];
-                                Step3Info.connections.Add(l1.Text + "|" + l2.Text, new Connection() { t1 = Step2Info.territories[l1.Text], t2 = Step2Info.territories[l2.Text] });
-                                Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, l1.Location + new Size(l1.Size.Width / 2, 0), l2.Location + new Size(l2.Size.Width / 2, 0));
+                                textBox3.Text = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""));
                             }
-                            catch { }
-                        }
-                        if (cur.Contains("<resource ") && cur.Contains("name=\""))
-                        {
-                            textBox3.Text = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""));
-                        }
-                        if (cur.Contains("<player ") && cur.Contains("name=\""))
-                        {
-                            tplayers.Add(cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), new Player() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")) });
-                        }
-                        if (cur.Contains("<alliance ") && cur.Contains("player=\""))
-                        {
-                            tplayers[cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""))].Alliance = cur.Substring(cur.IndexOf("alliance=\"") + 10, cur.Substring(cur.IndexOf("alliance=\"") + 10).IndexOf("\""));
-                        }
-                        if (cur.Contains("<unit ") && cur.Contains("name=\""))
-                        {
-                            tunits.Add(cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")).ToLower(), new Unit() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")) });
-                        }
-                        if (cur.Contains("<productionRule ") && cur.Contains("name=\""))
-                        {
-                            unitTName = cur.Substring(cur.IndexOf("name=\"") + 9, cur.Substring(cur.IndexOf("name=\"") + 9).IndexOf("\""));
-                        }
-                        if (cur.Contains("<cost ") && cur.Contains("resource=\""))
-                        {
-                            try
+                            if (cur.Contains("<player ") && cur.Contains("name=\""))
                             {
-                                string numTP = cur.Substring(cur.IndexOf(" quantity=\"") + 11, cur.Substring(cur.IndexOf(" quantity=\"") + 11).IndexOf("\""));
-                                tunits[unitTName.ToLower()].cost.cost = Convert.ToInt32(numTP);
+                                tplayers.Add(cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), new Player() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")) });
                             }
-                            catch { }
-                        }
-                        if (cur.Contains("<result ") && cur.Contains("resourceOrUnit=\""))
-                        {
-                            try
+                            if (cur.Contains("<alliance ") && cur.Contains("player=\""))
                             {
-                                tunits[unitTName.ToLower()].cost.result.ResourceOrUnitName = unitTName;
-                                tunits[unitTName.ToLower()].cost.result.BuyQuantity = Convert.ToInt32(cur.Substring(cur.IndexOf(" quantity=\"") + 11, cur.Substring(cur.IndexOf(" quantity=\"") + 11).IndexOf("\"")));
+                                tplayers[cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""))].Alliance = cur.Substring(cur.IndexOf("alliance=\"") + 10, cur.Substring(cur.IndexOf("alliance=\"") + 10).IndexOf("\""));
                             }
-                            catch { }
-                        }
-                        if (cur.Contains("<attatchment ") && cur.Contains("name=\"unitAttatchment\""))
-                        {
-                            unitTName2 = cur.Substring(cur.IndexOf("attatchTo=\"") + 11, cur.Substring(cur.IndexOf("attatchTo=\"") + 11).IndexOf("\"")).ToLower();
-                        }
-                        if (cur.Contains("</attatchment>") && unitTName2.Length > 0)
-                        {
-                            AddUnit(tunits[unitTName2.ToLower()].Name, tunits[unitTName2.ToLower()].cost.cost.ToString(), tunits[unitTName2.ToLower()].cost.result.BuyQuantity.ToString());
-                            AddUnitAttachment(tunits[unitTName2.ToLower()]);
-                            unitTName2 = "";
-                        }
-                        if (cur.Contains("<option ") && cur.Contains("name=\"") && unitTName2.Length > 0)
-                        {
-                            tunits[unitTName2.ToLower()].attachment.options.Add(new UnitOption() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), Value = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\"")) });
-                        }
-                        if (cur.Contains("<resourceGiven ") && cur.Contains("player=\""))
-                        {
-                            string num = cur.Substring(cur.IndexOf(" quantity=\"") + 11, cur.Substring(cur.IndexOf(" quantity=\"") + 11).IndexOf("\""));
-                            tplayers[cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""))].InitialResources = Convert.ToInt32(num);
-                            AddPlayer(tplayers[cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""))].Name, tplayers[cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""))].Alliance, tplayers[cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""))].InitialResources.ToString());
-                        }
-                        if (cur.Contains("<delegate ") && cur.Contains("name=\""))
-                        {
-                            AddGameplayDelegate(cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), cur.Substring(cur.IndexOf("javaClass=\"") + 11 + 32, cur.Substring(cur.IndexOf("javaClass=\"") + 11 + 32).IndexOf("\"")), cur.Substring(cur.IndexOf("display=\"") + 9, cur.Substring(cur.IndexOf("display=\"") + 9).IndexOf("\"")));
-                        }
-                        if (cur.Contains("<step ") && cur.Contains("name=\""))
-                        {
-                            if (cur.Contains("player=\""))
+                            if (cur.Contains("<unit ") && cur.Contains("name=\""))
                             {
-                                if (!cur.Contains(" maxRunCount=\""))
-                                    AddPlayerDelegate(cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), cur.Substring(cur.IndexOf(" delegate=\"") + 11, cur.Substring(cur.IndexOf(" delegate=\"") + 11).IndexOf("\"")), cur.Substring(cur.IndexOf(" player=\"") + 9, cur.Substring(cur.IndexOf(" player=\"") + 9).IndexOf("\"")), "0");
-                                else
-                                    AddPlayerDelegate(cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), cur.Substring(cur.IndexOf(" delegate=\"") + 11, cur.Substring(cur.IndexOf(" delegate=\"") + 11).IndexOf("\"")), cur.Substring(cur.IndexOf(" player=\"") + 9, cur.Substring(cur.IndexOf(" player=\"") + 9).IndexOf("\"")), cur.Substring(cur.IndexOf(" maxRunCount=\"") + 14, cur.Substring(cur.IndexOf(" maxRunCount=\"") + 14).IndexOf("\"")));
+                                tunits.Add(cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")).ToLower(), new Unit() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")) });
                             }
-                            else
+                            if (cur.Contains("<productionRule ") && cur.Contains("name=\""))
                             {
-                                //AddPlayerDelegate(cur.Substring(cur.IndexOf("<step name=\"") + 12, cur.Substring(cur.IndexOf("<step name=\"") + 12).IndexOf("\"")), cur.Substring(cur.IndexOf("\" delegate=\"") + 12, cur.Substring(cur.IndexOf("\" delegate=\"") + 12).IndexOf("\"")), "" , cur.Substring(cur.IndexOf("\" maxRunCount=\"") + 15, cur.Substring(cur.IndexOf("\" maxRunCount=\"") + 15).IndexOf("\"")));
+                                unitTName = cur.Substring(cur.IndexOf("name=\"") + 9, cur.Substring(cur.IndexOf("name=\"") + 9).IndexOf("\""));
                             }
-                        }
-                        if (cur.Contains("<productionFrontier ") && cur.Contains("name=\""))
-                        {
-                            pfTName = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""));
-                            pfts.Add(pfTName, new ProductionFrontier() { Name = pfTName });
-                        }
-                        if (cur.Contains("<frontierRules ") && cur.Contains("name=\""))
-                        {
-                            pfts[pfTName].UnitsInFrontier.Add(new Unit() { Name = cur.Substring(cur.IndexOf("name=\"") + 9, cur.Substring(cur.IndexOf("name=\"") + 9).IndexOf("\"")) });
-                        }
-                        if (cur.Contains("<playerProduction ") && cur.Contains("player=\""))
-                        {
-                            pfts[cur.Substring(cur.IndexOf(" frontier=\"") + 11, cur.Substring(cur.IndexOf(" frontier=\"") + 11).IndexOf("\""))].Name = cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""));
-                            AddProductionFrontier(pfts[cur.Substring(cur.IndexOf(" frontier=\"") + 11, cur.Substring(cur.IndexOf(" frontier=\"") + 11).IndexOf("\""))]);
-                        }
-                        if (cur.Contains("<attatchment ") && cur.Contains("name=\"techAttatchment\""))
-                        {
-                            ttplayer = cur.Substring(cur.IndexOf(" attatchTo=\"") + 12, cur.Substring(cur.IndexOf(" attatchTo=\"") + 12).IndexOf("\""));
-                        }
-                        if (cur.Contains("<option ") && cur.Contains("name=\"") && ttplayer.Length > 0)
-                        {
-                            techs.Add(new Technology() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), AlreadyEnabled = Convert.ToBoolean(cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\""))), player = new Player() { Name = ttplayer } });
-                        }
-                        if (cur.Contains("</attatchment>") && ttplayer.Length > 0)
-                        {
-                            AddTechs(techs);
-                            ttplayer = "";
-                        }
-                        if (cur.Contains("<attatchment ") && cur.Contains("name=\"territoryAttatchment\""))
-                        {
-                            tTName = cur.Substring(cur.IndexOf(" attatchTo=\"") + 12, cur.Substring(cur.IndexOf(" attatchTo=\"") + 12).IndexOf("\""));
-                        }
-                        if (cur.Contains("<option ") && cur.Contains("name=\"production\""))
-                        {
-                            Step2Info.territories[tTName].Production = Convert.ToInt32(cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\"")));
-                        }
-                        if (cur.Contains("<option ") && cur.Contains("name=\"capital\""))
-                        {
-                            Step2Info.territories[tTName].IsCapitol = true; //                            TerritoryDefinitionsImageDrawer.Controls[cur.Substring(cur.IndexOf("<territory name=\"") + 17, cur.Substring(cur.IndexOf("<territory name=\"") + 17).IndexOf("\""))].BackColor = Color.DodgerBlue;
-                            TerritoryDefinitionsImageDrawer.Controls[tTName].Tag = ((string)TerritoryDefinitionsImageDrawer.Controls[tTName].Tag) + "Capitol";
-                            TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor = Color.Violet;
-                        }
-                        if (cur.Contains("<option ") && cur.Contains("name=\"isImpassible\"") && cur.Contains("value=\"true\""))
-                        {
-                            Step2Info.territories[tTName].IsImpassable = true;
-                            TerritoryDefinitionsImageDrawer.Controls[tTName].Tag = ((string)TerritoryDefinitionsImageDrawer.Controls[tTName].Tag) + "Impassable";
-                            TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor = Color.DarkGray;
-                        }
-                        if (cur.Contains("<option ") && cur.Contains("name=\"victoryCity\"") && cur.Contains("value=\"true\""))
-                        {
-                            Step2Info.territories[tTName].IsVictoryCity = true;
-                            TerritoryDefinitionsImageDrawer.Controls[tTName].Tag = ((string)TerritoryDefinitionsImageDrawer.Controls[tTName].Tag) + "VictoryCity";
-                            TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor = Color.Red;
-                        }
-                        if (cur.Contains("</attatchment>") && tTName.Length > 0)
-                        {
-                            tTName = "";
-                        }
-                        if (cur.Contains("<attatchment ") && cur.Contains("name=\"canalAttatchment"))
-                        {
-                            tTName2 = cur.Substring(cur.IndexOf(" attatchTo=\"") + 12, cur.Substring(cur.IndexOf(" attatchTo=\"") + 12).IndexOf("\""));
-                        }
-                        if (cur.Contains("<option ") && cur.Contains("name=\"canalName\"") && cur.Contains("value=\""))
-                        {
-                            cn = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\""));
-                            try
+                            if (cur.Contains("<cost ") && cur.Contains("resource=\""))
                             {
-                                Step12Info.Canals[cn].CanalSeaNeighbors.Add(Step2Info.territories[tTName2]);
-                            }
-                            catch
-                            {
-                                Canal c = new Canal() { Name = cn };
-                                c.CanalSeaNeighbors.Add(Step2Info.territories[tTName2]);
-                                Step12Info.Canals.Add(cn, c);
-                            }
-                        }
-                        if (cur.Contains("<option ") && cur.Contains("name=\"landTerritories\""))
-                        {
-                            int ni = 0;
-                            try
-                            {
-                                string tn = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf(":"));
-                                Step12Info.Canals[cn].LandTerritories.Add(Step2Info.territories[tn]);
-                            }
-                            catch
-                            {
-                                string tn = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\""));
-                                Step12Info.Canals[cn].LandTerritories.Add(Step2Info.territories[tn]);
-                            }
-                            try
-                            {
-                                if (cur.Substring(ni).Contains(":"))
+                                try
                                 {
-                                    Step12Info.Canals[cn].LandTerritories.Add(Step2Info.territories[cur.Substring(cur.IndexOf(":") + 1, cur.Substring(cur.IndexOf(":") + 1).IndexOf("\""))]);
-                                    ni += cur.IndexOf(":") + 1;
+                                    string numTP = cur.Substring(cur.IndexOf(" quantity=\"") + 11, cur.Substring(cur.IndexOf(" quantity=\"") + 11).IndexOf("\""));
+                                    tunits[unitTName.ToLower()].cost.cost = Convert.ToInt32(numTP);
+                                }
+                                catch { }
+                            }
+                            if (cur.Contains("<result ") && cur.Contains("resourceOrUnit=\""))
+                            {
+                                try
+                                {
+                                    tunits[unitTName.ToLower()].cost.result.ResourceOrUnitName = unitTName;
+                                    tunits[unitTName.ToLower()].cost.result.BuyQuantity = Convert.ToInt32(cur.Substring(cur.IndexOf(" quantity=\"") + 11, cur.Substring(cur.IndexOf(" quantity=\"") + 11).IndexOf("\"")));
+                                }
+                                catch { }
+                            }
+                            if (cur.Contains("<attatchment ") && cur.Contains("name=\"unitAttatchment\""))
+                            {
+                                unitTName2 = cur.Substring(cur.IndexOf("attatchTo=\"") + 11, cur.Substring(cur.IndexOf("attatchTo=\"") + 11).IndexOf("\"")).ToLower();
+                            }
+                            if (cur.Contains("</attatchment>") && unitTName2.Length > 0)
+                            {
+                                AddUnit(tunits[unitTName2.ToLower()].Name, tunits[unitTName2.ToLower()].cost.cost.ToString(), tunits[unitTName2.ToLower()].cost.result.BuyQuantity.ToString());
+                                AddUnitAttachment(tunits[unitTName2.ToLower()]);
+                                unitTName2 = "";
+                            }
+                            if (cur.Contains("<option ") && cur.Contains("name=\"") && unitTName2.Length > 0)
+                            {
+                                tunits[unitTName2.ToLower()].attachment.options.Add(new UnitOption() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), Value = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\"")) });
+                            }
+                            if (cur.Contains("<resourceGiven ") && cur.Contains("player=\""))
+                            {
+                                string num = cur.Substring(cur.IndexOf(" quantity=\"") + 11, cur.Substring(cur.IndexOf(" quantity=\"") + 11).IndexOf("\""));
+                                tplayers[cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""))].InitialResources = Convert.ToInt32(num);
+                                AddPlayer(tplayers[cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""))].Name, tplayers[cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""))].Alliance, tplayers[cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""))].InitialResources.ToString());
+                            }
+                            if (cur.Contains("<delegate ") && cur.Contains("name=\""))
+                            {
+                                AddGameplayDelegate(cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), cur.Substring(cur.IndexOf("javaClass=\"") + 11 + 32, cur.Substring(cur.IndexOf("javaClass=\"") + 11 + 32).IndexOf("\"")), cur.Substring(cur.IndexOf("display=\"") + 9, cur.Substring(cur.IndexOf("display=\"") + 9).IndexOf("\"")));
+                            }
+                            if (cur.Contains("<step ") && cur.Contains("name=\""))
+                            {
+                                if (cur.Contains("player=\""))
+                                {
+                                    if (!cur.Contains(" maxRunCount=\""))
+                                        AddPlayerDelegate(cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), cur.Substring(cur.IndexOf(" delegate=\"") + 11, cur.Substring(cur.IndexOf(" delegate=\"") + 11).IndexOf("\"")), cur.Substring(cur.IndexOf(" player=\"") + 9, cur.Substring(cur.IndexOf(" player=\"") + 9).IndexOf("\"")), "0");
+                                    else
+                                        AddPlayerDelegate(cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), cur.Substring(cur.IndexOf(" delegate=\"") + 11, cur.Substring(cur.IndexOf(" delegate=\"") + 11).IndexOf("\"")), cur.Substring(cur.IndexOf(" player=\"") + 9, cur.Substring(cur.IndexOf(" player=\"") + 9).IndexOf("\"")), cur.Substring(cur.IndexOf(" maxRunCount=\"") + 14, cur.Substring(cur.IndexOf(" maxRunCount=\"") + 14).IndexOf("\"")));
+                                }
+                                else
+                                {
+                                    //AddPlayerDelegate(cur.Substring(cur.IndexOf("<step name=\"") + 12, cur.Substring(cur.IndexOf("<step name=\"") + 12).IndexOf("\"")), cur.Substring(cur.IndexOf("\" delegate=\"") + 12, cur.Substring(cur.IndexOf("\" delegate=\"") + 12).IndexOf("\"")), "" , cur.Substring(cur.IndexOf("\" maxRunCount=\"") + 15, cur.Substring(cur.IndexOf("\" maxRunCount=\"") + 15).IndexOf("\"")));
                                 }
                             }
-                            catch { }
-                        }
-                        if (cur.Contains("</attatchment>") && tTName2.Trim().Length > 0)
-                        {
-                            tTName2 = "";
-                        }
-                        if (cur.Contains("<territoryOwner ") && cur.Contains("territory=\""))
-                        {
-                            string tn = cur.Substring(cur.IndexOf("territory=\"") + 11, cur.Substring(cur.IndexOf("territory=\"") + 11).IndexOf("\""));
-                            string on = cur.Substring(cur.IndexOf(" owner=\"") + 8, cur.Substring(cur.IndexOf(" owner=\"") + 8).IndexOf("\""));
-                            Step2Info.territories[tn].Owner = new Player() { Name = on };
-                        }
-                        if (cur.Contains("<unitPlacement ") && cur.Contains("unitType=\""))
-                        {
-                            string tn = cur.Substring(cur.IndexOf("territory=\"") + 11, cur.Substring(cur.IndexOf("territory=\"") + 11).IndexOf("\""));
-                            string on = "";
-                            if (cur.Contains(" owner=\""))
-                                on = cur.Substring(cur.IndexOf(" owner=\"") + 8, cur.Substring(cur.IndexOf(" owner=\"") + 8).IndexOf("\""));
-                            string ut = cur.Substring(cur.IndexOf("unitType=\"") + 10, cur.Substring(cur.IndexOf("unitType=\"") + 10).IndexOf("\""));
-                            string uq = cur.Substring(cur.IndexOf(" quantity=\"") + 11, cur.Substring(cur.IndexOf(" quantity=\"") + 11).IndexOf("\""));
-                            int addAmount = Convert.ToInt32(uq);
-                            for (int i = 0; i < addAmount; i++)
+                            if (cur.Contains("<productionFrontier ") && cur.Contains("name=\""))
                             {
-                                if (on.Trim().Length > 0)
-                                    Step2Info.territories[tn].Units.Add(new Unit() { Name = ut, unitOwner = new Player() { Name = on } });
-                                else
-                                    Step2Info.territories[tn].Units.Add(new Unit() { Name = ut });
+                                pfTName = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\""));
+                                pfts.Add(pfTName, new ProductionFrontier() { Name = pfTName });
+                            }
+                            if (cur.Contains("<frontierRules ") && cur.Contains("name=\""))
+                            {
+                                pfts[pfTName].UnitsInFrontier.Add(new Unit() { Name = cur.Substring(cur.IndexOf("name=\"") + 9, cur.Substring(cur.IndexOf("name=\"") + 9).IndexOf("\"")) });
+                            }
+                            if (cur.Contains("<playerProduction ") && cur.Contains("player=\""))
+                            {
+                                pfts[cur.Substring(cur.IndexOf(" frontier=\"") + 11, cur.Substring(cur.IndexOf(" frontier=\"") + 11).IndexOf("\""))].Name = cur.Substring(cur.IndexOf("player=\"") + 8, cur.Substring(cur.IndexOf("player=\"") + 8).IndexOf("\""));
+                                AddProductionFrontier(pfts[cur.Substring(cur.IndexOf(" frontier=\"") + 11, cur.Substring(cur.IndexOf(" frontier=\"") + 11).IndexOf("\""))]);
+                            }
+                            if (cur.Contains("<attatchment ") && cur.Contains("name=\"techAttatchment\""))
+                            {
+                                ttplayer = cur.Substring(cur.IndexOf(" attatchTo=\"") + 12, cur.Substring(cur.IndexOf(" attatchTo=\"") + 12).IndexOf("\""));
+                            }
+                            if (cur.Contains("<option ") && cur.Contains("name=\"") && ttplayer.Length > 0)
+                            {
+                                techs.Add(new Technology() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), AlreadyEnabled = Convert.ToBoolean(cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\""))), player = new Player() { Name = ttplayer } });
+                            }
+                            if (cur.Contains("</attatchment>") && ttplayer.Length > 0)
+                            {
+                                AddTechs(techs);
+                                ttplayer = "";
+                            }
+                            if (cur.Contains("<attatchment ") && cur.Contains("name=\"territoryAttatchment\""))
+                            {
+                                tTName = cur.Substring(cur.IndexOf(" attatchTo=\"") + 12, cur.Substring(cur.IndexOf(" attatchTo=\"") + 12).IndexOf("\""));
+                            }
+                            if (cur.Contains("<option ") && cur.Contains("name=\"production\""))
+                            {
+                                Step2Info.territories[tTName].Production = Convert.ToInt32(cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\"")));
+                            }
+                            if (cur.Contains("<option ") && cur.Contains("name=\"capital\""))
+                            {
+                                Step2Info.territories[tTName].IsCapitol = true; //                            TerritoryDefinitionsImageDrawer.Controls[cur.Substring(cur.IndexOf("<territory name=\"") + 17, cur.Substring(cur.IndexOf("<territory name=\"") + 17).IndexOf("\""))].BackColor = Color.DodgerBlue;
+                                TerritoryDefinitionsImageDrawer.Controls[tTName].Tag = ((string)TerritoryDefinitionsImageDrawer.Controls[tTName].Tag) + "Capitol";
+                                TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor = Color.Violet;
+                            }
+                            if (cur.Contains("<option ") && cur.Contains("name=\"isImpassible\"") && cur.Contains("value=\"true\""))
+                            {
+                                Step2Info.territories[tTName].IsImpassable = true;
+                                TerritoryDefinitionsImageDrawer.Controls[tTName].Tag = ((string)TerritoryDefinitionsImageDrawer.Controls[tTName].Tag) + "Impassable";
+                                TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor = Color.DarkGray;
+                            }
+                            if (cur.Contains("<option ") && cur.Contains("name=\"victoryCity\"") && cur.Contains("value=\"true\""))
+                            {
+                                Step2Info.territories[tTName].IsVictoryCity = true;
+                                TerritoryDefinitionsImageDrawer.Controls[tTName].Tag = ((string)TerritoryDefinitionsImageDrawer.Controls[tTName].Tag) + "VictoryCity";
+                                if(TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor != Color.Violet)
+                                    TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor = Color.Red;
+                            }
+                            if (cur.Contains("</attatchment>") && tTName.Length > 0)
+                            {
+                                tTName = "";
+                            }
+                            if (cur.Contains("<attatchment ") && cur.Contains("name=\"canalAttatchment"))
+                            {
+                                tTName2 = cur.Substring(cur.IndexOf(" attatchTo=\"") + 12, cur.Substring(cur.IndexOf(" attatchTo=\"") + 12).IndexOf("\""));
+                            }
+                            if (cur.Contains("<option ") && cur.Contains("name=\"canalName\"") && cur.Contains("value=\""))
+                            {
+                                cn = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\""));
+                                try
+                                {
+                                    Step12Info.Canals[cn].CanalSeaNeighbors.Add(Step2Info.territories[tTName2]);
+                                }
+                                catch
+                                {
+                                    Canal c = new Canal() { Name = cn };
+                                    c.CanalSeaNeighbors.Add(Step2Info.territories[tTName2]);
+                                    Step12Info.Canals.Add(cn, c);
+                                }
+                            }
+                            if (cur.Contains("<option ") && cur.Contains("name=\"landTerritories\""))
+                            {
+                                int ni = 0;
+                                try
+                                {
+                                    string tn = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf(":"));
+                                    Step12Info.Canals[cn].LandTerritories.Add(Step2Info.territories[tn]);
+                                }
+                                catch
+                                {
+                                    string tn = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\""));
+                                    Step12Info.Canals[cn].LandTerritories.Add(Step2Info.territories[tn]);
+                                }
+                                try
+                                {
+                                    if (cur.Substring(ni).Contains(":"))
+                                    {
+                                        Step12Info.Canals[cn].LandTerritories.Add(Step2Info.territories[cur.Substring(cur.IndexOf(":") + 1, cur.Substring(cur.IndexOf(":") + 1).IndexOf("\""))]);
+                                        ni += cur.IndexOf(":") + 1;
+                                    }
+                                }
+                                catch { }
+                            }
+                            if (cur.Contains("</attatchment>") && tTName2.Trim().Length > 0)
+                            {
+                                tTName2 = "";
+                            }
+                            if (cur.Contains("<territoryOwner ") && cur.Contains("territory=\""))
+                            {
+                                string tn = cur.Substring(cur.IndexOf("territory=\"") + 11, cur.Substring(cur.IndexOf("territory=\"") + 11).IndexOf("\""));
+                                string on = cur.Substring(cur.IndexOf(" owner=\"") + 8, cur.Substring(cur.IndexOf(" owner=\"") + 8).IndexOf("\""));
+                                Step2Info.territories[tn].Owner = new Player() { Name = on };
+                            }
+                            if (cur.Contains("<unitPlacement ") && cur.Contains("unitType=\""))
+                            {
+                                string tn = cur.Substring(cur.IndexOf("territory=\"") + 11, cur.Substring(cur.IndexOf("territory=\"") + 11).IndexOf("\""));
+                                string on = "";
+                                if (cur.Contains(" owner=\""))
+                                    on = cur.Substring(cur.IndexOf(" owner=\"") + 8, cur.Substring(cur.IndexOf(" owner=\"") + 8).IndexOf("\""));
+                                string ut = cur.Substring(cur.IndexOf("unitType=\"") + 10, cur.Substring(cur.IndexOf("unitType=\"") + 10).IndexOf("\""));
+                                string uq = cur.Substring(cur.IndexOf(" quantity=\"") + 11, cur.Substring(cur.IndexOf(" quantity=\"") + 11).IndexOf("\""));
+                                int addAmount = Convert.ToInt32(uq);
+                                for (int i = 0; i < addAmount; i++)
+                                {
+                                    if (on.Trim().Length > 0)
+                                        Step2Info.territories[tn].Units.Add(new Unit() { Name = ut, unitOwner = new Player() { Name = on } });
+                                    else
+                                        Step2Info.territories[tn].Units.Add(new Unit() { Name = ut });
+                                }
+                            }
+                            if (cur.Contains("<property ") && !(cur.Contains("name=\"notes\" value=\"")/* || cur.Contains("name=\"mapName\" value=\"")*/))
+                            {
+                                sta = new Setting() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), Value = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\"")) };
+                                if (cur.Contains(" editable=\""))
+                                    sta.Editable = Convert.ToBoolean(cur.Substring(cur.IndexOf(" editable=\"") + 11, cur.Substring(cur.IndexOf(" editable=\"") + 11).IndexOf("\"")));
+                                if (cur.Contains("/>"))
+                                    AddInGameSetting(sta);
+                            }
+                            if (cur.Contains("<number min=\""))
+                            {
+                                sta.IntMin = Convert.ToInt32(cur.Substring(cur.IndexOf("min=\"") + 5, cur.Substring(cur.IndexOf("min=\"") + 5).IndexOf("\"")));
+                                sta.IntMax = Convert.ToInt32(cur.Substring(cur.IndexOf("max=\"") + 5, cur.Substring(cur.IndexOf("max=\"") + 5).IndexOf("\"")));
+                            }
+                            if (cur.Contains("</property>") && !(cur.Contains("name=\"notes\" value=\"")/* || cur.Contains("name=\"mapName\" value=\"")*/))
+                            {
+                                AddInGameSetting(sta);
+                            }
+                            if (cur.Contains("name=\"notes\" value=\""))
+                            {
+                                mapNotesTextBox.Text = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\""));
                             }
                         }
-                        if (cur.Contains("<property ") && !(cur.Contains("name=\"notes\" value=\"")/* || cur.Contains("name=\"mapName\" value=\"")*/))
-                        {
-                            sta = new Setting() { Name = cur.Substring(cur.IndexOf("name=\"") + 6, cur.Substring(cur.IndexOf("name=\"") + 6).IndexOf("\"")), Value = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\"")) };
-                            if (cur.Contains(" editable=\""))
-                                sta.Editable = Convert.ToBoolean(cur.Substring(cur.IndexOf(" editable=\"") + 11, cur.Substring(cur.IndexOf(" editable=\"") + 11).IndexOf("\"")));
-                            if (cur.Contains("/>"))
-                                AddInGameSetting(sta);
-                        }
-                        if (cur.Contains("<number min=\""))
-                        {
-                            sta.IntMin = Convert.ToInt32(cur.Substring(cur.IndexOf("min=\"") + 5, cur.Substring(cur.IndexOf("min=\"") + 5).IndexOf("\"")));
-                            sta.IntMax = Convert.ToInt32(cur.Substring(cur.IndexOf("max=\"") + 5, cur.Substring(cur.IndexOf("max=\"") + 5).IndexOf("\"")));
-                        }
-                        if (cur.Contains("</property>") && !(cur.Contains("name=\"notes\" value=\"")/* || cur.Contains("name=\"mapName\" value=\"")*/))
-                        {
-                            AddInGameSetting(sta);
-                        }
-                        if (cur.Contains("name=\"notes\" value=\""))
-                        {
-                            mapNotesTextBox.Text = cur.Substring(cur.IndexOf(" value=\"") + 8, cur.Substring(cur.IndexOf(" value=\"") + 8).IndexOf("\""));
-                        }
+                        catch { errorOccured = true; }
                     }
                     Step1Info.LoadedFile = d4.FileName;
                 }
@@ -2225,7 +2257,11 @@ namespace TripleAGameCreator
             {
                 MessageBox.Show("An error occured when trying to load the Xml file. Make sure the xml file has no errors.", "Error Loading Xml File");
             }
-            Stop();
+            if (errorOccured)
+            {
+                MessageBox.Show("An error occured when trying to load the Xml file. Make sure the xml file has no errors.", "Error Loading Xml File.");
+            }
+                Stop();
         }
         private void ClearAllDataAndControls()
         {
@@ -2717,17 +2753,35 @@ namespace TripleAGameCreator
                 lines.Add("        <loader javaClass=\"games.strategy.triplea.TripleA\"/>");
                 lines.Add("        <map>");
                 lines.Add("                <!-- Territory Definitions -->");
-                foreach (Territory cur in Step2Info.territories.Values)
+                foreach (Player player in Step4Info.players.Values)
                 {
-                    lines.Add("                <territory name=\"" + cur.Name + "\""
-                        + (cur.IsWater ? " water=\"true\"" : "") + "/>");
+                    foreach (Territory cur in Step2Info.territories.Values)
+                    {
+                        if (cur.Owner.Name == player.Name)
+                        {
+                            lines.Add("                <territory name=\"" + cur.Name + "\""
+                                + (cur.IsWater ? " water=\"true\"" : "") + "/>");
+                        }
+                    }
                 }
                 lines.Add("");
                 lines.Add("                <!-- Territory Connections -->");
-                foreach (Connection cur in Step3Info.connections.Values)
+                foreach (Player player in Step4Info.players.Values)
                 {
-                    if(cur.t1.Name != cur.t2.Name)
-                        lines.Add("                <connection t1=\"" + cur.t1.Name + "\" t2=\"" + cur.t2.Name + "\"/>");
+                    foreach (Territory terr in Step2Info.territories.Values)
+                    {
+                        if (terr.Owner.Name == player.Name)
+                        {
+                            foreach (Connection cur in Step3Info.connections.Values)
+                            {
+                                if (cur.t1.Name == terr.Name)
+                                {
+                                    if (cur.t1.Name != cur.t2.Name)
+                                        lines.Add("                <connection t1=\"" + cur.t1.Name + "\" t2=\"" + cur.t2.Name + "\"/>");
+                                }
+                            }
+                        }
+                    }
                 }
                 lines.Add("        </map>");
                 lines.Add("        <resourceList>");
@@ -2813,20 +2867,26 @@ namespace TripleAGameCreator
                     }
                     lines.Add("                    </attatchment>");
                 }
-                foreach (Territory cur in Step2Info.territories.Values)
+                foreach (Player player in Step4Info.players.Values)
                 {
-                    if ((cur.Production > 0 || cur.IsWater == false || cur.IsCapitol || cur.IsVictoryCity || cur.IsImpassable))
+                    foreach (Territory cur in Step2Info.territories.Values)
                     {
-                        lines.Add("                    <attatchment name=\"territoryAttatchment\" attatchTo=\"" + cur.Name + "\" javaClass=\"games.strategy.triplea.attatchments.TerritoryAttachment\" type=\"territory\">");
-                        if(cur.Production > 0 || cur.IsWater == false)
-                            lines.Add("                        <option name=\"production\" value=\"" + cur.Production + "\"/>");
-                        if (cur.IsCapitol)
-                            lines.Add("                        <option name=\"capital\" value=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
-                        if (cur.IsVictoryCity)
-                            lines.Add("                        <option name=\"victoryCity\" value=\"true\"/>");
-                        if (cur.IsImpassable)
-                            lines.Add("                        <option name=\"isImpassible\" value=\"true\"/>");
-                        lines.Add("                   </attatchment>");
+                        if (cur.Owner.Name == player.Name)
+                        {
+                            if ((cur.Production > 0 || cur.IsWater == false || cur.IsCapitol || cur.IsVictoryCity || cur.IsImpassable))
+                            {
+                                lines.Add("                    <attatchment name=\"territoryAttatchment\" attatchTo=\"" + cur.Name + "\" javaClass=\"games.strategy.triplea.attatchments.TerritoryAttachment\" type=\"territory\">");
+                                if (cur.Production > 0 || cur.IsWater == false)
+                                    lines.Add("                        <option name=\"production\" value=\"" + cur.Production + "\"/>");
+                                if (cur.IsCapitol)
+                                    lines.Add("                        <option name=\"capital\" value=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
+                                if (cur.IsVictoryCity)
+                                    lines.Add("                        <option name=\"victoryCity\" value=\"true\"/>");
+                                if (cur.IsImpassable)
+                                    lines.Add("                        <option name=\"isImpassible\" value=\"true\"/>");
+                                lines.Add("                   </attatchment>");
+                            }
+                        }
                     }
                 }
                 try
@@ -2862,23 +2922,35 @@ namespace TripleAGameCreator
                 lines.Add("        </attatchmentList>");
                 lines.Add("        <initialize>");
                 lines.Add("                <ownerInitialize>");
-                foreach (Territory cur in Step2Info.territories.Values)
+                foreach (Player player in Step4Info.players.Values)
                 {
-                    if(cur.Owner.Name.Length > 0)
-                        lines.Add("                        <territoryOwner territory=\"" + cur.Name + "\" owner=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
+                    foreach (Territory cur in Step2Info.territories.Values)
+                    {
+                        if (cur.Owner.Name == player.Name)
+                        {
+                            if (cur.Owner.Name.Length > 0)
+                                lines.Add("                        <territoryOwner territory=\"" + cur.Name + "\" owner=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
+                        }
+                    }
                 }
                 lines.Add("                </ownerInitialize>");
                 lines.Add("                <unitInitialize>");
-                foreach (Territory cur in Step2Info.territories.Values)
+                foreach (Player player in Step4Info.players.Values)
                 {
-                    foreach (Unit cur2 in cur.Units)
+                    foreach (Territory cur in Step2Info.territories.Values)
                     {
-                        if (cur2.unitOwner.Name.Trim().Length > 0)
-                            lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur2.unitOwner.Name.Replace(" ", "") + "\"/>");
-                        else if (cur.Owner.Name.Length > 0)
-                            lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
-                        else
-                            lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\"/>");
+                        if (cur.Owner.Name == player.Name)
+                        {
+                            foreach (Unit cur2 in cur.Units)
+                            {
+                                if (cur2.unitOwner.Name.Trim().Length > 0)
+                                    lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur2.unitOwner.Name.Replace(" ", "") + "\"/>");
+                                else if (cur.Owner.Name.Length > 0)
+                                    lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
+                                else
+                                    lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\"/>");
+                            }
+                        }
                     }
                 }
                 lines.Add("                </unitInitialize>");
@@ -3516,6 +3588,10 @@ namespace TripleAGameCreator
         Point oLocation = new Point();
         public GrabPanel()
         {
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
+            this.SetStyle(ControlStyles.UserPaint, true);
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.UpdateStyles();
             MouseDown += new MouseEventHandler(mouseDown);
             MouseMove += new MouseEventHandler(mouseMove);
             MouseUp += new MouseEventHandler(mouseUp);
@@ -3540,7 +3616,7 @@ namespace TripleAGameCreator
                     {
                         ((Panel)Parent).VerticalScroll.Value = oLocation.Y + omLocation.Y - Form1.MousePosition.Y;
                     }
-                    catch 
+                    catch
                     {
                         ((Panel)Parent).VerticalScroll.Value = 0;
                     }
@@ -3548,7 +3624,7 @@ namespace TripleAGameCreator
                     {
                         ((Panel)Parent).HorizontalScroll.Value = oLocation.X + omLocation.X - Form1.MousePosition.X;
                     }
-                    catch 
+                    catch
                     {
                         ((Panel)Parent).HorizontalScroll.Value = 0;
                     }
@@ -3561,6 +3637,15 @@ namespace TripleAGameCreator
             if (e.Button == MouseButtons.Right)
             {
                 down = false;
+            }
+        }
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams params1 = base.CreateParams;
+                params1.ExStyle |= 0x20;
+                return params1;
             }
         }
     }

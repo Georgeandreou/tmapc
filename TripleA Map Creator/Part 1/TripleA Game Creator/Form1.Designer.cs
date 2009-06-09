@@ -85,6 +85,7 @@ namespace TripleA_Game_Creator
             this.button21 = new System.Windows.Forms.Button();
             this.button22 = new System.Windows.Forms.Button();
             this.label24 = new System.Windows.Forms.Label();
+            this.tabPage10 = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -98,6 +99,10 @@ namespace TripleA_Game_Creator
             this.label1 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button23 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -108,6 +113,7 @@ namespace TripleA_Game_Creator
             this.tabPage7.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.tabPage9.SuspendLayout();
+            this.tabPage10.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -122,6 +128,7 @@ namespace TripleA_Game_Creator
             this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Controls.Add(this.tabPage9);
+            this.tabControl1.Controls.Add(this.tabPage10);
             this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this.tabControl1.Location = new System.Drawing.Point(182, -21);
             this.tabControl1.Name = "tabControl1";
@@ -380,6 +387,8 @@ namespace TripleA_Game_Creator
             this.label10.Size = new System.Drawing.Size(63, 13);
             this.label10.TabIndex = 4;
             this.label10.Text = "Player Color";
+            this.toolTip1.SetToolTip(this.label10, "This column is where you enter the color for the player. It has to be a six digit" +
+                    " number like: #fbaa29");
             // 
             // label9
             // 
@@ -389,6 +398,7 @@ namespace TripleA_Game_Creator
             this.label9.Size = new System.Drawing.Size(67, 13);
             this.label9.TabIndex = 4;
             this.label9.Text = "Player Name";
+            this.toolTip1.SetToolTip(this.label9, "This column is where you enter the player name.");
             // 
             // textBox1
             // 
@@ -396,7 +406,6 @@ namespace TripleA_Game_Creator
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(137, 20);
             this.textBox1.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.textBox1, "This is where you enter the player name.");
             // 
             // textBox2
             // 
@@ -404,8 +413,6 @@ namespace TripleA_Game_Creator
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.textBox2, "This is where you enter the color for the player. It has to be a six digit number" +
-                    " like: #fbaa29");
             this.textBox2.DoubleClick += new System.EventHandler(this.textBox2_DoubleClick);
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
@@ -760,6 +767,18 @@ namespace TripleA_Game_Creator
             this.label24.TabIndex = 21;
             this.label24.Text = "Image Shrinker";
             // 
+            // tabPage10
+            // 
+            this.tabPage10.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage10.Controls.Add(this.button23);
+            this.tabPage10.Controls.Add(this.button4);
+            this.tabPage10.Controls.Add(this.label28);
+            this.tabPage10.Location = new System.Drawing.Point(4, 22);
+            this.tabPage10.Name = "tabPage10";
+            this.tabPage10.Size = new System.Drawing.Size(580, 453);
+            this.tabPage10.TabIndex = 9;
+            this.tabPage10.Text = "tabPage10";
+            // 
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -880,6 +899,53 @@ namespace TripleA_Game_Creator
             this.label8.TabIndex = 10;
             this.label8.Text = "9: Image Shrinker";
             // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.Location = new System.Drawing.Point(12, 214);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(148, 14);
+            this.label27.TabIndex = 10;
+            this.label27.Text = "10: Halfway Finished!!";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label28.Location = new System.Drawing.Point(205, 8);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(159, 18);
+            this.label28.TabIndex = 3;
+            this.label28.Text = "Halfway Finished!!";
+            // 
+            // button4
+            // 
+            this.button4.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
+            this.button4.FlatAppearance.BorderSize = 0;
+            this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.Control;
+            this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.Location = new System.Drawing.Point(32, 53);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(516, 299);
+            this.button4.TabIndex = 12;
+            this.button4.Text = resources.GetString("button4.Text");
+            this.button4.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // button23
+            // 
+            this.button23.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button23.Location = new System.Drawing.Point(136, 368);
+            this.button23.Name = "button23";
+            this.button23.Size = new System.Drawing.Size(311, 50);
+            this.button23.TabIndex = 13;
+            this.button23.Text = "Open Part 2!!!";
+            this.button23.UseVisualStyleBackColor = true;
+            this.button23.Click += new System.EventHandler(this.button23_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -887,6 +953,7 @@ namespace TripleA_Game_Creator
             this.ClientSize = new System.Drawing.Size(769, 491);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel2);
+            this.Controls.Add(this.label27);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
@@ -922,6 +989,8 @@ namespace TripleA_Game_Creator
             this.tabPage8.PerformLayout();
             this.tabPage9.ResumeLayout(false);
             this.tabPage9.PerformLayout();
+            this.tabPage10.ResumeLayout(false);
+            this.tabPage10.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -998,6 +1067,11 @@ namespace TripleA_Game_Creator
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TabPage tabPage10;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Button button23;
+        private System.Windows.Forms.Button button4;
 
     }
 }
