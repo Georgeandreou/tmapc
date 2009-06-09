@@ -16,34 +16,34 @@ Changes for 1.0.0.6
 
 Changes for 1.0.0.5
 
-* Fix multiple errors with mod creation
+* Fix multiple errors with mod creation (SDW)
 
-* Add error catching to the Image Extractor
+* Add error catching to the Image Extractor (SDW)
 
-* Add a player color selection window to Part 1
+* Add a player color selection window to Part 1 (SDW)
 
-* Add the ability to automatically supply the unit's scale when running the Auto Placement Finder
+* Add the ability to automatically supply the unit's scale when running the Auto Placement Finder (SDW)
 
 
 
 Changes for 1.0.0.4
 
-* Add a Map Image Extraction Utility and a Mod Creation Guide
+* Add a Map Image Extraction Utility and a Mod Creation Guide (SDW)
 
 
 
 Changes for 1.0.0.3
 
-* Fix a few small errors with the Part 2
+* Fix a few small errors with the Part 2 (SDW)
 
 
 
 Changes for 1.0.0.2
 
-* Fix a small error with the Automatic Connection Finder
+* Fix a small error with the Automatic Connection Finder (SDW)
 
 
 
 Changes for 1.0.0.1
 
-* Fix a small error with the Xml writing
+* Fix a small error with the Xml writing (SDW)
