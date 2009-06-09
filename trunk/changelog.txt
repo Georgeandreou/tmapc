@@ -1,10 +1,10 @@
 Changes for 1.0.0.6
 
-* Fix problem where Part 1 would not copy the needed 'misc' folder when finding units' placements
+* Fix problem where Part 1 would not copy the needed 'misc' folder when finding units' placements (SDW)
 
-* Add a halfway finished tab page to Part 1 informing the user to start Part 2
+* Add a halfway finished tab page to Part 1 informing the user to start Part 2 (SDW)
 
-* Fix tool-tips for Part 1
+* Fix tool-tips for Part 1 (SDW)
 
 * Fix problem where program would crash if the directory C:\Program Files\TripleA\ did not exist (SDW)
 
