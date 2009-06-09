@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TripleA Map Creator.exe" size="186880">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TripleA Map Creator.exe" size="188928">
       <assemblyIdentity name="TripleA Map Creator" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>ZnjsnB+5rZ35mZ3NnRocsMzVkvI=</dsig:DigestValue>
+        <dsig:DigestValue>61dyihxfygFGVBQM7n7g67IXQc4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

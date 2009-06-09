@@ -2145,7 +2145,8 @@ namespace TripleAGameCreator
                             {
                                 Step2Info.territories[tTName].IsImpassable = true;
                                 TerritoryDefinitionsImageDrawer.Controls[tTName].Tag = ((string)TerritoryDefinitionsImageDrawer.Controls[tTName].Tag) + "Impassable";
-                                TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor = Color.DarkGray;
+                                if (TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor != Color.Violet && TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor != Color.Red)
+                                    TerritoryDefinitionsImageDrawer.Controls[tTName].BackColor = Color.DarkGray;
                             }
                             if (cur.Contains("<option ") && cur.Contains("name=\"victoryCity\"") && cur.Contains("value=\"true\""))
                             {
@@ -2764,6 +2765,14 @@ namespace TripleAGameCreator
                         }
                     }
                 }
+                foreach (Territory cur in Step2Info.territories.Values)
+                {
+                    if (cur.Owner.Name.ToLower().Trim() == "neutral" || cur.Owner.Name.ToLower().Trim().Length == 0)
+                    {
+                        lines.Add("                <territory name=\"" + cur.Name + "\""
+                            + (cur.IsWater ? " water=\"true\"" : "") + "/>");
+                    }
+                }
                 lines.Add("");
                 lines.Add("                <!-- Territory Connections -->");
                 foreach (Player player in Step4Info.players.Values)
@@ -2779,6 +2788,20 @@ namespace TripleAGameCreator
                                     if (cur.t1.Name != cur.t2.Name)
                                         lines.Add("                <connection t1=\"" + cur.t1.Name + "\" t2=\"" + cur.t2.Name + "\"/>");
                                 }
+                            }
+                        }
+                    }
+                }
+                foreach (Territory terr in Step2Info.territories.Values)
+                {
+                    if (terr.Owner.Name.ToLower().Trim() == "neutral" || terr.Owner.Name.ToLower().Trim().Length == 0)
+                    {
+                        foreach (Connection cur in Step3Info.connections.Values)
+                        {
+                            if (cur.t1.Name == terr.Name)
+                            {
+                                if (cur.t1.Name != cur.t2.Name)
+                                    lines.Add("                <connection t1=\"" + cur.t1.Name + "\" t2=\"" + cur.t2.Name + "\"/>");
                             }
                         }
                     }
@@ -2889,6 +2912,25 @@ namespace TripleAGameCreator
                         }
                     }
                 }
+                foreach (Territory cur in Step2Info.territories.Values)
+                {
+                    if (cur.Owner.Name.ToLower().Trim() == "neutral" || cur.Owner.Name.ToLower().Trim().Length == 0)
+                    {
+                        if ((cur.Production > 0 || cur.IsWater == false || cur.IsCapitol || cur.IsVictoryCity || cur.IsImpassable))
+                        {
+                            lines.Add("                    <attatchment name=\"territoryAttatchment\" attatchTo=\"" + cur.Name + "\" javaClass=\"games.strategy.triplea.attatchments.TerritoryAttachment\" type=\"territory\">");
+                            if (cur.Production > 0 || cur.IsWater == false)
+                                lines.Add("                        <option name=\"production\" value=\"" + cur.Production + "\"/>");
+                            if (cur.IsCapitol)
+                                lines.Add("                        <option name=\"capital\" value=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
+                            if (cur.IsVictoryCity)
+                                lines.Add("                        <option name=\"victoryCity\" value=\"true\"/>");
+                            if (cur.IsImpassable)
+                                lines.Add("                        <option name=\"isImpassible\" value=\"true\"/>");
+                            lines.Add("                   </attatchment>");
+                        }
+                    }
+                }
                 try
                 {
                     int index = 0;
@@ -2933,6 +2975,14 @@ namespace TripleAGameCreator
                         }
                     }
                 }
+                foreach (Territory cur in Step2Info.territories.Values)
+                {
+                    if (cur.Owner.Name.ToLower().Trim() == "neutral" || cur.Owner.Name.ToLower().Trim().Length == 0)
+                    {
+                        if (cur.Owner.Name.Length > 0)
+                            lines.Add("                        <territoryOwner territory=\"" + cur.Name + "\" owner=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
+                    }
+                }
                 lines.Add("                </ownerInitialize>");
                 lines.Add("                <unitInitialize>");
                 foreach (Player player in Step4Info.players.Values)
@@ -2950,6 +3000,21 @@ namespace TripleAGameCreator
                                 else
                                     lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\"/>");
                             }
+                        }
+                    }
+                }
+                foreach (Territory cur in Step2Info.territories.Values)
+                {
+                    if (cur.Owner.Name.ToLower().Trim() == "neutral" || cur.Owner.Name.ToLower().Trim().Length == 0)
+                    {
+                        foreach (Unit cur2 in cur.Units)
+                        {
+                            if (cur2.unitOwner.Name.Trim().Length > 0)
+                                lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur2.unitOwner.Name.Replace(" ", "") + "\"/>");
+                            else if (cur.Owner.Name.Length > 0)
+                                lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
+                            else
+                                lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\"/>");
                         }
                     }
                 }
