@@ -1,3 +1,46 @@
+Changes for 1.0.0.7
+
+* Added help for Step 16 of Part 2. (SDW)
+
+* Fix problem where user could accidentally change tab page with cursor keys without updating step display. (SDW)
+
+* Make it so the program resizes the Map Notes textbox to better fit the window. (SDW)
+
+* Make it so the Map Creator files are contained in a folder with the version number as the folder name. (SDW)
+
+* Make it so the String Retriever window focuses on the text so the user can just start typing and the text will change. (SDW)
+
+* Make it so the String Retriever window would only return text if it contains a character other than space. (SDW)
+
+* Make it so the program asks if it should re-create the settings.inf file if it doesn't exist. (SDW)
+
+* Make it so that the program asks for the owner of units added to water territories. (SDW)
+
+* Make it so when the user is entering the territory ownership, the ownership changing window uses a combobox with the list of players. (SDW)
+
+* Make it so when the user is entering the territory production, the production entering window uses a numerical up-down control. (SDW)
+
+* Make it so the program changes the color of all the territories that used to be canals when deleting all canals. (SDW)
+
+* Make it so Part 1 of the Map Creator deletes the temporary map folder when it's done using it. (SDW)
+
+* Make it so that when the user is entering units, the user can remove all units by deleting the enter value. (SDW)
+
+* Fix problem where it resets the territory ownership when going back then forward again. (SDW)
+
+* Made it so the user can skip entering the map properties for a map that already has the map.properties file created. (SDW)
+
+* Fix problem where the Map Creator would change the map name to lower case when loading then saving. (SDW)
+
+* Fixed big error where the Auto-Placement-Finder would not work properly if the map.properties file did not contain a definition for the unit's scale. (SDW)
+
+* Updated Auto-Placement-Finder guidance text to include help for the newest versions of the map utilities. (SDW)
+
+* Fix problem where Part 1 of the Map Creator would crash when trying to overwrite 'misc' folder data. (SDW)
+
+* Fix problem where the Auto-Fill would make battleships not two-hit units. (SDW)
+
+
 Changes for 1.0.0.6
 
 * Fix problem where Part 1 would not copy the needed 'misc' folder when finding units' placements (SDW)
@@ -23,6 +66,8 @@ Changes for 1.0.0.5
 * Add a player color selection window to Part 1 (SDW)
 
 * Add the ability to automatically supply the unit's scale when running the Auto Placement Finder (SDW)
+
+* Add a map notes textbox. (SDW)
 
 
 

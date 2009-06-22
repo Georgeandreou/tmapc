@@ -23,6 +23,8 @@ namespace TripleAGameCreator
             origSize = Size;
             tabControl1.Tag = tabControl1.Size;
             panel2.Tag = panel2.Location;
+            panel17.Tag = panel17.Location;
+            button26.Tag = button26.Location;
             button15.Tag = button15.Location;
             button16.Tag = button16.Location;
             panel4.Tag = panel4.Size;
@@ -33,6 +35,7 @@ namespace TripleAGameCreator
             panel14.Tag = panel14.Size;
             tabControl2.Tag = tabControl2.Size;
             tabControl3.Tag = tabControl3.Size;
+            mapNotesTextBox.Tag = mapNotesTextBox.Size;
             RefreshSettings();
         }
         public void RefreshSettings()
@@ -52,14 +55,17 @@ namespace TripleAGameCreator
                 }
                 else
                 {
-                    try
+                    if (MessageBox.Show("The program is unable to locate the settings file. Do you want the program to re-create the settings file?", "Can't Locate Settings", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                     {
-                        List<string> lines = new List<string>();
-                        lines.Add("Display Current Units When Entering New Units=\"true\"");
-                        lines.Add("Java Heap Size=\"1000\"");
-                        File.WriteAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf", lines.ToArray());
+                        try
+                        {
+                            List<string> lines = new List<string>();
+                            lines.Add("Display Current Units When Entering New Units=\"true\"");
+                            lines.Add("Java Heap Size=\"1000\"");
+                            File.WriteAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf", lines.ToArray());
+                        }
+                        catch { }
                     }
-                    catch { }
                 }
             }
             catch
@@ -129,7 +135,7 @@ namespace TripleAGameCreator
             }
             Control oldControl = getControl("label" + stepIndex);
             oldStepIndex = stepIndex;
-            if (stepIndex < 18)
+            if (stepIndex < 16)
                 stepIndex++;
             Control newControl = getControl("label" + stepIndex);
             oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
@@ -512,18 +518,6 @@ namespace TripleAGameCreator
                     }
                     else if (oldStepIndex == 14)
                     {
-                        foreach (Territory cur in Step2Info.territories.Values)
-                        {
-                            try
-                            {
-                                if (cur.Units.Count > 0)
-                                {
-                                    UnitPlacementsImageDrawer.Controls[cur.Name].AccessibleName = cur.Units[0].unitOwner.Name;
-                                }
-                            }
-                            catch { smallErrorOccured = true; }
-                            cur.Units.Clear();
-                        }
                         foreach (Control cur in UnitPlacementsImageDrawer.Controls)
                         {
                             try
@@ -901,51 +895,63 @@ namespace TripleAGameCreator
                     else if (tabControl1.SelectedIndex == 12 && (territoryChange || force || !opened4))
                     {
                         opened4 = true;
-                        TerritoryOwnershipImageDrawer.Controls.Clear();
+                        List<Control> toDelete = new List<Control>();
+                        foreach (Control cur in TerritoryOwnershipImageDrawer.Controls)
+                        {
+                            if (!Step2Info.territories.ContainsKey(((string)(cur.Tag))))
+                                toDelete.Add(cur);
+                        }
+                        foreach (Control cur in toDelete)
+                        {
+                            TerritoryOwnershipImageDrawer.Controls.RemoveByKey((string)(cur.Tag));
+                        }
                         foreach (Territory cur in Step2Info.territories.Values)
                         {
-                            Label l;
-                            if (cur.IsWater || cur.Owner.Name.ToLower() == "neutral" || cur.Owner.Name.Trim().Length == 0)
-                                l = new Label() { Text = cur.IsWater ? "None" : "Neutral", Tag = cur.Name, BackColor = cur.Owner.Name.ToLower().Trim() == "neutral" || (!cur.IsWater && cur.Owner.Name.Trim().Length == 0) ? Color.White : cur.Label.BackColor, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
-                            else
+                            if (!TerritoryOwnershipImageDrawer.Controls.ContainsKey(cur.Name))
                             {
-                                l = new Label() { Text = cur.Owner.Name, Tag = cur.Name, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
-                                int index = 0;
-                                bool found = false;
-                                foreach (Player cur2 in Step4Info.players.Values)
+                                Label l;
+                                if (cur.IsWater || cur.Owner.Name.ToLower() == "neutral" || cur.Owner.Name.Trim().Length == 0)
+                                    l = new Label() { Text = cur.IsWater ? "None" : "Neutral", Tag = cur.Name, BackColor = cur.Owner.Name.ToLower().Trim() == "neutral" || (!cur.IsWater && cur.Owner.Name.Trim().Length == 0) ? Color.White : cur.Label.BackColor, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
+                                else
                                 {
-                                    if (cur2.Name == cur.Owner.Name)
+                                    l = new Label() { Text = cur.Owner.Name, Tag = cur.Name, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
+                                    int index = 0;
+                                    bool found = false;
+                                    foreach (Player cur2 in Step4Info.players.Values)
                                     {
-                                        found = true;
-                                        break;
+                                        if (cur2.Name == cur.Owner.Name)
+                                        {
+                                            found = true;
+                                            break;
+                                        }
+                                        index++;
                                     }
-                                    index++;
-                                }
-                                if (index == 0)
-                                    l.BackColor = Color.Red;
-                                else if (index == 1)
-                                    l.BackColor = Color.Orange;
-                                else if (index == 2)
-                                    l.BackColor = Color.Yellow;
-                                else if (index == 3)
-                                    l.BackColor = Color.Green;
-                                else if (index == 4)
-                                    l.BackColor = Color.Blue;
-                                else if (index == 5)
-                                    l.BackColor = Color.Indigo;
-                                else if (index == 6)
-                                    l.BackColor = Color.Violet;
+                                    if (index == 0)
+                                        l.BackColor = Color.Red;
+                                    else if (index == 1)
+                                        l.BackColor = Color.Orange;
+                                    else if (index == 2)
+                                        l.BackColor = Color.Yellow;
+                                    else if (index == 3)
+                                        l.BackColor = Color.Green;
+                                    else if (index == 4)
+                                        l.BackColor = Color.Blue;
+                                    else if (index == 5)
+                                        l.BackColor = Color.Indigo;
+                                    else if (index == 6)
+                                        l.BackColor = Color.Violet;
 
-                                if (!found)
-                                    l.BackColor = Color.White;
+                                    if (!found)
+                                        l.BackColor = Color.White;
+                                }
+                                l.Location = new Point((l.Location.X + ((int)(l.Size.Width / 2))) - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(l.Text, l.Font).Width / 2), l.Location.Y);
+                                l.Name = cur.Name;
+                                l.MouseClick += new MouseEventHandler(l_MouseClick);
+                                TerritoryOwnershipImageDrawer.Controls.Add(l);
                             }
-                            l.Location = new Point((l.Location.X + ((int)(l.Size.Width / 2))) - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(l.Text, l.Font).Width / 2), l.Location.Y);
-                            l.Name = cur.Name;
-                            l.MouseClick += new MouseEventHandler(l_MouseClick);
-                            TerritoryOwnershipImageDrawer.Controls.Add(l);
+                            TerritoryOwnershipImageDrawer.BackgroundImage = Step1Info.MapImage;
+                            TerritoryOwnershipImageDrawer.Size = TerritoryOwnershipImageDrawer.BackgroundImage.Size;
                         }
-                        TerritoryOwnershipImageDrawer.BackgroundImage = Step1Info.MapImage;
-                        TerritoryOwnershipImageDrawer.Size = TerritoryOwnershipImageDrawer.BackgroundImage.Size;
                     }
                     else if (tabControl1.SelectedIndex == 13 && (territoryChange || force || !opened5))
                     {
@@ -957,7 +963,7 @@ namespace TripleAGameCreator
                             Label l;
                             if (cur.Units.Count > 0)
                             {
-                                l = new Label() { Text = cur.Name,Name = cur.Name, BackColor = Color.LightGray, Font = TerritoryOwnershipImageDrawer.Controls[cur.Name].Font, AutoSize = true, Location = cur.Label.Location };
+                                l = new Label() { Text = cur.Name, Name = cur.Name, BackColor = Color.LightGray, Font = TerritoryOwnershipImageDrawer.Controls[cur.Name].Font, AutoSize = true, Location = cur.Label.Location };
                                 Dictionary<string, int> unitsTA = new Dictionary<string, int>();
                                 foreach (Unit cur2 in cur.Units)
                                 {
@@ -970,8 +976,10 @@ namespace TripleAGameCreator
                                     {
                                         unitsTA.Add(cur2.Name, 1);
                                     }
+                                    if (cur2.unitOwner.Name.Trim().Length > 0)
+                                        l.AccessibleName = cur2.unitOwner.Name;
                                 }
-                                foreach (KeyValuePair<string,int> cur2 in unitsTA)
+                                foreach (KeyValuePair<string, int> cur2 in unitsTA)
                                 {
                                     l.Tag += cur2.Key + ":" + cur2.Value + ",";
                                 }
@@ -979,7 +987,11 @@ namespace TripleAGameCreator
                                 l.Tag += "|" + l.Text;
                             }
                             else
-                                l = new Label() { Text = cur.Name, Tag = cur.Name, BackColor = cur.Label.BackColor, Font = TerritoryOwnershipImageDrawer.Controls[cur.Name].Font, AutoSize = true, Location = cur.Label.Location };
+                                l = new Label() { Text = cur.Name, Tag = "", BackColor = cur.Label.BackColor, Font = TerritoryOwnershipImageDrawer.Controls[cur.Name].Font, AutoSize = true, Location = cur.Label.Location };
+                            
+                            if (cur.IsWater == false && cur.Owner.Name.Trim().Length > 0)
+                                l.AccessibleName = cur.Owner.Name;
+
                             l.MouseClick += new MouseEventHandler(l_MouseClick);
                             UnitPlacementsImageDrawer.Controls.Add(l);
                         }
@@ -1281,11 +1293,18 @@ namespace TripleAGameCreator
                 {
                     String s;
                     //if (Settings.DisplayCurrentUnitsWhenEnteringNewUnits == false)
-                        s = RetrieveString("Enter territory \"" + l.Tag.ToString() + "\"'s production amount.");
+                    s = RetrieveString("Enter territory \"" + l.Tag.ToString() + "\"'s production amount.", Convert.ToInt32(l.Text)).Trim();
                     //else
                     //    s = RetrieveString("Enter territory \"" + l.Tag.ToString() + "\"'s production amount.", Step2Info.territories[l.Tag.ToString()].Production.ToString());
                     if (s.Length > 0)
-                        l.Text = s;
+                    {
+                        try
+                        {
+                            int i = Convert.ToInt32(s);
+                            l.Text = s;
+                        }
+                        catch { }
+                    }
                 }
             }
             else if (tabControl1.SelectedIndex == 11)
@@ -1331,7 +1350,16 @@ namespace TripleAGameCreator
                 else if (e.Button == MouseButtons.Right)
                 {
                     if (MessageBox.Show("Are you sure you want to remove all canals?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                    {
                         Step12Info.Canals.Clear();
+                        foreach (Control cur in CanalsImageDrawer.Controls)
+                        {
+                            if (cur.BackColor == Color.Red)
+                            {
+                                cur.BackColor = TerritoryDefinitionsImageDrawer.Controls[cur.Text].BackColor;
+                            }
+                        }
+                    }
                 }
             }
             else if (tabControl1.SelectedIndex == 12)
@@ -1341,7 +1369,7 @@ namespace TripleAGameCreator
                 {
                     String s;
                     //if (Settings.DisplayCurrentUnitsWhenEnteringNewUnits == false)
-                        s = RetrieveString("Enter territory \"" + l.Tag + "\"'s new owner.");
+                    s = RetrieveString("Enter territory \"" + l.Tag + "\"'s new owner.", l.Text, getPlayersWithNeutral()).Trim();
                     //else
                     //    s = RetrieveString("Enter territory \"" + l.Tag + "\"'s new owner.", Step2Info.territories[(string)l.Tag].Owner.Name);
                     if (s.Length > 0)
@@ -1392,16 +1420,28 @@ namespace TripleAGameCreator
                     //catch { }
                     String s;
                     if (Settings.DisplayCurrentUnitsWhenEnteringNewUnits == false)
-                        s = RetrieveString("Enter territory \"" + l.Text + "\"'s units.");
+                        s = RetrieveString("Enter territory \"" + l.Text + "\"'s units.").Trim();
                     else
                     {
                         try
                         {
-                            s = RetrieveString("Enter territory \"" + l.Text + "\"'s units.", l.Tag.ToString().Substring(0, l.Tag.ToString().IndexOf("|")));
+                            s = RetrieveString("Enter territory \"" + l.Text + "\"'s units.", l.Tag.ToString().Substring(0, l.Tag.ToString().IndexOf("|"))).Trim();
                         }
-                        catch { s = RetrieveString("Enter territory \"" + l.Text + "\"'s units.", l.Tag.ToString()); }
+                        catch { s = RetrieveString("Enter territory \"" + l.Text + "\"'s units.", "").Trim(); }
                     }
-                    if (s.Length > 0)
+                    string s2 = "";
+                    if (Step2Info.territories[l.Text].IsWater)
+                    {
+                        s2 = RetrieveString("Enter the owner of these units.", "Neutral", getPlayersWithNeutral());
+                        if (s2.ToLower().Trim() == "neutral")
+                            s2 = "";
+                        l.AccessibleName = s2;
+                    }
+                    else
+                    {
+                        l.AccessibleName = Step2Info.territories[l.Text].Owner.Name;
+                    }
+                    if (s.Length > 0 || !s.ToLower().Trim().Equals((string)l.Tag))
                     {
                         l.BackColor = Color.LightGray;
                         l.Tag = s;
@@ -1452,22 +1492,23 @@ namespace TripleAGameCreator
         StringRetriever sretriever = new StringRetriever();
         public String RetrieveString(string labelString)
         {
-            sretriever.Value = "";
-            sretriever.Text = labelString;
-            sretriever.textBox1.SelectAll();
             sretriever.parent = this;
-            sretriever.ShowDialog();
-            return sretriever.Value;
+            return sretriever.RetrieveString(labelString);
         }
         public String RetrieveString(string labelString,string textBoxString)
         {
-            sretriever.Value = "";
-            sretriever.Text = labelString;
-            sretriever.textBox1.Text = textBoxString;
-            sretriever.textBox1.SelectAll();
-             sretriever.parent = this;
-            sretriever.ShowDialog();
-            return sretriever.Value;
+            sretriever.parent = this;
+            return sretriever.RetrieveString(labelString,textBoxString);
+        }
+        public String RetrieveString(string labelString, string textBoxString,object[] comboBoxItems)
+        {
+            sretriever.parent = this;
+            return sretriever.RetrieveString(labelString, textBoxString,comboBoxItems);
+        }
+        public String RetrieveString(string labelString, int numberToDisplay)
+        {
+            sretriever.parent = this;
+            return sretriever.RetrieveString(labelString,numberToDisplay);
         }
         Size origSize;
         private void Form1_Resize(object sender, EventArgs e)
@@ -1477,6 +1518,8 @@ namespace TripleAGameCreator
 
             tabControl1.Size = ((Size)tabControl1.Tag); tabControl1.Size += change;
             panel2.Location = ((Point)panel2.Tag); panel2.Location += new Size(change.Width / 2,change.Height);
+            panel17.Location = ((Point)panel17.Tag); panel17.Location += new Size(change.Width / 2, change.Height);
+            button26.Location = ((Point)button26.Tag); button26.Location += new Size(change.Width / 2, change.Height);            
             button15.Location = ((Point)button15.Tag); button15.Location += new Size(0,change.Height);
             button16.Location = ((Point)button16.Tag); button16.Location += new Size(0,change.Height);
             panel4.Size = ((Size)panel4.Tag); panel4.Size += change;
@@ -1485,6 +1528,7 @@ namespace TripleAGameCreator
             panel12.Size = ((Size)panel12.Tag); panel12.Size += change;
             panel13.Size = ((Size)panel13.Tag); panel13.Size += change;
             panel14.Size = ((Size)panel14.Tag); panel14.Size += change;
+            mapNotesTextBox.Size = ((Size)mapNotesTextBox.Tag); mapNotesTextBox.Size += change;
             tabControl2.Size = ((Size)tabControl2.Tag); tabControl2.Size += change;
             tabControl3.Size = ((Size)tabControl3.Tag); tabControl3.Size += change;
         }
@@ -1583,6 +1627,10 @@ namespace TripleAGameCreator
             else if (stepIndex == 15)
             {
                 MessageBox.Show("Setting Name: The name of the setting. Examples: Always on AA, Two hit battleship, and Japanese bid.\r\n\r\nValue: The value of the setting. Examples: true, false, 0, 5, 32.\r\n\r\nEditable: Whether the setting should be able to be changed by the player.\r\n\r\nMin. N. (Optional): The lowest number that the player can set the value to.\r\n\r\nMax. N.(Optional): The highest number that the player can set the value to.\r\n\r\nTo have the program automatically enter the defualt In-Game Settings, click the 'Auto-Fill' button between the Back and Next buttons.", "Help On Current Step");
+            }
+            else if (stepIndex == 16)
+            {
+                MessageBox.Show("To add the Map Notes, just type what you want the Map Notes to say in the text box. Then just click the 'Save Map To File' button, and select where you want to save the finished map xml file.", "Help On Current Step");
             }
         }
 
@@ -2542,7 +2590,10 @@ namespace TripleAGameCreator
             foreach (Unit cur2 in frontierToAdd.UnitsInFrontier)
             {
                 ComboBox cb1 = new ComboBox() { Text = cur2.Name, Location = comboBox3.Location + new Size(0, ch), Size = comboBox3.Size };
-                cb1.Items.AddRange(frontierToAdd.UnitsInFrontier.ToArray());
+                foreach (Unit cur3 in frontierToAdd.UnitsInFrontier)
+                {
+                    cb1.Items.Add(cur3);
+                }
                 cur.Controls.Add(cb1);
                 ch += 25;
             }
@@ -2701,6 +2752,16 @@ namespace TripleAGameCreator
             {
                 result.Add(cur.Name);
             }
+            return result.ToArray();
+        }
+        public object[] getPlayersWithNeutral()
+        {
+            List<object> result = new List<object>();
+            foreach (Player cur in Step4Info.players.Values)
+            {
+                result.Add(cur.Name);
+            }
+            result.Add("Neutral");
             return result.ToArray();
         }
         int change6 = 0;
@@ -3032,7 +3093,7 @@ namespace TripleAGameCreator
                 {
                     if (cur.IntMin != 0 || cur.IntMax != 0)
                     {
-                        lines.Add("                <property name=\"" + cur.Name + "\" value=\"" + cur.Value.ToString().ToLower() + "\" editable=\"" + cur.Editable.ToString().ToLower() + "\">");
+                        lines.Add("                <property name=\"" + cur.Name + "\" value=\"" + cur.Value.ToString() + "\" editable=\"" + cur.Editable.ToString().ToLower() + "\">");
                         lines.Add("                        <number min=\"" + cur.IntMin + "\" max=\"" + cur.IntMax + "\"/>");
                         lines.Add("                </property>");
                     }
@@ -3044,7 +3105,7 @@ namespace TripleAGameCreator
                     }
                     else
                     {
-                        lines.Add("                <property name=\"" + cur.Name + "\" value=\"" + cur.Value.ToString().ToLower() + "\" editable=\"" + cur.Editable.ToString().ToLower() + "\"/>");
+                        lines.Add("                <property name=\"" + cur.Name + "\" value=\"" + cur.Value.ToString() + "\" editable=\"" + cur.Editable.ToString().ToLower() + "\"/>");
                     }
                     if (cur.Name == "mapName")
                         foundMapName = true;
@@ -3103,7 +3164,7 @@ namespace TripleAGameCreator
             if (e.Button == MouseButtons.Left)
             {
                 olocaiton = Form1.MousePosition;
-                String s = RetrieveString("Enter New Territory's Name");
+                String s = RetrieveString("Enter New Territory's Name").Trim();
                 Label l = new Label() { Text = s, BackColor = Color.LightGreen, Font = new Font(label1.Font, FontStyle.Bold), AutoSize = true, Location = GetPosition() - new Size((int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(s, new Font(label1.Font, FontStyle.Bold)).Width / 2), 5) };
                 l.MouseClick += new MouseEventHandler(l_MouseClick);
                 if (l.Text.Length > 0)
@@ -3528,7 +3589,7 @@ namespace TripleAGameCreator
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isSea", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
-                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isTwoHit", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "false", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isTwoHit", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
                         }
                         else if (cur.Text.ToLower().Contains("destroyer"))

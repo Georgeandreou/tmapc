@@ -190,6 +190,7 @@ namespace TripleAGameCreator
             this.button24 = new System.Windows.Forms.Button();
             this.label69 = new System.Windows.Forms.Label();
             this.tabPage16 = new System.Windows.Forms.TabPage();
+            this.mapNotesTextBox = new System.Windows.Forms.TextBox();
             this.panel17 = new System.Windows.Forms.Panel();
             this.button26 = new System.Windows.Forms.Button();
             this.label76 = new System.Windows.Forms.Label();
@@ -204,7 +205,6 @@ namespace TripleAGameCreator
             this.label16 = new System.Windows.Forms.Label();
             this.button15 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
-            this.mapNotesTextBox = new System.Windows.Forms.TextBox();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -318,7 +318,7 @@ namespace TripleAGameCreator
             this.panel2.Location = new System.Drawing.Point(180, 391);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(585, 37);
-            this.panel2.TabIndex = 2;
+            this.panel2.TabIndex = 3;
             // 
             // panel1
             // 
@@ -344,7 +344,6 @@ namespace TripleAGameCreator
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(103, 23);
             this.button4.TabIndex = 0;
-            this.button4.TabStop = false;
             this.button4.Text = "Help";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
@@ -354,8 +353,7 @@ namespace TripleAGameCreator
             this.button3.Location = new System.Drawing.Point(473, 6);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(103, 23);
-            this.button3.TabIndex = 0;
-            this.button3.TabStop = false;
+            this.button3.TabIndex = 4;
             this.button3.Text = "Cancel";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -365,8 +363,7 @@ namespace TripleAGameCreator
             this.button2.Location = new System.Drawing.Point(163, 6);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(98, 23);
-            this.button2.TabIndex = 0;
-            this.button2.TabStop = false;
+            this.button2.TabIndex = 1;
             this.button2.Text = "Back";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -377,8 +374,7 @@ namespace TripleAGameCreator
             this.button27.Location = new System.Drawing.Point(263, 6);
             this.button27.Name = "button27";
             this.button27.Size = new System.Drawing.Size(52, 23);
-            this.button27.TabIndex = 0;
-            this.button27.TabStop = false;
+            this.button27.TabIndex = 2;
             this.button27.Text = "Auto-Fill";
             this.button27.UseVisualStyleBackColor = true;
             this.button27.Click += new System.EventHandler(this.button27_Click);
@@ -388,8 +384,7 @@ namespace TripleAGameCreator
             this.button1.Location = new System.Drawing.Point(317, 6);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(92, 23);
-            this.button1.TabIndex = 0;
-            this.button1.TabStop = false;
+            this.button1.TabIndex = 3;
             this.button1.Text = "Next";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -1875,6 +1870,15 @@ namespace TripleAGameCreator
             this.tabPage16.TabIndex = 16;
             this.tabPage16.Text = "tabPage17";
             // 
+            // mapNotesTextBox
+            // 
+            this.mapNotesTextBox.Location = new System.Drawing.Point(37, 41);
+            this.mapNotesTextBox.Multiline = true;
+            this.mapNotesTextBox.Name = "mapNotesTextBox";
+            this.mapNotesTextBox.Size = new System.Drawing.Size(500, 228);
+            this.mapNotesTextBox.TabIndex = 35;
+            this.mapNotesTextBox.Text = "(Fill this with the notes for the map.)";
+            // 
             // panel17
             // 
             this.panel17.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -1991,7 +1995,7 @@ namespace TripleAGameCreator
             this.label16.Location = new System.Drawing.Point(8, 362);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(119, 14);
-            this.label16.TabIndex = 1;
+            this.label16.TabIndex = 3;
             this.label16.Text = "16: Map Finished!";
             // 
             // button15
@@ -1999,8 +2003,7 @@ namespace TripleAGameCreator
             this.button15.Location = new System.Drawing.Point(92, 399);
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(73, 23);
-            this.button15.TabIndex = 0;
-            this.button15.TabStop = false;
+            this.button15.TabIndex = 1;
             this.button15.Text = "Load";
             this.button15.UseVisualStyleBackColor = true;
             this.button15.Click += new System.EventHandler(this.button15_Click);
@@ -2011,19 +2014,9 @@ namespace TripleAGameCreator
             this.button16.Name = "button16";
             this.button16.Size = new System.Drawing.Size(75, 23);
             this.button16.TabIndex = 0;
-            this.button16.TabStop = false;
             this.button16.Text = "Save";
             this.button16.UseVisualStyleBackColor = true;
             this.button16.Click += new System.EventHandler(this.button16_Click);
-            // 
-            // mapNotesTextBox
-            // 
-            this.mapNotesTextBox.Location = new System.Drawing.Point(37, 41);
-            this.mapNotesTextBox.Multiline = true;
-            this.mapNotesTextBox.Name = "mapNotesTextBox";
-            this.mapNotesTextBox.Size = new System.Drawing.Size(500, 228);
-            this.mapNotesTextBox.TabIndex = 35;
-            this.mapNotesTextBox.Text = "(Fill this with the notes for the map.)";
             // 
             // Form1
             // 

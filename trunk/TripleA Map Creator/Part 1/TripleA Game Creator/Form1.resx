@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="button4.Text" xml:space="preserve">
-    <value>                              Congratulations!! You're about halfway done!!
-
-Now all you have to do is open Part 2 of the program and finish your map. You should find Part 2 in the same folder as this program. 
-
-                                          :D :D Good Luck!! :D :D
-
-</value>
-  </data>
   <data name="button5.Text" xml:space="preserve">
     <value>Before you use this program, make sure:
 
@@ -182,12 +173,14 @@ When you've finished, save the file by clicking "File", "Save Placements", then 
 
 When a window opens that asks you to enter the map name, type in 'temp'.
 
+If a window opens that asks you for the Unit's Scale, enter the scale that the unit's images are drawn on TripleA.
+
 When a window opens that asks where to save 'place.txt', select the map's folder.</value>
   </data>
   <data name="button17.Text" xml:space="preserve">
     <value>                         Instructions for using the 'Tile Image Breaker'
 
-When a window opens that says 'Where to save tile images', make a new folder named 'baseTiles' in your map's folder and select it.
+When a window opens that says 'Where to save tile images', select the folder named 'baseTiles' located in your map's folder.
 
 When a window opens that asks you to select the map, select the map image file.
 </value>
@@ -210,7 +203,16 @@ When a window opens that asks you to select the large image, select the map imag
 When a window opens that asks for the scale, enter the amount to scale down the image.
 </value>
   </data>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
+  <data name="button4.Text" xml:space="preserve">
+    <value>                              Congratulations!! You're about halfway done!!
+
+Now all you have to do is open Part 2 of the program and finish your map. You should find Part 2 in the same folder as this program. 
+
+                                          :D :D Good Luck!! :D :D
+
+</value>
+  </data>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>56</value>
   </metadata>
 </root>
