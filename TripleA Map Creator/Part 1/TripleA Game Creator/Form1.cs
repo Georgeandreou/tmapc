@@ -37,14 +37,17 @@ namespace TripleA_Game_Creator
                 }
                 else
                 {
-                    try
+                    if (MessageBox.Show("The program is unable to locate the settings file. Do you want the program to re-create the settings file?", "Can't Locate Settings", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                     {
-                        List<string> lines = new List<string>();
-                        lines.Add("Display Current Units When Entering New Units=\"true\"");
-                        lines.Add("Java Heap Size=\"1000\"");
-                        File.WriteAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf",lines.ToArray());
+                        try
+                        {
+                            List<string> lines = new List<string>();
+                            lines.Add("Display Current Units When Entering New Units=\"true\"");
+                            lines.Add("Java Heap Size=\"1000\"");
+                            File.WriteAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf", lines.ToArray());
+                        }
+                        catch { }
                     }
-                    catch { }
                 }
             }
             catch
@@ -130,86 +133,91 @@ namespace TripleA_Game_Creator
         {
             if (stepIndex == 5)
             {
-                if (MessageBox.Show("WARNING!! If the 'Auto-Placement Finder' is still running, some files will be incomplete. Do you want to continue?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                if (MessageBox.Show("WARNING!! If the 'Auto-Placement Finder' is still running, some files will be incomplete. Do you want to continue?", "Confirmation", MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
                 {
-                    foreach (Control cur in tabControl1.TabPages[stepIndex].Controls)
-                    {
-                        if (cur is TextBox && !(cur.Text.Trim().Length > 0))
-                        {
-                            MessageBox.Show("Fill in all the fields before going to the next step.", "Complete Current Step");
-                            return;
-                        }
-                    }
-                    Control oldControl = getControl("label" + stepIndex);
-                    oldStepIndex = stepIndex;
-                    if (stepIndex < 10)
-                        stepIndex++;
-                    Control newControl = getControl("label" + stepIndex);
-                    oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
-                    newControl.Font = new Font(newControl.Font, FontStyle.Bold);
-                    try
-                    {
-                        Directory.Delete(cutPath);
-                    }
-                    catch { }
+                    return;
                 }
             }
             else if (stepIndex == 7)
             {
-                if (MessageBox.Show("WARNING!! If the 'Relief Image Breaker' is still running, some files will be incomplete. Do you want to continue?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                if (MessageBox.Show("WARNING!! If the 'Relief Image Breaker' is still running, some files will be incomplete. Do you want to continue?", "Confirmation", MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
                 {
-                    foreach (Control cur in tabControl1.TabPages[stepIndex].Controls)
-                    {
-                        if (cur is TextBox && !(cur.Text.Trim().Length > 0))
-                        {
-                            MessageBox.Show("Fill in all the fields before going to the next step.", "Complete Current Step");
-                            return;
-                        }
-                    }
-                    Control oldControl = getControl("label" + stepIndex);
-                    oldStepIndex = stepIndex;
-                    if (stepIndex < 10)
-                        stepIndex++;
-                    Control newControl = getControl("label" + stepIndex);
-                    oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
-                    newControl.Font = new Font(newControl.Font, FontStyle.Bold);
-                    try
-                    {
-                        Directory.Move(cutPath + "/reliefTiles/", textBox3.Text + "/reliefTiles");
-                        Directory.Delete(cutPath);
-                    }
-                    catch { }
+                    return;
                 }
             }
-            else if (stepIndex < 8)
+
+
+            int nonFilledFields = 0;
+            int filledFields = 0;
+            foreach (Control cur in tabControl1.TabPages[stepIndex].Controls)
             {
-                foreach (Control cur in tabControl1.TabPages[stepIndex].Controls)
+                if (cur is TextBox && cur.Name.ToLower() != "textbox3")
                 {
-                    if (cur is TextBox && !(cur.Text.Trim().Length > 0))
+                    if (!(cur.Text.Trim().Length > 0))
                     {
-                        MessageBox.Show("Fill in all the fields before going to the next step.", "Complete Current Step");
-                        return;
+                        nonFilledFields++;
+                    }
+                    else
+                    {
+                        filledFields++;
                     }
                 }
-                Control oldControl = getControl("label" + stepIndex);
-                oldStepIndex = stepIndex;
-                if (stepIndex < 10)
-                    stepIndex++;
-                Control newControl = getControl("label" + stepIndex);
-                oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
-                newControl.Font = new Font(newControl.Font, FontStyle.Bold);
+            }
+            if (tabControl1.SelectedIndex == 1)
+            {
+                if((filledFields > 0 && nonFilledFields != 0) || (!File.Exists(textBox3.Text + @"\map.properties") && nonFilledFields > 0))
+                {
+                    MessageBox.Show("Fill in all the fields before proceeding to the next step.", "Complete Current Step");
+                    return;
+                }
             }
             else
             {
-                Control oldControl = getControl("label" + stepIndex);
-                oldStepIndex = stepIndex;
-                if (stepIndex < 10)
-                    stepIndex++;
-                Control newControl = getControl("label" + stepIndex);
-                oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
-                newControl.Font = new Font(newControl.Font, FontStyle.Bold);
+                if (textBox3.Text.Trim().Length == 0 && tabControl1.SelectedIndex == 1)
+                {
+                    MessageBox.Show("Please supply the location of the map's folder before proceeding to the next step.", "Supply Map Folder");
+                    return;
+                }
+            }
+            if (!Directory.Exists(textBox3.Text.Trim()) && tabControl1.SelectedIndex == 1)
+            {
+                MessageBox.Show("The map folder you supplied does not exist. Please supply the correct map folder and try again.", "Supply Valid Map Folder");
+                return;
             }
 
+            if (filledFields > 0 && nonFilledFields == 0)
+            {
+                enteredMapProperties = true;
+            }
+            else
+            {
+                enteredMapProperties = false;
+            }
+
+            Control oldControl = getControl("label" + stepIndex);
+            oldStepIndex = stepIndex;
+            if (stepIndex < 10)
+                stepIndex++;
+            Control newControl = getControl("label" + stepIndex);
+            oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
+            newControl.Font = new Font(newControl.Font, FontStyle.Bold);
+            if (stepIndex == 5)
+            {
+                try
+                {
+                    Directory.Delete(cutPath,true);
+                }
+                catch { }
+            }
+            else if (stepIndex == 7)
+            {
+                try
+                {
+                    Directory.Move(cutPath + "/reliefTiles/", textBox3.Text + "/reliefTiles");
+                    Directory.Delete(cutPath,true);
+                }
+                catch { }
+            }
         }
         public Control getControl(string name)
         {
@@ -318,47 +326,54 @@ namespace TripleA_Game_Creator
                 button11.Location += new Size(0, -25);
             }
         }
-
+        bool enteredMapProperties = false;
         private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {
-            if (oldStepIndex < stepIndex)
+            try
             {
-                if (oldStepIndex == 1)
+                if (oldStepIndex < stepIndex)
                 {
-                    if (File.Exists(textBox3.Text + "/map.properties"))
+                    if (oldStepIndex == 1)
                     {
-                        if (MessageBox.Show("Another map.properties file was found in the maps folder. Do you want to overwrite it with a new file consisting of what you just entered?", "Overwrite?", MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
-                            return;
-                    }
-                    string playerName = "";
-                    List<String> lines = new List<string>();
-                    foreach (Control cur in tabControl1.TabPages[oldStepIndex].Controls)
-                    {
-                        if (cur is TextBox && cur.Name != "textBox3" && cur.Name != "textBox4" && cur.Name != "textBox7")
+                        if (enteredMapProperties)
                         {
-                            if (playerName == "")
-                                playerName = cur.Text;
-                            else
+                            if (File.Exists(textBox3.Text + "/map.properties"))
                             {
-                                lines.Add("color." + playerName + "=" + cur.Text.Replace("#",""));
-                                playerName = "";
+                                if (MessageBox.Show("Another map.properties file was found in the maps folder. Do you want to overwrite it with a new file consisting of what you just entered?", "Overwrite?", MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
+                                    return;
                             }
+                            string playerName = "";
+                            List<String> lines = new List<string>();
+                            foreach (Control cur in tabControl1.TabPages[oldStepIndex].Controls)
+                            {
+                                if (cur is TextBox && cur.Name != "textBox3" && cur.Name != "textBox4" && cur.Name != "textBox7")
+                                {
+                                    if (playerName == "")
+                                        playerName = cur.Text;
+                                    else
+                                    {
+                                        lines.Add("color." + playerName + "=" + cur.Text.Replace("#", ""));
+                                        playerName = "";
+                                    }
+                                }
+                            }
+                            lines.Add("units.scale=" + textBox4.Text);
+                            lines.Add("map.hasRelief=" + comboBox1.Text.ToLower());
+                            lines.Add("map.showCapitolMarkers=false");
+                            lines.Add("map.width=" + textBox7.Text.Substring(0, textBox7.Text.IndexOf(",")));
+                            lines.Add("map.height=" + textBox7.Text.Substring(textBox7.Text.IndexOf(",") + 1));
+                            lines.Add("map.scrollWrapX=" + comboBox2.Text.ToLower());
+                            File.WriteAllLines(textBox3.Text + "/map.properties", lines.ToArray());
                         }
                     }
-                    lines.Add("units.scale=" + textBox4.Text);
-                    lines.Add("map.hasRelief=" + comboBox1.Text.ToLower());
-                    lines.Add("map.showCapitolMarkers=false");
-                    lines.Add("map.width=" + textBox7.Text.Substring(0, textBox7.Text.IndexOf(",")));
-                    lines.Add("map.height=" + textBox7.Text.Substring(textBox7.Text.IndexOf(",") + 1));
-                    lines.Add("map.scrollWrapX=" + comboBox2.Text.ToLower());
-                    File.WriteAllLines(textBox3.Text + "/map.properties", lines.ToArray());
-                }
-                if (stepIndex == 1)
-                {
-                    comboBox1.SelectedIndex = 1;
-                    comboBox2.SelectedIndex = 1;
+                    if (stepIndex == 1)
+                    {
+                        comboBox1.SelectedIndex = 1;
+                        comboBox2.SelectedIndex = 1;
+                    }
                 }
             }
+            catch { MessageBox.Show("An error occured when trying to write the map properties. Make sure you entered everything correctly and try again.", "Error Writing Map Properties"); e.Cancel = true; Back(); }
         }
         FolderBrowserDialog d = new FolderBrowserDialog();
         private void button12_Click(object sender, EventArgs e)
@@ -596,10 +611,14 @@ namespace TripleA_Game_Creator
                     Directory.CreateDirectory(cutPath + @"\misc");
                     foreach (FileInfo cur in new DirectoryInfo(textBox3.Text + @"\misc").GetFiles())
                     {
-                        File.Copy(cur.FullName, cutPath + @"\misc\" + cur.Name);
+                        File.Copy(cur.FullName, cutPath + @"\misc\" + cur.Name,true);
                     }
                 }
-                System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder " + getUnitScale(new DirectoryInfo(textBox3.Text)).ToString());
+                double unitsScale = getUnitScale(new DirectoryInfo(textBox3.Text));
+                if(unitsScale != 0)
+                    System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder " + unitsScale.ToString());
+                else
+                    System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder");
             }
         }
 
@@ -654,6 +673,9 @@ namespace TripleA_Game_Creator
                         file = d2.FileName;
                 }
             }
+            if (!Directory.Exists(textBox3.Text + @"\baseTiles\"))
+                Directory.CreateDirectory(textBox3.Text + @"\baseTiles\");
+
             if (File.Exists(file))
                 System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/TileImageBreaker");
         }
