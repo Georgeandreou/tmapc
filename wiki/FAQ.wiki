@@ -21,3 +21,7 @@ You can post your map on the TripleA Maps And Mods Forums located here: http://n
 *Where can I find the source code for the map creator?*
 
 You can find the source code on the "Source" page above.
+
+*Where can I download the .NET Framework?
+
+You can download the .NET Framework v2.0 SP1 here: http://www.microsoft.com/downloads/details.aspx?FamilyID=0856EACB-4362-4B0D-8EDD-AAB15C5E04F5&displaylang=en
