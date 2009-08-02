@@ -75,7 +75,7 @@ This page is a guide to how to create a map using my program.
 
 29. In the 'Map Version' textbox, enter the map version.
 
-30. In the 'Resource Name' textbox, enter the name of the resources.
+30. In the 'Resource Name' textbox, enter the name of the resources for your map (Usually "IPC's").
 
 31. Click the first 'Browse' button, and locate the map's image file.
 
