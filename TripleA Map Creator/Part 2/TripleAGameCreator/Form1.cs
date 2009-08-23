@@ -12,6 +12,7 @@ using System.Xml;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Net;
 
 namespace TripleAGameCreator
 {
@@ -37,6 +38,52 @@ namespace TripleAGameCreator
             tabControl3.Tag = tabControl3.Size;
             mapNotesTextBox.Tag = mapNotesTextBox.Size;
             RefreshSettings();
+            CheckForUpdates();
+        }
+        private Version usersVersion = new Version(1, 0, 0, 8);
+        public void CheckForUpdates()
+        {
+            Thread t = new Thread(new ThreadStart(update));
+            t.Priority = ThreadPriority.Lowest;
+            t.Start();
+        }
+        private void update()
+        {
+            WebClient client = new WebClient(); //http://tmapc.googlecode.com/files/TripleA%20Map%20Creator%20v1.0.0.8.zip
+            Version currentCheckingVersion = usersVersion;
+            Version newestVersionAvailable = usersVersion;
+            bool doBreak = false;
+
+            for (int buildI = usersVersion.Build + 1; buildI < 10; buildI++)
+            {
+                try
+                {
+                    Version checkVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, buildI, 0);
+                    Stream s = client.OpenRead("http://tmapc.googlecode.com/files/TripleA%20Map%20Creator%20v" + checkVersion.ToString() + ".zip");
+                    newestVersionAvailable = checkVersion;
+                    currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, buildI, 1);
+                    s.Close();
+                }
+                catch { }
+            }
+            while (!doBreak)
+            {
+                try
+                {
+                    Stream s = client.OpenRead("http://tmapc.googlecode.com/files/TripleA%20Map%20Creator%20v" + currentCheckingVersion.ToString() + ".zip");
+                    newestVersionAvailable = currentCheckingVersion;
+                    currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build, currentCheckingVersion.Revision + 1);
+                    s.Close();
+                }
+                catch
+                {
+                    break;
+                }
+            }
+            if (Convert.ToInt32(usersVersion.ToString().Replace(".", "")) < Convert.ToInt32(newestVersionAvailable.ToString().Replace(".", "")))
+            {
+                MessageBox.Show("There is a newer version of the Map Creator available.\r\nYour version: " + usersVersion.ToString() + ".\r\nNewest Version: " + newestVersionAvailable.ToString() + ".\r\n\r\nTo download the latest version, please go to \"http://code.google.com/p/tmapc/downloads/list\" and click on the latest download.", "Checking For Updates");
+            }
         }
         public void RefreshSettings()
         {
@@ -88,6 +135,93 @@ namespace TripleAGameCreator
         int oldStepIndex = 1;
         bool surpress1 = false;
         bool surpress2 = false;
+        private string defaultWindowText = "TripleA Map Creator - Part 2";
+        public void UpdateWindowText()
+        {
+            switch (stepIndex - 1)
+            {
+                case 0:
+                    {
+                        this.Text = defaultWindowText;
+                        break;
+                    }
+                case 1:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 3% Done With Part 2)";
+                        break;
+                    }
+                case 2:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 10% Done With Part 2)";
+                        break;
+                    }
+                case 3:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 30% Done With Part 2)";
+                        break;
+                    }
+                case 4:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 32% Done With Part 2)";
+                        break;
+                    }
+                case 5:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 35% Done With Part 2)";
+                        break;
+                    }
+                case 6:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 38% Done With Part 2)";
+                        break;
+                    }
+                case 7:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 44% Done With Part 2)";
+                        break;
+                    }
+                case 8:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 46% Done With Part 2)";
+                        break;
+                    }
+                case 9:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 50% Done With Part 2)";
+                        break;
+                    }
+                case 10:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 53% Done With Part 2)";
+                        break;
+                    }
+                case 11:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 70% Done With Part 2)";
+                        break;
+                    }
+                case 12:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 72% Done With Part 2)";
+                        break;
+                    }
+                case 13:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 80% Done With Part 2)";
+                        break;
+                    }
+                case 14:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 97% Done With Part 2)";
+                        break;
+                    }
+                case 15:
+                    {
+                        this.Text = defaultWindowText + " (Completely Done With Part 2)";
+                        break;
+                    }
+            }
+        }
         private void Back()
         {
             Control oldControl = getControl("label" + stepIndex);
@@ -97,6 +231,7 @@ namespace TripleAGameCreator
             Control newControl = getControl("label" + stepIndex);
             oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
             newControl.Font = new Font(newControl.Font, FontStyle.Bold);
+            UpdateWindowText();
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -111,6 +246,8 @@ namespace TripleAGameCreator
         }
         private void Next()
         {
+            if (stepIndex == 1)
+                t.Abort();
             foreach (Control cur in tabControl1.TabPages[stepIndex - 1].Controls)
             {
                 if ((cur is TextBox  || cur is ComboBox) && !(cur.Text.Trim().Length > 0) && cur.Name != "textBox7" && cur.Name != "textBox8")
@@ -140,6 +277,7 @@ namespace TripleAGameCreator
             Control newControl = getControl("label" + stepIndex);
             oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
             newControl.Font = new Font(newControl.Font, FontStyle.Bold);
+            UpdateWindowText();
         }
         public Control getControl(string name)
         {
@@ -1602,15 +1740,15 @@ namespace TripleAGameCreator
             }
             else if (stepIndex == 9)
             {
-                MessageBox.Show("Unit Name: The name of the unit in the production frontier. Examples: Infantry, Artillery, and Tank.\r\n\r\nTo have the program autmoattically enter the default units, click the 'Auto-Fill' button between the Back and Next buttons.", "Help On Current Step");
+                MessageBox.Show("Unit Name: The name of the unit in the production frontier. Examples: Infantry, Artillery, and Tank.\r\n\r\nTo have the program automatically add all the units available, click the 'Auto-Fill' button between the Back and Next buttons.", "Help On Current Step");
             }
             else if (stepIndex == 10)
             {
-                MessageBox.Show("Attachment Name: The name of the attachment. Examples: movement, attack, defense, isAir, isSea, and isStrategicBomber.\r\n\r\nValue: The value of the attachment. Examples: True, False, 1, 2\r\n\r\nTo have the program automatically enter the default attachments for each unit, click the 'Auto-Fill' button between the Back and Next buttons.", "Help On Current Step");
+                MessageBox.Show("Attachment Name: The name of the attachment. Examples: movement, attack, defense, isAir, isSea, and isStrategicBomber.\r\n\r\nValue: The value of the attachment. Examples: True, False, 1, 2\r\n\r\nTo have the program automatically enter the default attachments for the unit being viewed, click the 'Auto-Fill' button between the Back and Next buttons.", "Help On Current Step");
             }
             else if (stepIndex == 11)
             {
-                MessageBox.Show("To change the production of a territory, click on the location of the territory and enter its name in the window that appears.", "Help On Current Step");
+                MessageBox.Show("To change the production of a territory, click on the territory and enter the territory's new production value in the window that appears.", "Help On Current Step");
             }
             else if (stepIndex == 12)
             {
@@ -1761,6 +1899,7 @@ namespace TripleAGameCreator
                 }
         }
         System.Windows.Forms.Timer t2 = new System.Windows.Forms.Timer();
+        Thread t = null;
         public void Load2()
         {
             t2.Interval = 500;
@@ -1770,32 +1909,32 @@ namespace TripleAGameCreator
             button16.Enabled = false;
             tabControl1.Enabled = false;
             t2.Start();
-            //Thread t = new Thread(new ThreadStart(do1));
-            //Form1.CheckForIllegalCrossThreadCalls = false;
-            //t.Start();
-            do1();
-            Stop();
+            t = new Thread(new ThreadStart(LoadMap));
+            Form1.CheckForIllegalCrossThreadCalls = false;
+            t.Start();
+            //do1();
+            //Stop();
         }
         int n2 = 1;
         void t2_Tick(object sender, EventArgs e)
         {
             if(n2 == 1)
             {
-                this.Text = "TripleA Map Creator (Loading.)";
+                this.Text = "TripleA Map Creator - Part 2 (Loading.)";
                 n2++;
             }
             else if (n2 == 2)
             {
-                this.Text = "TripleA Map Creator (Loading..)";
+                this.Text = "TripleA Map Creator - Part 2 (Loading..)";
                 n2++;
             }
             else
             {
-                this.Text = "TripleA Map Creator (Loading...)";
+                this.Text = "TripleA Map Creator - Part 2 (Loading...)";
                 n2 = 1;
             }
         }
-        public void do1()
+        public void LoadMap()
         {
             bool errorOccured = false;
             Step1Info.LoadedFile = "";
@@ -2310,7 +2449,7 @@ namespace TripleAGameCreator
             {
                 MessageBox.Show("An error occured when trying to load the Xml file. Make sure the xml file has no errors.", "Error Loading Xml File.");
             }
-                Stop();
+            Stop();
         }
         private void ClearAllDataAndControls()
         {
@@ -2376,7 +2515,7 @@ namespace TripleAGameCreator
             button15.Enabled = true;
             button16.Enabled = true;
             tabControl1.Enabled = true;
-            this.Text = "TripleA Map Creator";
+            this.Text = "TripleA Map Creator - Part 2";
         }
         Setting sta;
         string cn = "";
@@ -2685,6 +2824,7 @@ namespace TripleAGameCreator
         private void button16_Click(object sender, EventArgs e)
         {
             force = true;
+            oldStepIndex = stepIndex;
             surpress2 = true;
             tabControl1_Selecting(new object(), new TabControlCancelEventArgs(new TabPage(), 0, false, TabControlAction.Selecting));
             surpress2 = false;
@@ -3112,7 +3252,8 @@ namespace TripleAGameCreator
                 }
                 if(foundMapName == false)
                 lines.Add("                <property name=\"mapName\" value=\"" + Step1Info.MapName + "\" editable=\"false\"/>");
-                lines.Add("                <property name=\"notes\" value=\"" + mapNotesTextBox.Text + "\"/>");
+                if(!mapNotesTextBox.Text.Equals("(Fill this with the notes for the map.)"))
+                    lines.Add("                <property name=\"notes\" value=\"" + mapNotesTextBox.Text + "\"/>");
                 lines.Add("        </propertyList>");
                 lines.Add("</game>");
                 File.WriteAllLines(fileLoc, lines.ToArray());
@@ -3714,13 +3855,47 @@ namespace TripleAGameCreator
         Point oLocation = new Point();
         public GrabPanel()
         {
-            this.SetStyle(ControlStyles.DoubleBuffer, true);
             this.SetStyle(ControlStyles.UserPaint, true);
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            this.SetStyle(ControlStyles.DoubleBuffer, true);
             this.UpdateStyles();
+            this.BackgroundImageLayout = ImageLayout.None;
             MouseDown += new MouseEventHandler(mouseDown);
             MouseMove += new MouseEventHandler(mouseMove);
             MouseUp += new MouseEventHandler(mouseUp);
+        }
+        Rectangle lastVisibleBounds = new Rectangle();
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            //e.Graphics.Clip = new Region(e.ClipRectangle);
+            //base.OnPaint(e);
+        }
+        Rectangle visibleBounds = new Rectangle();
+        //public new Image BackgroundImage = null;
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            e.Graphics.Clip = new Region(e.ClipRectangle);
+            visibleBounds = new Rectangle(new Point(-((Panel)this.Parent).AutoScrollPosition.X, -((Panel)this.Parent).AutoScrollPosition.Y), new Size(((Panel)this.Parent).Size.Width - (((Panel)this.Parent).VerticalScroll.Visible ? 21 : 4), ((Panel)this.Parent).Size.Height - (((Panel)this.Parent).HorizontalScroll.Visible ? 21 : 4)));
+            //e.Graphics.DrawImage(BackgroundImage, visibleBounds.Location.X,visibleBounds.Location.Y,visibleBounds,GraphicsUnit.Pixel);
+            e.Graphics.Clip.Intersect(visibleBounds);
+            if (this.DesignMode)
+                base.OnPaintBackground(e);
+            else
+            {
+                if (!visibleBounds.Equals(lastVisibleBounds))
+                {
+                    Region r = new Region(visibleBounds);
+                    r.Exclude(lastVisibleBounds);
+                    e.Graphics.Clip = r;
+
+                    base.OnPaintBackground(e);
+
+                    lastVisibleBounds = new Rectangle(visibleBounds.X, visibleBounds.Y, visibleBounds.Width, visibleBounds.Height);
+                }
+                else
+                {
+                    base.OnPaintBackground(e);
+                }
+            }
         }
         private void mouseDown(object sender, MouseEventArgs e)
         {
@@ -3738,22 +3913,7 @@ namespace TripleAGameCreator
             {
                 if (down)
                 {
-                    try
-                    {
-                        ((Panel)Parent).VerticalScroll.Value = oLocation.Y + omLocation.Y - Form1.MousePosition.Y;
-                    }
-                    catch
-                    {
-                        ((Panel)Parent).VerticalScroll.Value = 0;
-                    }
-                    try
-                    {
-                        ((Panel)Parent).HorizontalScroll.Value = oLocation.X + omLocation.X - Form1.MousePosition.X;
-                    }
-                    catch
-                    {
-                        ((Panel)Parent).HorizontalScroll.Value = 0;
-                    }
+                    ((Form1.FlickerFreeHolderPanel)Parent).AutoScrollPosition = new Point(oLocation.X + omLocation.X - Form1.MousePosition.X, oLocation.Y + omLocation.Y - Form1.MousePosition.Y);
                 }
             }
         }

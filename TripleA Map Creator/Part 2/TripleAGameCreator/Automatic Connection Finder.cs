@@ -199,7 +199,7 @@ namespace TripleAGameCreator
                 //}
                 //File.WriteAllLines(Step1Info.MapImageLocation.Substring(0, Step1Info.MapImageLocation.LastIndexOf(@"\")) + "/cons.txt", lines.ToArray());
             }
-            catch{ if(connections.Count == 0) MessageBox.Show("An error occured trying to find the connections. Make sure you selected a valid polygons file and try again.", "Error Occured"); }
+            catch{ if(connections.Count == 0) MessageBox.Show("An error occured trying to find the connections. Make sure the polygons file for the map has no errors in it. (Like misspelling a territory name.)", "Error Occured"); }
         }
         List<Territory> done = new List<Territory>();
         public List<Connection> connections = new List<Connection>();
