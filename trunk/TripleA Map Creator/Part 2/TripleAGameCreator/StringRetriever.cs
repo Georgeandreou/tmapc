@@ -13,11 +13,16 @@ namespace TripleAGameCreator
         public StringRetriever()
         {
             InitializeComponent();
-            oldSize = Size;
         }
         public string Value = "";
         public Form1 parent = null;
         private void button1_Click(object sender, EventArgs e)
+        {
+            FocusOnBoxAndSetValue();
+            Hide();
+        }
+
+        private void FocusOnBoxAndSetValue()
         {
             if (textBox1.Visible)
             {
@@ -37,9 +42,25 @@ namespace TripleAGameCreator
                 numericUpDown1.Focus();
                 this.numericUpDown1.Select(0, this.numericUpDown1.Text.Length);
             }
-            Hide();
         }
-        Size oldSize;
+        private void FocusOnBox()
+        {
+            if (textBox1.Visible)
+            {
+                textBox1.Focus();
+                textBox1.SelectAll();
+            }
+            else if (comboBox1.Visible)
+            {
+                comboBox1.Focus();
+                comboBox1.SelectAll();
+            }
+            else if (numericUpDown1.Visible)
+            {
+                numericUpDown1.Focus();
+                this.numericUpDown1.Select(0, this.numericUpDown1.Text.Length);
+            }
+        }
         private void StringRetriever_Load(object sender, EventArgs e)
         {
 
@@ -67,49 +88,48 @@ namespace TripleAGameCreator
             this.ShowDialog();
             return this.Value;
         }
-        public String RetrieveString(string labelString, string textBoxString,object[] comboBoxItems)
+        public String RetrieveString(string labelString, string textBoxString, object[] comboBoxItems)
         {
-                this.Value = "";
-                this.Text = labelString;
-                this.textBox1.Hide();
-                this.numericUpDown1.Hide();
-                this.comboBox1.Show();
+            this.Value = "";
+            this.Text = labelString;
+            this.textBox1.Hide();
+            this.numericUpDown1.Hide();
+            this.comboBox1.Show();
 
-                this.comboBox1.Text = textBoxString;
-                this.comboBox1.SelectAll();
-                this.comboBox1.Items.Clear();
-                this.comboBox1.Items.AddRange(comboBoxItems);
+            this.comboBox1.Text = textBoxString;
+            this.comboBox1.SelectAll();
+            this.comboBox1.Items.Clear();
+            this.comboBox1.Items.AddRange(comboBoxItems);
 
-                this.ShowDialog();
-                return this.Value;
+            this.ShowDialog();
+            return this.Value;
         }
         public String RetrieveString(string labelString, int numberToDisplay)
         {
-                this.Value = "";
-                this.Text = labelString;
-                this.textBox1.Hide();
-                this.comboBox1.Hide();
-                this.numericUpDown1.Show();
+            this.Value = "";
+            this.Text = labelString;
+            this.textBox1.Hide();
+            this.comboBox1.Hide();
+            this.numericUpDown1.Show();
 
-                this.numericUpDown1.Value = numberToDisplay;
-                this.numericUpDown1.Select(0, this.numericUpDown1.Text.Length);
+            this.numericUpDown1.Value = numberToDisplay;
+            this.numericUpDown1.Select(0, this.numericUpDown1.Text.Length);
 
-                this.ShowDialog();
-                return this.Value;
+            this.ShowDialog();
+            return this.Value;
         }
-        private void StringRetriever_Resize(object sender, EventArgs e)
-        {
-            textBox1.Width = 207 + (Size.Width - oldSize.Width);
-            button1.Location = new Point(225 + (Size.Width - oldSize.Width), 10);
-        }
-
         private void textBox1_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Value = textBox1.Text;
-                Hide();
+                button1_Click(new object(), new EventArgs());
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            FocusOnBox();
+            Hide();
         }
     }
 }

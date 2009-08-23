@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
+using System.Net;
+using System.Threading;
 
 namespace TripleA_Game_Creator
 {
@@ -16,9 +18,71 @@ namespace TripleA_Game_Creator
         {
             InitializeComponent();
             oldSize = Size;
-            tabControl1.Tag = tabControl1.Size;
-            panel2.Tag = panel2.Location;
+            foreach (Control cur in this.Controls)
+            {
+                cur.Tag = cur.Bounds;
+                if (cur.Controls.Count > 0)
+                {
+                    foreach (Control cur2 in cur.Controls)
+                    {
+                        cur2.Tag = cur2.Bounds;
+                        if (cur2.Controls.Count > 0)
+                        {
+                            foreach (Control cur3 in cur2.Controls)
+                            {
+                                cur3.Tag = cur3.Bounds;
+                            }
+                        }
+                    }
+                }
+            }
             RefreshSettings();
+            CheckForUpdates();
+        }
+        private Version usersVersion = new Version(1,0,0,8);
+        public void CheckForUpdates()
+        {
+            Thread t = new Thread(new ThreadStart(update));
+            t.Priority = ThreadPriority.Lowest;
+            t.Start();
+        }
+        private void update()
+        {
+            WebClient client = new WebClient(); //http://tmapc.googlecode.com/files/TripleA%20Map%20Creator%20v1.0.0.8.zip
+            Version currentCheckingVersion = usersVersion;
+            Version newestVersionAvailable = usersVersion;
+            bool doBreak = false;
+
+            for (int buildI = usersVersion.Build + 1; buildI < 10; buildI++)
+            {
+                try
+                {
+                    Version checkVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, buildI, 0);
+                    Stream s = client.OpenRead("http://tmapc.googlecode.com/files/TripleA%20Map%20Creator%20v" + checkVersion.ToString() + ".zip");
+                    newestVersionAvailable = checkVersion;
+                    currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, buildI, 1);
+                    s.Close();
+                }
+                catch { }
+            }
+            while (!doBreak)
+            {
+                try
+                {
+                    Stream s = client.OpenRead("http://tmapc.googlecode.com/files/TripleA%20Map%20Creator%20v" + currentCheckingVersion.ToString() + ".zip");
+                    newestVersionAvailable = currentCheckingVersion;
+                    currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build, currentCheckingVersion.Revision + 1);
+                    s.Close();
+                }
+                catch
+                {
+                    break;
+                }
+            }
+            if (Convert.ToInt32(usersVersion.ToString().Replace(".", "")) < Convert.ToInt32(newestVersionAvailable.ToString().Replace(".", "")))
+            {
+                MessageBox.Show("There is a newer version of the Map Creator available.\r\nYour version: " + usersVersion.ToString() + ".\r\nNewest Version: " + newestVersionAvailable.ToString() + ".\r\n\r\nTo download the latest version, please go to \"http://code.google.com/p/tmapc/downloads/list\" and click on the latest download.", "Checking For Updates");
+            }
         }
         public void RefreshSettings()
         {
@@ -121,6 +185,7 @@ namespace TripleA_Game_Creator
                 oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
                 newControl.Font = new Font(newControl.Font, FontStyle.Bold);
             }
+            UpdateWindowText();
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -129,6 +194,63 @@ namespace TripleA_Game_Creator
             //MessageBox.Show(Step2Info.territories.Count.ToString() + "/" + Step3Info.connections.Count.ToString());
             //MessageBox.Show(TerritoryDefinitionsImageDrawer.Controls.Count.ToString() + "/" + TerritoryConnectionsImageDrawer.Controls.Count.ToString());
         }
+        public void UpdateWindowText()
+        {
+            switch (stepIndex)
+            {
+                case 0:
+                    {
+                        this.Text = defaultWindowText;
+                        break;
+                    }
+                case 1:
+                    {
+                        this.Text = defaultWindowText;
+                        break;
+                    }
+                case 2:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 6% Done With Part 1)";
+                        break;
+                    }
+                case 3:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 60% Done With Part 1)";
+                        break;
+                    }
+                case 4:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 76% Done With Part 1)";
+                        break;
+                    }
+                case 5:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 76% Done With Part 1)";
+                        break;
+                    }
+                case 6:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 80% Done With Part 1)";
+                        break;
+                    }
+                case 7:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 86% Done With Part 1)";
+                        break;
+                    }
+                case 8:
+                    {
+                        this.Text = defaultWindowText + " (Approximately 94% Done With Part 1)";
+                        break;
+                    }
+                case 9:
+                    {
+                        this.Text = defaultWindowText + " (Completely Done With Part 1)";
+                        break;
+                    }
+            }
+        }
+        private string defaultWindowText = "TripleA Map Creator - Part 1";
         private void Next()
         {
             if (stepIndex == 5)
@@ -167,7 +289,7 @@ namespace TripleA_Game_Creator
             {
                 if((filledFields > 0 && nonFilledFields != 0) || (!File.Exists(textBox3.Text + @"\map.properties") && nonFilledFields > 0))
                 {
-                    MessageBox.Show("Fill in all the fields before proceeding to the next step.", "Complete Current Step");
+                    MessageBox.Show("Supply the Map Folder before proceeding to the next step.", "Complete Current Step");
                     return;
                 }
             }
@@ -218,6 +340,7 @@ namespace TripleA_Game_Creator
                 }
                 catch { }
             }
+            UpdateWindowText();
         }
         public Control getControl(string name)
         {
@@ -252,8 +375,24 @@ namespace TripleA_Game_Creator
         private void Form1_Resize(object sender, EventArgs e)
         {
             Size change = new Size(Size.Width - oldSize.Width, Size.Height - oldSize.Height);
-            tabControl1.Size = ((Size)tabControl1.Tag) + change;
-            panel2.Location = ((Point)panel2.Tag) + new Size(change.Width / 2, change.Height);
+            tabControl1.Size = ((Rectangle)tabControl1.Tag).Size + change;
+            panel2.Location = ((Rectangle)panel2.Tag).Location + new Size(change.Width / 2, change.Height);
+            button5.Size = ((Rectangle)button5.Tag).Size + change;
+            button14.Size = ((Rectangle)button14.Tag).Size + change;
+            button15.Size = ((Rectangle)button15.Tag).Size + change;
+            button6.Size = ((Rectangle)button6.Tag).Size + change;
+            button9.Size = ((Rectangle)button9.Tag).Size + change;
+            button17.Size = ((Rectangle)button17.Tag).Size + change;
+            button19.Size = ((Rectangle)button19.Tag).Size + change;
+            button21.Size = ((Rectangle)button21.Tag).Size + change;
+            button10.Location = ((Rectangle)button10.Tag).Location + new Size(change.Width / 2, change.Height);
+            button13.Location = ((Rectangle)button13.Tag).Location + new Size(change.Width / 2, change.Height);
+            button16.Location = ((Rectangle)button16.Tag).Location + new Size(change.Width / 2, change.Height);
+            button18.Location = ((Rectangle)button18.Tag).Location + new Size(change.Width / 2, change.Height);
+            button20.Location = ((Rectangle)button20.Tag).Location + new Size(change.Width / 2, change.Height);
+            button22.Location = ((Rectangle)button22.Tag).Location + new Size(change.Width / 2, change.Height);
+            button23.Location = ((Rectangle)button23.Tag).Location + new Size(change.Width / 2, change.Height);
+            button7.Location = ((Rectangle)button7.Tag).Location + new Size(change.Width / 2, change.Height);
         }
         int change = 0;
         private void button6_Click(object sender, EventArgs e)
@@ -882,7 +1021,7 @@ namespace TripleA_Game_Creator
             if (File.Exists(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + @"\TripleA Map Creator Part 2.exe"))
                 System.Diagnostics.Process.Start((new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + @"\TripleA Map Creator Part 2.exe"));
             else
-                MessageBox.Show("Unable to find Part 2 of the Map Creator. The program will now close.");
+                MessageBox.Show("Unable to find Part 2 of the Map Creator. The program will now close.","Cannot locate Part 2.");
             Environment.Exit(0);
         }
     }

@@ -1,3 +1,31 @@
+Changes for 1.0.0.8
+
+* Fix problem where it doesn't save data that was changed in the current step when saving using the button in the bottom-left. (SDW)
+
+* Make it so the program only writes the mapNotes setting if the user actually enters notes. (SDW)
+
+* Make the program inform the user of newer version by checking the available versions on the download page. (SDW)
+
+* Update the window text every time the user advances to the next step to show how much the user has left to complete of the map. (SDW)
+
+* Add a cancel button to the String Retriever. (SDW)
+
+* Fix problem where the StringRetriever will not always work correctly when the user presses the 'Enter' key. (SDW)
+
+* Make it so the Map Creator runs the map loading method in a seperate thread. (SDW)
+
+* Change Part 2 Title Text to "TripleA Map Creator - Part 2" when the program finishes loading a map. (SDW)
+
+* Improve the scrolling quality on the territory input panels of Part 2. (SDW)
+
+* Fix some misleading help information on Part 2.
+
+* Update the 'readme.txt' file to contain a link to the .NET Framework if the program fails to start. (SDW)
+
+* Change the help for when Part 2 crashes when it tries to find the polygons for a territory and can't find it. (SDW)
+
+* Make it so Part 1 of the Map Creator resizes the step instructions buttons and centers the run utility button. (SDW)
+
 Changes for 1.0.0.7
 
 * Added help for Step 16 of Part 2. (SDW)

@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using System.Drawing;
 namespace TripleAGameCreator
 {
     partial class Form1
@@ -66,11 +67,11 @@ namespace TripleAGameCreator
             this.label37 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.panel4 = new TripleAGameCreator.Form1.FlickerFreePanel();
+            this.panel4 = new TripleAGameCreator.Form1.FlickerFreeHolderPanel();
             this.TerritoryDefinitionsImageDrawer = new TripleAGameCreator.GrabPanel();
             this.label20 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.panel10 = new TripleAGameCreator.Form1.FlickerFreePanel();
+            this.panel10 = new TripleAGameCreator.Form1.FlickerFreeHolderPanel();
             this.TerritoryConnectionsImageDrawer = new TripleAGameCreator.GrabPanel();
             this.label21 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -156,20 +157,20 @@ namespace TripleAGameCreator
             this.label63 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.tabPage11 = new System.Windows.Forms.TabPage();
-            this.panel11 = new TripleAGameCreator.Form1.FlickerFreePanel();
+            this.panel11 = new TripleAGameCreator.Form1.FlickerFreeHolderPanel();
             this.TerritoryProductionsImageDrawer = new TripleAGameCreator.GrabPanel();
             this.label17 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
             this.tabPage12 = new System.Windows.Forms.TabPage();
-            this.panel12 = new TripleAGameCreator.Form1.FlickerFreePanel();
+            this.panel12 = new TripleAGameCreator.Form1.FlickerFreeHolderPanel();
             this.CanalsImageDrawer = new TripleAGameCreator.GrabPanel();
             this.label18 = new System.Windows.Forms.Label();
             this.tabPage13 = new System.Windows.Forms.TabPage();
-            this.panel13 = new TripleAGameCreator.Form1.FlickerFreePanel();
+            this.panel13 = new TripleAGameCreator.Form1.FlickerFreeHolderPanel();
             this.TerritoryOwnershipImageDrawer = new TripleAGameCreator.GrabPanel();
             this.label31 = new System.Windows.Forms.Label();
             this.tabPage14 = new System.Windows.Forms.TabPage();
-            this.panel14 = new TripleAGameCreator.Form1.FlickerFreePanel();
+            this.panel14 = new TripleAGameCreator.Form1.FlickerFreeHolderPanel();
             this.UnitPlacementsImageDrawer = new TripleAGameCreator.GrabPanel();
             this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
@@ -2104,16 +2105,35 @@ namespace TripleAGameCreator
 
         #endregion
 
-        public class FlickerFreePanel : Panel
+        public class FlickerFreeHolderPanel : Panel
         {
-            /*
-            public FlickerFreePanel()
-                : base()
+            public FlickerFreeHolderPanel()
             {
-                this.SetStyle(ControlStyles.DoubleBuffer, true);
-                this.SetStyle(ControlStyles.UserPaint, true);
                 this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+                this.SetStyle(ControlStyles.UserPaint, true);
+                this.SetStyle(ControlStyles.Opaque, true);
                 this.UpdateStyles();
+            }
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                e.Graphics.Clip = new Region(e.ClipRectangle);
+                if (this.DesignMode)
+                    base.OnPaint(e);
+                else
+                {
+                    //base.OnPaint(e);
+                }
+            }
+            protected override void OnPaintBackground(PaintEventArgs e)
+            {
+                e.Graphics.Clip = new Region(e.ClipRectangle);
+                if (this.DesignMode)
+                    base.OnPaintBackground(e);
+                else
+                {
+                    //e.Graphics.Clip.Exclude(new Region(new Rectangle(new Point(0, 0), GraphicsManager.TerrainDrawer.Size)));
+                    //base.OnPaintBackground(e);
+                }
             }
             protected override CreateParams CreateParams
             {
@@ -2124,9 +2144,7 @@ namespace TripleAGameCreator
                     return params1;
                 }
             }
-             * */
         }
-
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -2158,9 +2176,9 @@ namespace TripleAGameCreator
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.Label label39;
-        private FlickerFreePanel panel4;
+        private FlickerFreeHolderPanel panel4;
         private GrabPanel TerritoryDefinitionsImageDrawer;
-        private FlickerFreePanel panel10;
+        private FlickerFreeHolderPanel panel10;
         private GrabPanel TerritoryConnectionsImageDrawer;
         private System.Windows.Forms.Label label45;
         private System.Windows.Forms.Label label44;
@@ -2269,16 +2287,16 @@ namespace TripleAGameCreator
         private System.Windows.Forms.Label label63;
         private System.Windows.Forms.Label label65;
         private System.Windows.Forms.TextBox textBox17;
-        private FlickerFreePanel panel11;
+        private FlickerFreeHolderPanel panel11;
         private GrabPanel TerritoryProductionsImageDrawer;
         private System.Windows.Forms.Label label17;
-        private FlickerFreePanel panel12;
+        private FlickerFreeHolderPanel panel12;
         private GrabPanel CanalsImageDrawer;
         private System.Windows.Forms.Label label18;
-        private FlickerFreePanel panel13;
+        private FlickerFreeHolderPanel panel13;
         private GrabPanel TerritoryOwnershipImageDrawer;
         private System.Windows.Forms.Label label31;
-        private FlickerFreePanel panel14;
+        private FlickerFreeHolderPanel panel14;
         private GrabPanel UnitPlacementsImageDrawer;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Panel panel15;
