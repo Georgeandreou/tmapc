@@ -1,5 +1,13 @@
 Changes for 1.0.0.8
 
+* When catching an error, let the user see the complete error message by re-throwing it. (SDW)
+
+* Added setting to stop the loading of an XML file when an error is found. (SDW)
+
+* Increase xml loading speed and efficiency. (SDW)
+
+* Add error catching debugging information to Part 2 when the program fails to load an xml file. (SDW)
+
 * Fix problem where it doesn't save data that was changed in the current step when saving using the button in the bottom-left. (SDW)
 
 * Make it so the program only writes the mapNotes setting if the user actually enters notes. (SDW)

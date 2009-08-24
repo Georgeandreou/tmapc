@@ -107,6 +107,7 @@ namespace TripleA_Game_Creator
                         {
                             List<string> lines = new List<string>();
                             lines.Add("Display Current Units When Entering New Units=\"true\"");
+                            lines.Add("Stop Loading XML File When Error Is Found=\"false\"");
                             lines.Add("Java Heap Size=\"1000\"");
                             File.WriteAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf", lines.ToArray());
                         }
