@@ -34,7 +34,7 @@ namespace TripleAGameCreator
             {
                 Value = comboBox1.Text;
                 comboBox1.Focus();
-                comboBox1.SelectAll();
+                comboBox1.Select();
             }
             else if (numericUpDown1.Visible)
             {
@@ -53,7 +53,7 @@ namespace TripleAGameCreator
             else if (comboBox1.Visible)
             {
                 comboBox1.Focus();
-                comboBox1.SelectAll();
+                comboBox1.Select();
             }
             else if (numericUpDown1.Visible)
             {

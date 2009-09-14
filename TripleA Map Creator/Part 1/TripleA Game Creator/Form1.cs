@@ -522,52 +522,19 @@ namespace TripleA_Game_Creator
             if (d.ShowDialog() == DialogResult.OK)
                 textBox3.Text = d.SelectedPath;
         }
-        string directory = "";
+        string tripleADirectory = null;
         string file = "";
         private void button13_Click(object sender, EventArgs e)
         {
-            directory = "";
-            if (Directory.Exists("C:/Program Files/TripleA/") && new DirectoryInfo("C:/Program Files/TripleA/").GetDirectories().Length > 0)
-                directory = "C:/Program Files/TripleA/";
-            else
-            {
-                FolderBrowserDialog od = new FolderBrowserDialog();
-                od.Description = "Please locate the TripleA Program's folder. (Where you installed TripleA)";
-                od.ShowNewFolderButton = true;
-                if (Directory.Exists(@"C:\Program Files\"))
-                    od.SelectedPath = @"C:\Program Files\";
-                if (od.ShowDialog() != DialogResult.Cancel)
-                    directory = od.SelectedPath;
-                else return;
-            }
-            bool isBaseDirectory = false;
-            foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-            {
-                if (cur.Name.ToLower() == "bin")
-                {
-                    isBaseDirectory = true;
-                }
-            }
-            if (isBaseDirectory == false)
-            {
-                DirectoryInfo newestTripleAVersion = new DirectoryInfo(directory).GetDirectories()[0];
-                foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                {
-                    try
-                    {
-                        if (Convert.ToInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > Convert.ToInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
-                            newestTripleAVersion = cur;
-                    }
-                    catch { }
-                }
-                directory = newestTripleAVersion.FullName;
-            }
-            file = directory + "/bin/triplea.jar";
+            SetNewestTripleAVersion();
+            if (tripleADirectory == null)
+                return;
+            file = tripleADirectory + "/bin/triplea.jar";
             if (!File.Exists(file))
             {
                 OpenFileDialog d2 = new OpenFileDialog();
                 d2.Multiselect = false;
-                d2.InitialDirectory = directory;
+                d2.InitialDirectory = tripleADirectory;
                 d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
                 if (d2.ShowDialog() == DialogResult.OK)
                     file = d2.FileName;
@@ -575,14 +542,12 @@ namespace TripleA_Game_Creator
             if(File.Exists(file))
             System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/CenterPicker");
         }
-
-        private void button7_Click_1(object sender, EventArgs e)
+        public void SetNewestTripleAVersion()
         {
-            if (!File.Exists(file))
+            if (tripleADirectory == null)
             {
-                directory = "";
                 if (Directory.Exists("C:/Program Files/TripleA/") && new DirectoryInfo("C:/Program Files/TripleA/").GetDirectories().Length > 0)
-                    directory = "C:/Program Files/TripleA/";
+                    tripleADirectory = "C:/Program Files/TripleA/";
                 else
                 {
                     FolderBrowserDialog od = new FolderBrowserDialog();
@@ -591,11 +556,11 @@ namespace TripleA_Game_Creator
                     if (Directory.Exists(@"C:\Program Files\"))
                         od.SelectedPath = @"C:\Program Files\";
                     if (od.ShowDialog() != DialogResult.Cancel)
-                        directory = od.SelectedPath;
+                        tripleADirectory = od.SelectedPath;
                     else return;
                 }
                 bool isBaseDirectory = false;
-                foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
+                foreach (DirectoryInfo cur in new DirectoryInfo(tripleADirectory).GetDirectories())
                 {
                     if (cur.Name.ToLower() == "bin")
                     {
@@ -604,8 +569,8 @@ namespace TripleA_Game_Creator
                 }
                 if (isBaseDirectory == false)
                 {
-                    DirectoryInfo newestTripleAVersion = new DirectoryInfo(directory).GetDirectories()[0];
-                    foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
+                    DirectoryInfo newestTripleAVersion = new DirectoryInfo(tripleADirectory).GetDirectories()[0];
+                    foreach (DirectoryInfo cur in new DirectoryInfo(tripleADirectory).GetDirectories())
                     {
                         try
                         {
@@ -614,18 +579,26 @@ namespace TripleA_Game_Creator
                         }
                         catch { }
                     }
-                    directory = newestTripleAVersion.FullName;
+                    tripleADirectory = newestTripleAVersion.FullName;
                 }
-                file = directory + "/bin/triplea.jar";
-                if (!File.Exists(file))
-                {
-                    OpenFileDialog d2 = new OpenFileDialog();
-                    d2.Multiselect = false;
-                    d2.InitialDirectory = directory;
-                    d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
-                    if (d2.ShowDialog() == DialogResult.OK)
-                        file = d2.FileName;
-                }
+            }
+        }
+
+        private void button7_Click_1(object sender, EventArgs e)
+        {
+            SetNewestTripleAVersion();
+            if (tripleADirectory == null)
+                return;
+
+            file = tripleADirectory + "/bin/triplea.jar";
+            if (!File.Exists(file))
+            {
+                OpenFileDialog d2 = new OpenFileDialog();
+                d2.Multiselect = false;
+                d2.InitialDirectory = tripleADirectory;
+                d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
+                if (d2.ShowDialog() == DialogResult.OK)
+                    file = d2.FileName;
             }
             if (File.Exists(file))
                 System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/PolygonGrabber");
@@ -633,54 +606,19 @@ namespace TripleA_Game_Creator
 
         private void button10_Click(object sender, EventArgs e)
         {
+            SetNewestTripleAVersion();
+            if (tripleADirectory == null)
+                return;
+
+            file = tripleADirectory + "/bin/triplea.jar";
             if (!File.Exists(file))
             {
-                directory = "";
-                if (Directory.Exists("C:/Program Files/TripleA/") && new DirectoryInfo("C:/Program Files/TripleA/").GetDirectories().Length > 0)
-                    directory = "C:/Program Files/TripleA/";
-                else
-                {
-                    FolderBrowserDialog od = new FolderBrowserDialog();
-                    od.Description = "Please locate the TripleA Program's folder. (Where you installed TripleA)";
-                    od.ShowNewFolderButton = true;
-                    if (Directory.Exists(@"C:\Program Files\"))
-                        od.SelectedPath = @"C:\Program Files\";
-                    if (od.ShowDialog() != DialogResult.Cancel)
-                        directory = od.SelectedPath;
-                    else return;
-                }
-                bool isBaseDirectory = false;
-                foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                {
-                    if (cur.Name.ToLower() == "bin")
-                    {
-                        isBaseDirectory = true;
-                    }
-                }
-                if (isBaseDirectory == false)
-                {
-                    DirectoryInfo newestTripleAVersion = new DirectoryInfo(directory).GetDirectories()[0];
-                    foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                    {
-                        try
-                        {
-                            if (Convert.ToInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > Convert.ToInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
-                                newestTripleAVersion = cur;
-                        }
-                        catch { }
-                    }
-                    directory = newestTripleAVersion.FullName;
-                }
-                file = directory + "/bin/triplea.jar";
-                if (!File.Exists(file))
-                {
-                    OpenFileDialog d2 = new OpenFileDialog();
-                    d2.Multiselect = false;
-                    d2.InitialDirectory = directory;
-                    d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
-                    if (d2.ShowDialog() == DialogResult.OK)
-                        file = d2.FileName;
-                }
+                OpenFileDialog d2 = new OpenFileDialog();
+                d2.Multiselect = false;
+                d2.InitialDirectory = tripleADirectory;
+                d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
+                if (d2.ShowDialog() == DialogResult.OK)
+                    file = d2.FileName;
             }
             if (File.Exists(file))
                 System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/PlacementPicker");
@@ -688,58 +626,23 @@ namespace TripleA_Game_Creator
         string cutPath = "";
         private void button16_Click(object sender, EventArgs e)
         {
+            SetNewestTripleAVersion();
+            if (tripleADirectory == null)
+                return;
+
+            file = tripleADirectory + "/bin/triplea.jar";
             if (!File.Exists(file))
             {
-                directory = "";
-                if (Directory.Exists("C:/Program Files/TripleA/") && new DirectoryInfo("C:/Program Files/TripleA/").GetDirectories().Length > 0)
-                    directory = "C:/Program Files/TripleA/";
-                else
-                {
-                    FolderBrowserDialog od = new FolderBrowserDialog();
-                    od.Description = "Please locate the TripleA Program's folder. (Where you installed TripleA)";
-                    od.ShowNewFolderButton = true;
-                    if (Directory.Exists(@"C:\Program Files\"))
-                        od.SelectedPath = @"C:\Program Files\";
-                    if (od.ShowDialog() != DialogResult.Cancel)
-                        directory = od.SelectedPath;
-                    else return;
-                }
-                bool isBaseDirectory = false;
-                foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                {
-                    if (cur.Name.ToLower() == "bin")
-                    {
-                        isBaseDirectory = true;
-                    }
-                }
-                if (isBaseDirectory == false)
-                {
-                    DirectoryInfo newestTripleAVersion = new DirectoryInfo(directory).GetDirectories()[0];
-                    foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                    {
-                        try
-                        {
-                            if (Convert.ToInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > Convert.ToInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
-                                newestTripleAVersion = cur;
-                        }
-                        catch { }
-                    }
-                    directory = newestTripleAVersion.FullName;
-                }
-                file = directory + "/bin/triplea.jar";
-                if (!File.Exists(file))
-                {
-                    OpenFileDialog d2 = new OpenFileDialog();
-                    d2.Multiselect = false;
-                    d2.InitialDirectory = directory;
-                    d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
-                    if (d2.ShowDialog() == DialogResult.OK)
-                        file = d2.FileName;
-                }
+                OpenFileDialog d2 = new OpenFileDialog();
+                d2.Multiselect = false;
+                d2.InitialDirectory = tripleADirectory;
+                d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
+                if (d2.ShowDialog() == DialogResult.OK)
+                    file = d2.FileName;
             }
             if (File.Exists(file))
             {
-                cutPath = Directory.GetParent(file.Substring(0, file.LastIndexOf("/"))).FullName + "/maps/temp/";
+                cutPath = Directory.GetParent(file.Substring(0, file.Replace("\\", "/").LastIndexOf("/"))).FullName + "/maps/temp/";
                 File.Create(textBox3.Text + "/place.txt").Close();
                 Directory.CreateDirectory(cutPath);
                 foreach (string cur in Directory.GetFiles(textBox3.Text))
@@ -751,11 +654,11 @@ namespace TripleA_Game_Creator
                     Directory.CreateDirectory(cutPath + @"\misc");
                     foreach (FileInfo cur in new DirectoryInfo(textBox3.Text + @"\misc").GetFiles())
                     {
-                        File.Copy(cur.FullName, cutPath + @"\misc\" + cur.Name,true);
+                        File.Copy(cur.FullName, cutPath + @"\misc\" + cur.Name, true);
                     }
                 }
                 double unitsScale = getUnitScale(new DirectoryInfo(textBox3.Text));
-                if(unitsScale != 0)
+                if (unitsScale != 0)
                     System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder " + unitsScale.ToString());
                 else
                     System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder");
@@ -764,54 +667,19 @@ namespace TripleA_Game_Creator
 
         private void button18_Click(object sender, EventArgs e)
         {
+            SetNewestTripleAVersion();
+            if (tripleADirectory == null)
+                return;
+
+            file = tripleADirectory + "/bin/triplea.jar";
             if (!File.Exists(file))
             {
-                directory = "";
-                if (Directory.Exists("C:/Program Files/TripleA/") && new DirectoryInfo("C:/Program Files/TripleA/").GetDirectories().Length > 0)
-                    directory = "C:/Program Files/TripleA/";
-                else
-                {
-                    FolderBrowserDialog od = new FolderBrowserDialog();
-                    od.Description = "Please locate the TripleA Program's folder. (Where you installed TripleA)";
-                    od.ShowNewFolderButton = true;
-                    if (Directory.Exists(@"C:\Program Files\"))
-                        od.SelectedPath = @"C:\Program Files\";
-                    if (od.ShowDialog() != DialogResult.Cancel)
-                        directory = od.SelectedPath;
-                    else return;
-                }
-                bool isBaseDirectory = false;
-                foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                {
-                    if (cur.Name.ToLower() == "bin")
-                    {
-                        isBaseDirectory = true;
-                    }
-                }
-                if (isBaseDirectory == false)
-                {
-                    DirectoryInfo newestTripleAVersion = new DirectoryInfo(directory).GetDirectories()[0];
-                    foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                    {
-                        try
-                        {
-                            if (Convert.ToInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > Convert.ToInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
-                                newestTripleAVersion = cur;
-                        }
-                        catch { }
-                    }
-                    directory = newestTripleAVersion.FullName;
-                }
-                file = directory + "/bin/triplea.jar";
-                if (!File.Exists(file))
-                {
-                    OpenFileDialog d2 = new OpenFileDialog();
-                    d2.Multiselect = false;
-                    d2.InitialDirectory = directory;
-                    d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
-                    if (d2.ShowDialog() == DialogResult.OK)
-                        file = d2.FileName;
-                }
+                OpenFileDialog d2 = new OpenFileDialog();
+                d2.Multiselect = false;
+                d2.InitialDirectory = tripleADirectory;
+                d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
+                if (d2.ShowDialog() == DialogResult.OK)
+                    file = d2.FileName;
             }
             if (!Directory.Exists(textBox3.Text + @"\baseTiles\"))
                 Directory.CreateDirectory(textBox3.Text + @"\baseTiles\");
@@ -822,56 +690,21 @@ namespace TripleA_Game_Creator
 
         private void button20_Click(object sender, EventArgs e)
         {
+            SetNewestTripleAVersion();
+            if (tripleADirectory == null)
+                return;
+
+            file = tripleADirectory + "/bin/triplea.jar";
             if (!File.Exists(file))
             {
-                directory = "";
-                if (Directory.Exists("C:/Program Files/TripleA/") && new DirectoryInfo("C:/Program Files/TripleA/").GetDirectories().Length > 0)
-                    directory = "C:/Program Files/TripleA/";
-                else
-                {
-                    FolderBrowserDialog od = new FolderBrowserDialog();
-                    od.Description = "Please locate the TripleA Program's folder. (Where you installed TripleA)";
-                    od.ShowNewFolderButton = true;
-                    if (Directory.Exists(@"C:\Program Files\"))
-                        od.SelectedPath = @"C:\Program Files\";
-                    if (od.ShowDialog() != DialogResult.Cancel)
-                        directory = od.SelectedPath;
-                    else return;
-                }
-                bool isBaseDirectory = false;
-                foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                {
-                    if (cur.Name.ToLower() == "bin")
-                    {
-                        isBaseDirectory = true;
-                    }
-                }
-                if (isBaseDirectory == false)
-                {
-                    DirectoryInfo newestTripleAVersion = new DirectoryInfo(directory).GetDirectories()[0];
-                    foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                    {
-                        try
-                        {
-                            if (Convert.ToInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > Convert.ToInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
-                                newestTripleAVersion = cur;
-                        }
-                        catch { }
-                    }
-                    directory = newestTripleAVersion.FullName;
-                }
-                file = directory + "/bin/triplea.jar";
-                if (!File.Exists(file))
-                {
-                    OpenFileDialog d2 = new OpenFileDialog();
-                    d2.Multiselect = false;
-                    d2.InitialDirectory = directory;
-                    d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
-                    if (d2.ShowDialog() == DialogResult.OK)
-                        file = d2.FileName;
-                }
+                OpenFileDialog d2 = new OpenFileDialog();
+                d2.Multiselect = false;
+                d2.InitialDirectory = tripleADirectory;
+                d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
+                if (d2.ShowDialog() == DialogResult.OK)
+                    file = d2.FileName;
             }
-            cutPath = Directory.GetParent(file.Substring(0, file.LastIndexOf("/"))).FullName + "/maps/temp/";
+            cutPath = Directory.GetParent(file.Substring(0, file.Replace("\\", "/").LastIndexOf("/"))).FullName + "/maps/temp/";
             Directory.CreateDirectory(cutPath + "/reliefTiles/");
             foreach (string cur in Directory.GetFiles(textBox3.Text))
             {
@@ -883,54 +716,19 @@ namespace TripleA_Game_Creator
 
         private void button22_Click(object sender, EventArgs e)
         {
+            SetNewestTripleAVersion();
+            if (tripleADirectory == null)
+                return;
+
+            file = tripleADirectory + "/bin/triplea.jar";
             if (!File.Exists(file))
             {
-                directory = "";
-                if (Directory.Exists("C:/Program Files/TripleA/") && new DirectoryInfo("C:/Program Files/TripleA/").GetDirectories().Length > 0)
-                    directory = "C:/Program Files/TripleA/";
-                else
-                {
-                    FolderBrowserDialog od = new FolderBrowserDialog();
-                    od.Description = "Please locate the TripleA Program's folder. (Where you installed TripleA)";
-                    od.ShowNewFolderButton = true;
-                    if(Directory.Exists(@"C:\Program Files\"))
-                    od.SelectedPath = @"C:\Program Files\";
-                    if (od.ShowDialog() != DialogResult.Cancel)
-                        directory = od.SelectedPath;
-                    else return;
-                }
-                bool isBaseDirectory = false;
-                foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                {
-                    if (cur.Name.ToLower() == "bin")
-                    {
-                        isBaseDirectory = true;
-                    }
-                }
-                if (isBaseDirectory == false)
-                {
-                    DirectoryInfo newestTripleAVersion = new DirectoryInfo(directory).GetDirectories()[0];
-                    foreach (DirectoryInfo cur in new DirectoryInfo(directory).GetDirectories())
-                    {
-                        try
-                        {
-                            if (Convert.ToInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > Convert.ToInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
-                                newestTripleAVersion = cur;
-                        }
-                        catch { }
-                    }
-                    directory = newestTripleAVersion.FullName;
-                }
-                file = directory + "/bin/triplea.jar";
-                if (!File.Exists(file))
-                {
-                    OpenFileDialog d2 = new OpenFileDialog();
-                    d2.Multiselect = false;
-                    d2.InitialDirectory = directory;
-                    d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
-                    if (d2.ShowDialog() == DialogResult.OK)
-                        file = d2.FileName;
-                }
+                OpenFileDialog d2 = new OpenFileDialog();
+                d2.Multiselect = false;
+                d2.InitialDirectory = tripleADirectory;
+                d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
+                if (d2.ShowDialog() == DialogResult.OK)
+                    file = d2.FileName;
             }
             if (File.Exists(file))
                 System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/ImageShrinker");

@@ -40,7 +40,7 @@ namespace TripleAGameCreator
             RefreshSettings();
             CheckForUpdates();
         }
-        private Version usersVersion = new Version(1, 0, 0, 8);
+        private Version usersVersion = new Version(1, 0, 0, 9);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));
@@ -685,7 +685,8 @@ namespace TripleAGameCreator
                                                 if (numIndex > -1)
                                                 {
                                                     int addAmount = Convert.ToInt32(tag1.Substring(numIndex, numLength).Trim());
-                                                    Step2Info.territories[tag2].Units.Add(new Unit() { Name = cur2.Name.ToString(), cost = new Cost() { cost = cur2.cost.cost, ResourceType = cur2.cost.ResourceType, result = new Result() { BuyQuantity = addAmount, ResourceOrUnitName = cur2.Name } }, attachment = cur2.attachment, unitOwner = new Player() { Name = cur.AccessibleName != null ? cur.AccessibleName : ""} });
+                                                    if(addAmount > 0)
+                                                        Step2Info.territories[tag2].Units.Add(new Unit() { Name = cur2.Name.ToString(), cost = new Cost() { cost = cur2.cost.cost, ResourceType = cur2.cost.ResourceType, result = new Result() { BuyQuantity = addAmount, ResourceOrUnitName = cur2.Name } }, attachment = cur2.attachment, unitOwner = new Player() { Name = cur.AccessibleName != null ? cur.AccessibleName : ""} });
                                                 }
                                             }
                                             catch
@@ -696,9 +697,10 @@ namespace TripleAGameCreator
                                                     if (numIndex > -1)
                                                     {
                                                         int addAmount = Convert.ToInt32(tag.Substring(numIndex, numLength).Trim());
+                                                        Unit unitTA = new Unit() { Name = cur2.Name.ToString(), cost = new Cost() { cost = cur2.cost.cost, ResourceType = cur2.cost.ResourceType, result = new Result() { BuyQuantity = addAmount, ResourceOrUnitName = cur2.Name } }, attachment = cur2.attachment, unitOwner = new Player() { Name = cur.AccessibleName != null ? cur.AccessibleName : "" } };
                                                         for (int i = 0; i < addAmount; i++)
                                                         {
-                                                            Step2Info.territories[tag2].Units.Add(new Unit() { Name = cur2.Name.ToString(), cost = new Cost() { cost = cur2.cost.cost, ResourceType = cur2.cost.ResourceType, result = new Result() { BuyQuantity = addAmount, ResourceOrUnitName = cur2.Name } }, attachment = cur2.attachment, unitOwner = new Player() { Name = cur.AccessibleName != null ? cur.AccessibleName : "" } });
+                                                            Step2Info.territories[tag2].Units.Add(unitTA);
                                                         }
                                                     }
                                                 }
@@ -1111,15 +1113,11 @@ namespace TripleAGameCreator
                                 Dictionary<string, int> unitsTA = new Dictionary<string, int>();
                                 foreach (Unit cur2 in cur.Units)
                                 {
-                                    try
-                                    {
-                                        unitsTA[cur2.Name].ToString();
+                                    if (unitsTA.ContainsKey(cur2.Name))
                                         unitsTA[cur2.Name]++;
-                                    }
-                                    catch
-                                    {
+                                    else
                                         unitsTA.Add(cur2.Name, 1);
-                                    }
+
                                     if (cur2.unitOwner.Name.Trim().Length > 0)
                                         l.AccessibleName = cur2.unitOwner.Name;
                                 }
@@ -1723,7 +1721,7 @@ namespace TripleAGameCreator
             }
             else if (stepIndex == 3)
             {
-                MessageBox.Show("To add a connection between two territories, click on the first territory in the connection then the second. To remove all the connections from a certain territory, right click on it and click yes.\r\n\r\nNote: To have the program find the connections automatticaly, click the 'Auto-Fill' button between the Back and Next buttons.", "Help On Current Step");
+                MessageBox.Show("To add a connection between two territories, click on the first territory in the connection then the second. To remove all the connections from a certain territory, right click on it and click yes.\r\n\r\nNote: To have the program find the connections automatically, click the 'Auto-Fill' button between the Back and Next buttons.", "Help On Current Step");
             }
             else if (stepIndex == 4)
             {
@@ -1739,7 +1737,7 @@ namespace TripleAGameCreator
             }
             else if (stepIndex == 7)
             {
-                MessageBox.Show("Sequence Name: The name of the sequence. Examples: russianBid, germanBidPlace, chineseTech, americanCombatMove, and germanPlace.\r\n\r\nGameplay Sequence: The name of the Gameplay Sequence to call. Examples: bid, tech, move, place, endTurn.\r\n\r\nPlayer: The name of the player the Player Delegate applies to. Examples: Russians, Germans, Americans, and Chinese.\r\n\r\nMax Run Count: The maximum number of times the Sequence can be called for the whole game (Always set to 100 or more unless on a 'bid' sequence).\r\n\r\nTo have the porgram automattically enter the default Player Sequences, click the 'Auto-Fill' button between the Back and Next buttons.", "Help On Current Step");
+                MessageBox.Show("Sequence Name: The name of the sequence. Examples: russianBid, germanBidPlace, chineseTech, americanCombatMove, and germanPlace.\r\n\r\nGameplay Sequence: The name of the Gameplay Sequence to call. Examples: bid, tech, move, place, endTurn.\r\n\r\nPlayer: The name of the player the Player Delegate applies to. Examples: Russians, Germans, Americans, and Chinese.\r\n\r\nMax Run Count: The maximum number of times the Sequence can be called for the whole game (Always set to 100 or more unless on a 'bid' sequence).\r\n\r\nTo have the porgram automatically enter the default Player Sequences, click the 'Auto-Fill' button between the Back and Next buttons.", "Help On Current Step");
             }
             else if (stepIndex == 8)
             {
@@ -1905,10 +1903,11 @@ namespace TripleAGameCreator
                     Write(d4.FileName);
                 }
         }
-        System.Windows.Forms.Timer t2 = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer t2;
         Thread t = null;
         public void Load2()
         {
+            t2 = new System.Windows.Forms.Timer();
             t2.Interval = 500;
             t2.Tick += new EventHandler(t2_Tick);
             panel2.Enabled = false;
@@ -1976,24 +1975,28 @@ namespace TripleAGameCreator
                     int lineIndex = 0;
                     foreach(string cur in xmlLines)
                     {
-                        if (cur.Contains(">"))
-                            text = String.Concat(text, cur);
-                        else
+                        if (!(cur.Trim().EndsWith(">") || cur.Contains(">")))
                             lineIndex++;
-
+                        text = String.Concat(text, cur);
                     }
                     if (File.Exists(new FileInfo(d4.FileName).DirectoryName + @"\centers.txt"))
                     {
                         centerLocation = new FileInfo(d4.FileName).DirectoryName + @"\centers.txt";
                         imageSelectStartFolder = new FileInfo(d4.FileName).DirectoryName;
                     }
+                    else if(File.Exists(new FileInfo(d4.FileName).Directory.Parent.Name + @"\centers.txt"))
+                    {
+                        centerLocation = new FileInfo(d4.FileName).Directory.Parent.Name + @"\centers.txt";
+                        imageSelectStartFolder = new FileInfo(d4.FileName).Directory.Parent.Name;
+                    }
                     else
                     {
                         bool found = false;
                         string mn = "";
-                        if (text.Contains("name=\"mapName\""))
+                        int indexOfMapName = text.IndexOf("name=\"mapName\"");
+                        if (indexOfMapName != -1)
                         {
-                            string mnss = text.Substring(text.IndexOf("name=\"mapName\""));
+                            string mnss = text.Substring(indexOfMapName);
                             mn = mnss.Substring(mnss.IndexOf(" value=\"") + 8, mnss.Substring(mnss.IndexOf(" value=\"") + 8).IndexOf("\""));
                         }
                         DirectoryInfo mapsFolder = null;
@@ -2034,34 +2037,12 @@ namespace TripleAGameCreator
                                 }
                             }
                         }
-
-                        if (!found)
+                        string parentHomeFolder = @"C:\Program Files\TripleA\";
+                        if (!new DirectoryInfo(parentHomeFolder).Exists)
+                            parentHomeFolder = @"C:\Program Files (x86)\TripleA\";
+                        string homeFolder = "";
+                        if (mapsFolder == null)
                         {
-                            foreach (DirectoryInfo cur2 in mapsFolder.GetDirectories())
-                            {
-                                if (cur2.Name.ToLower() == mn.ToLower())
-                                {
-                                    found = true;
-                                    centerLocation = cur2.FullName + "/centers.txt";
-                                    imageSelectStartFolder = new DirectoryInfo(cur2.FullName).FullName;
-                                }
-                            }
-                        }
-                        if (!found)
-                        {
-                            foreach (DirectoryInfo cur2 in mapsFolder.GetDirectories())
-                            {
-                                if (cur2.Name.Replace(" ", "").Replace("_", "") == new FileInfo(d4.FileName).Name.Replace(" ", "").Replace("_", ""))
-                                {
-                                    found = true;
-                                    centerLocation = cur2.FullName + "/centers.txt";
-                                    imageSelectStartFolder = new DirectoryInfo(cur2.FullName).FullName;
-                                }
-                            }
-                        }
-                        if (!found)
-                        {
-                            string parentHomeFolder = @"C:\Program Files\TripleA\";
                             if (!new DirectoryInfo(parentHomeFolder).Exists)
                             {
                                 FolderBrowserDialog od = new FolderBrowserDialog();
@@ -2097,8 +2078,72 @@ namespace TripleAGameCreator
                                 }
                                 catch { }
                             }
-                            string homeFolder = newestTripleAVersion.FullName;
+                            homeFolder = newestTripleAVersion.FullName;
+                            mapsFolder = new DirectoryInfo(homeFolder + @"\Maps\");
+                        }
 
+                        if (!found)
+                        {
+                            foreach (DirectoryInfo cur2 in mapsFolder.GetDirectories())
+                            {
+                                if (cur2.Name.ToLower() == mn.ToLower())
+                                {
+                                    found = true;
+                                    centerLocation = cur2.FullName + "/centers.txt";
+                                    imageSelectStartFolder = new DirectoryInfo(cur2.FullName).FullName;
+                                }
+                            }
+                        }
+                        if (!found)
+                        {
+                            foreach (DirectoryInfo cur2 in mapsFolder.GetDirectories())
+                            {
+                                if (cur2.Name.Replace(" ", "").Replace("_", "") == new FileInfo(d4.FileName).Name.Replace(" ", "").Replace("_", ""))
+                                {
+                                    found = true;
+                                    centerLocation = cur2.FullName + "/centers.txt";
+                                    imageSelectStartFolder = new DirectoryInfo(cur2.FullName).FullName;
+                                }
+                            }
+                        }
+                        if (!found)
+                        {
+                            if (!new DirectoryInfo(parentHomeFolder).Exists)
+                            {
+                                FolderBrowserDialog od = new FolderBrowserDialog();
+                                od.Description = "Please locate the TripleA Program's folder. (Where you installed TripleA)";
+                                od.ShowNewFolderButton = false;
+                                if (Directory.Exists(@"C:\Program Files\"))
+                                    od.SelectedPath = @"C:\Program Files\";
+                                if (od.ShowDialog() != DialogResult.Cancel)
+                                {
+                                    if (!new DirectoryInfo(od.SelectedPath).Exists)
+                                        return;
+                                    foreach (DirectoryInfo d in new DirectoryInfo(od.SelectedPath).GetDirectories())
+                                    {
+                                        if (d.Name.ToLower() == "bin" || d.Name.ToLower() == "maps")
+                                        {
+                                            od.SelectedPath = d.Parent.Parent.FullName;
+                                            break;
+                                        }
+                                    }
+                                    parentHomeFolder = od.SelectedPath;
+                                }
+                                else return;
+                            }
+                            if (!new DirectoryInfo(parentHomeFolder).Exists)
+                                return;
+                            DirectoryInfo newestTripleAVersion = new DirectoryInfo(parentHomeFolder).GetDirectories()[0];
+                            foreach (DirectoryInfo cur in new DirectoryInfo(parentHomeFolder).GetDirectories())
+                            {
+                                try
+                                {
+                                    if (Convert.ToInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > Convert.ToInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
+                                        newestTripleAVersion = cur;
+                                }
+                                catch { }
+                            }
+                            homeFolder = newestTripleAVersion.FullName;
                             if (File.Exists(homeFolder + @"\Maps\" + mn + @"\centers.txt"))
                             {
                                 found = true;
@@ -2484,8 +2529,18 @@ namespace TripleAGameCreator
             }
             if (errorOccured)
             {
-                if (MessageBox.Show(this, "An error occured when trying to load the Xml file. Make sure the xml file has no errors.\r\n\r\nText that failed to load: " + textThatFailedParsing + "\r\nLocation of failed text in file: " + indexOfTextThatFailed + "\r\nGuessed Line Number: " + guessedLineNumberThatFailed + "\r\n\r\nDo you want to view the error message?", "Error Loading Xml File", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
-                    throw thrownException;
+                if (thrownException is KeyNotFoundException)
+                {
+                    if (MessageBox.Show(this, "A \"KeyNotFoundException\" occured when trying to load the Xml file. Make sure the xml file has no errors.\r\n\r\nText that failed to load: " + textThatFailedParsing + "\r\nLocation of failed text in file: " + indexOfTextThatFailed + "\r\nGuessed Line Number: " + guessedLineNumberThatFailed + "\r\nCommon causes:\r\n1. The xml file contains text that references a territory or player that is spelled differently or doesn't exist.\r\n2. The xml file contains text that has information missing, like the owner name of a unit is missing from a unit placement declaration.\r\n\r\nDo you want to view the error message?", "Error Loading Xml File", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                        throw thrownException;
+                }
+                else
+                {                    
+                    string firstLetter = thrownException.GetType().Name.Substring(0,1);
+                    char[] searchLetters = new char[] { 'a', 'e', 'i', 'o', 'u' };
+                    if (MessageBox.Show(this, String.Concat("A",firstLetter.ToLower().IndexOfAny(searchLetters) == 0 ? "n" : "",thrownException.GetType().Name,"\" occured when trying to load the Xml file. Make sure the xml file has no errors.\r\n\r\nText that failed to load: ",textThatFailedParsing,"\r\nLocation of failed text in file: ",indexOfTextThatFailed,"\r\nGuessed Line Number: ",guessedLineNumberThatFailed,"\r\n\r\nDo you want to view the error message?"), "Error Loading Xml File", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                        throw thrownException;
+                }
             }
             Stop();
         }
@@ -3232,12 +3287,15 @@ namespace TripleAGameCreator
                         {
                             foreach (Unit cur2 in cur.Units)
                             {
-                                if (cur2.unitOwner.Name.Trim().Length > 0)
-                                    lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur2.unitOwner.Name.Replace(" ", "") + "\"/>");
-                                else if (cur.Owner.Name.Length > 0)
-                                    lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
-                                else
-                                    lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\"/>");
+                                if (cur2.cost.result.BuyQuantity > 0)
+                                {
+                                    if (cur2.unitOwner.Name.Trim().Length > 0)
+                                        lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur2.unitOwner.Name.Replace(" ", "") + "\"/>");
+                                    else if (cur.Owner.Name.Length > 0)
+                                        lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
+                                    else
+                                        lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\"/>");
+                                }
                             }
                         }
                     }
@@ -3248,12 +3306,15 @@ namespace TripleAGameCreator
                     {
                         foreach (Unit cur2 in cur.Units)
                         {
-                            if (cur2.unitOwner.Name.Trim().Length > 0)
-                                lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur2.unitOwner.Name.Replace(" ", "") + "\"/>");
-                            else if (cur.Owner.Name.Length > 0)
-                                lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
-                            else
-                                lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\"/>");
+                            if (cur2.cost.result.BuyQuantity > 0)
+                            {
+                                if (cur2.unitOwner.Name.Trim().Length > 0)
+                                    lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur2.unitOwner.Name.Replace(" ", "") + "\"/>");
+                                else if (cur.Owner.Name.Length > 0)
+                                    lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\" owner=\"" + cur.Owner.Name.Replace(" ", "") + "\"/>");
+                                else
+                                    lines.Add("                        <unitPlacement unitType=\"" + cur2.Name + "\" territory=\"" + cur.Name + "\" quantity=\"" + cur2.cost.result.BuyQuantity + "\"/>");
+                            }
                         }
                     }
                 }
@@ -3372,7 +3433,7 @@ namespace TripleAGameCreator
                 if (tabControl1.SelectedIndex == 2)
                 {
                     finder.main = this;
-                    if (finder.ShowDialog(this) != DialogResult.None && finder.connections.Count > 0)
+                    if (finder.ShowDialog(this) != DialogResult.None && !finder.hasCanceled && finder.connections.Count > 0)
                     {
                         Step1Info.MapImageWL = new Bitmap(Step1Info.MapImage);
                         Step3Info.connections.Clear();
