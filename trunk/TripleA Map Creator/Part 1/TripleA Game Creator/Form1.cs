@@ -39,7 +39,7 @@ namespace TripleA_Game_Creator
             RefreshSettings();
             CheckForUpdates();
         }
-        private Version usersVersion = new Version(1,0,0,8);
+        private Version usersVersion = new Version(1,0,0,9);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));

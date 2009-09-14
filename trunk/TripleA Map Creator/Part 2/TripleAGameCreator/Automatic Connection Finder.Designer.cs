@@ -35,8 +35,8 @@
             this.increaseAccuracy = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.addPointsBeforeRunning = new System.Windows.Forms.CheckBox();
-            this.onlyAddPointsToSeaZones = new System.Windows.Forms.CheckBox();
             this.checkPolygonBounds = new System.Windows.Forms.CheckBox();
+            this.onlyAddPointsToSeaZones = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -117,6 +117,18 @@
             this.addPointsBeforeRunning.Text = "Add Points Before Running To Ensure Finding All Connections(Slow)";
             this.addPointsBeforeRunning.UseVisualStyleBackColor = true;
             // 
+            // checkPolygonBounds
+            // 
+            this.checkPolygonBounds.AutoSize = true;
+            this.checkPolygonBounds.Checked = true;
+            this.checkPolygonBounds.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkPolygonBounds.Location = new System.Drawing.Point(17, 90);
+            this.checkPolygonBounds.Name = "checkPolygonBounds";
+            this.checkPolygonBounds.Size = new System.Drawing.Size(312, 17);
+            this.checkPolygonBounds.TabIndex = 6;
+            this.checkPolygonBounds.Text = "Check Polygon Bounds Intersection Before Scanning(Faster)";
+            this.checkPolygonBounds.UseVisualStyleBackColor = true;
+            // 
             // onlyAddPointsToSeaZones
             // 
             this.onlyAddPointsToSeaZones.AutoSize = true;
@@ -127,16 +139,6 @@
             this.onlyAddPointsToSeaZones.TabIndex = 6;
             this.onlyAddPointsToSeaZones.Text = "Only Add Polygon Points To Sea Zones(Faster)";
             this.onlyAddPointsToSeaZones.UseVisualStyleBackColor = true;
-            // 
-            // checkPolygonBounds
-            // 
-            this.checkPolygonBounds.AutoSize = true;
-            this.checkPolygonBounds.Location = new System.Drawing.Point(17, 90);
-            this.checkPolygonBounds.Name = "checkPolygonBounds";
-            this.checkPolygonBounds.Size = new System.Drawing.Size(312, 17);
-            this.checkPolygonBounds.TabIndex = 6;
-            this.checkPolygonBounds.Text = "Check Polygon Bounds Intersection Before Scanning(Faster)";
-            this.checkPolygonBounds.UseVisualStyleBackColor = true;
             // 
             // Automatic_Connection_Finder
             // 
