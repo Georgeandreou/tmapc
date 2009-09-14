@@ -1,3 +1,25 @@
+Changes for 1.0.0.9
+
+* Improved the Automatic Connection Finder by adding three more useful features. (SDW)
+
+* Add the 'Increase Accuracy By Adding Points(Slow)' checkbox to the Automatic Connection Finder window that helps the program find sea zone connections more easily. (SDW)
+
+* Fixed error where the Automatic Connection Finder will replace all connections with found connections even when the user has canceled the Automatic Connection Finder. (SDW)
+
+* Added better error catching code when loading a map in Part 2. (SDW)
+
+* Increased the speed of the Automatic Connection Finder. (SDW)
+
+* Fixed reintroduced problem from 1.0.0.8 that doesn't let the program load xml files that have xml "nodes?" spread over multiple lines. (SDW)
+
+* Made it so the the users only have to specify the location of the 'triplea.jar' file once when running the utilities in Part 1. (SDW)
+
+* Fix small error where the String Retriever window will not focus on the Combo-Box the first time it is opened. (SDW)
+
+* Fix big error where the program will crash if the user tries to load an xml file from a folder without the map data and without being in a TripleA folder. (SDW)
+
+* Fix error where the program would add another 'Tick' event to a timer everytime the user loaded a map. (SDW)
+
 Changes for 1.0.0.8
 
 * When catching an error, let the user see the complete error message by re-throwing it. (SDW)
