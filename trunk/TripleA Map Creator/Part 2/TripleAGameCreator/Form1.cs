@@ -21,8 +21,16 @@ namespace TripleAGameCreator
         public Form1()
         {
             InitializeComponent();
+            RemoveAllDesignerUsedTabPages();
+            SetControlsInitialSizesAndLocations();
+            RefreshSettings();
+            CheckForUpdates();
+        }
+
+        private void SetControlsInitialSizesAndLocations()
+        {
             origSize = Size;
-            tabControl1.Tag = tabControl1.Size;
+            mainTabControl.Tag = mainTabControl.Size;
             panel2.Tag = panel2.Location;
             panel17.Tag = panel17.Location;
             button26.Tag = button26.Location;
@@ -37,10 +45,14 @@ namespace TripleAGameCreator
             tabControl2.Tag = tabControl2.Size;
             tabControl3.Tag = tabControl3.Size;
             mapNotesTextBox.Tag = mapNotesTextBox.Size;
-            RefreshSettings();
-            CheckForUpdates();
         }
-        private Version usersVersion = new Version(1, 0, 0, 9);
+
+        private void RemoveAllDesignerUsedTabPages()
+        {
+            tabControl2.TabPages.Clear();
+            tabControl3.TabPages.Clear();
+        }
+        private Version usersVersion = new Version(1, 0, 1, 0);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));
@@ -241,20 +253,14 @@ namespace TripleAGameCreator
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                Next();
-                DisplayStepTabPage();
-            }
-            catch { }
+            Next();
+            DisplayStepTabPage();
             //MessageBox.Show(Step2Info.territories.Count.ToString() + "/" + Step3Info.connections.Count.ToString());
             //MessageBox.Show(TerritoryDefinitionsImageDrawer.Controls.Count.ToString() + "/" + TerritoryConnectionsImageDrawer.Controls.Count.ToString());
         }
         private void Next()
         {
-            if (stepIndex == 1)
-                t.Abort();
-            foreach (Control cur in tabControl1.TabPages[stepIndex - 1].Controls)
+            foreach (Control cur in mainTabControl.TabPages[stepIndex - 1].Controls)
             {
                 if ((cur is TextBox  || cur is ComboBox) && !(cur.Text.Trim().Length > 0) && cur.Name != "textBox7" && cur.Name != "textBox8")
                 {
@@ -312,8 +318,8 @@ namespace TripleAGameCreator
         }
         private void DisplayStepTabPage()
         {
-            tabControl1.SelectedIndex = stepIndex - 1;
-            if (tabControl1.SelectedIndex == 2 || tabControl1.SelectedIndex == 4 || tabControl1.SelectedIndex == 5 || tabControl1.SelectedIndex == 6 || tabControl1.SelectedIndex == 7 || tabControl1.SelectedIndex == 8 || tabControl1.SelectedIndex == 9 || tabControl1.SelectedIndex == 14)
+            mainTabControl.SelectedIndex = stepIndex - 1;
+            if (mainTabControl.SelectedIndex == 2 || mainTabControl.SelectedIndex == 4 || mainTabControl.SelectedIndex == 5 || mainTabControl.SelectedIndex == 6 || mainTabControl.SelectedIndex == 7 || mainTabControl.SelectedIndex == 8 || mainTabControl.SelectedIndex == 9 || mainTabControl.SelectedIndex == 14)
             {
                 button27.Enabled = true;
             }
@@ -328,10 +334,7 @@ namespace TripleAGameCreator
         bool opened3 = false;
         bool opened4 = false;
         bool opened5 = false;
-        bool infochange1 = false;
-        bool infochange2 = false;
-        bool infochange3 = false;
-        private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
+        private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e) //Re-Structure this entire method completely!
         {
             try
             {
@@ -508,7 +511,7 @@ namespace TripleAGameCreator
                                     }
                                 }
                             }
-                            catch { smallErrorOccured = true; }
+                            catch{ smallErrorOccured = true; }
                         }
                     }
                     else if (oldStepIndex == 7)
@@ -577,7 +580,7 @@ namespace TripleAGameCreator
                                     }
                                 }
                             }
-                            catch { smallErrorOccured = true; }
+                            catch (OutOfMemoryException ex) { smallErrorOccured = true; }
                         }
                     }
                     else if (oldStepIndex == 9)
@@ -760,7 +763,7 @@ namespace TripleAGameCreator
                 }
                 if (!surpress2 && (stepIndex > oldStepIndex || force))
                 {
-                    if (tabControl1.SelectedIndex == 1) //These methods are like instantiation methods, they preset the tabs when they are opened
+                    if (mainTabControl.SelectedIndex == 1) //These methods are like instantiation methods, they preset the tabs when they are opened
                     {
                         if (!(Step2Info.territories.Count > 0))
                         {
@@ -792,7 +795,7 @@ namespace TripleAGameCreator
                             catch { }
                         }
                     }
-                    else if (tabControl1.SelectedIndex == 2)
+                    else if (mainTabControl.SelectedIndex == 2)
                     {
                         //button27.Enabled = true;
                         if ((territoryChange || force || !opened1))
@@ -805,32 +808,36 @@ namespace TripleAGameCreator
                                 l.MouseClick += new MouseEventHandler(l_MouseClick);
                                 TerritoryConnectionsImageDrawer.Controls.Add(l);
                             }
-                                TerritoryConnectionsImageDrawer.BackgroundImage = Step1Info.MapImageWL;
-                            TerritoryConnectionsImageDrawer.Size = TerritoryDefinitionsImageDrawer.BackgroundImage.Size;
-                            foreach (Connection cur in Step3Info.connections.Values)
+                            try
                             {
-                                Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, cur.t1.Label.Location + new Size(cur.t1.Label.Size.Width / 2, 0), cur.t2.Label.Location + new Size(cur.t2.Label.Size.Width / 2, 0));
+                                TerritoryConnectionsImageDrawer.BackgroundImage = Step1Info.MapImageWL;
+                                TerritoryConnectionsImageDrawer.Size = TerritoryDefinitionsImageDrawer.BackgroundImage.Size;
+                                Graphics imageGraphics = Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage);
+                                foreach (Connection cur in Step3Info.connections.Values)
+                                {
+                                    imageGraphics.DrawLine(Pens.Red, cur.t1.Label.Location + new Size(cur.t1.Label.Size.Width / 2, 0), cur.t2.Label.Location + new Size(cur.t2.Label.Size.Width / 2, 0));
+                                }
                             }
+                            catch { MessageBox.Show("Unable to create the Graphics object for the image. The map image is not in the correct format.", "Wrong Image Format"); }
                         }
                     }
-                    else if (tabControl1.SelectedIndex == 4)
+                    else if (mainTabControl.SelectedIndex == 4)
                     {
                         //button27.Enabled = true;
                     }
-                    else if (tabControl1.SelectedIndex == 5)
+                    else if (mainTabControl.SelectedIndex == 5)
                     {
                         //button27.Enabled = true;
                     }
-                    else if (tabControl1.SelectedIndex == 6 )
+                    else if (mainTabControl.SelectedIndex == 6 )
                     {
                         //button27.Enabled = true;
                         if (true)//infochange1)
                         {
-                            infochange1 = false;
                             comboBox16.Items.Clear();
                             comboBox17.Items.Clear();
                             bool isFirst = false;
-                            foreach (Control cur2 in tabControl1.TabPages[tabControl1.SelectedIndex].Controls)
+                            foreach (Control cur2 in mainTabControl.TabPages[mainTabControl.SelectedIndex].Controls)
                             {
                                 if (cur2 is ComboBox)
                                 {
@@ -844,7 +851,7 @@ namespace TripleAGameCreator
                             isFirst = false;
                             foreach (GameplaySequence cur in Step6Info.gameplaySequences.Values)
                             {
-                                foreach (Control cur2 in tabControl1.TabPages[tabControl1.SelectedIndex].Controls)
+                                foreach (Control cur2 in mainTabControl.TabPages[mainTabControl.SelectedIndex].Controls)
                                 {
                                     if (cur2 is ComboBox)
                                     {
@@ -857,7 +864,7 @@ namespace TripleAGameCreator
                                 }
                             }
                             isFirst = true;
-                            foreach (Control cur2 in tabControl1.TabPages[tabControl1.SelectedIndex].Controls)
+                            foreach (Control cur2 in mainTabControl.TabPages[mainTabControl.SelectedIndex].Controls)
                             {
                                 if (cur2 is ComboBox)
                                 {
@@ -871,7 +878,7 @@ namespace TripleAGameCreator
                             isFirst = true;
                             foreach (Player cur in Step4Info.players.Values)
                             {
-                                foreach (Control cur2 in tabControl1.TabPages[tabControl1.SelectedIndex].Controls)
+                                foreach (Control cur2 in mainTabControl.TabPages[mainTabControl.SelectedIndex].Controls)
                                 {
                                     if (cur2 is ComboBox)
                                     {
@@ -885,14 +892,14 @@ namespace TripleAGameCreator
                             }
                         }
                     }
-                    else if (tabControl1.SelectedIndex == 7)
+                    else if (mainTabControl.SelectedIndex == 7)
                     {
                         //button27.Enabled = true;
                         comboBox2.Items.Clear();
                         bool isFirst = false;
                         foreach (Player cur in Step4Info.players.Values)
                         {
-                            foreach (Control cur2 in tabControl1.TabPages[tabControl1.SelectedIndex].Controls)
+                            foreach (Control cur2 in mainTabControl.TabPages[mainTabControl.SelectedIndex].Controls)
                             {
                                 if (cur2 is ComboBox)
                                 {
@@ -905,12 +912,11 @@ namespace TripleAGameCreator
                             }
                         }
                     }
-                    else if (tabControl1.SelectedIndex == 8)
+                    else if (mainTabControl.SelectedIndex == 8)
                     {
                         //button27.Enabled = true;
                         if (true)//infochange2)
                         {
-                            infochange2 = false;
                             List<string> listOfTabPagesJustAdded = new List<string>();
                             foreach (Player cur in Step4Info.players.Values)
                             {
@@ -953,12 +959,11 @@ namespace TripleAGameCreator
                             }
                         }
                     }
-                    else if (tabControl1.SelectedIndex == 9)
+                    else if (mainTabControl.SelectedIndex == 9)
                     {
                         //button27.Enabled = true;
                         if (true)//infochange3)
                         {
-                            infochange3 = false;
                             List<string> listOfTabPagesJustAdded = new List<string>();
                             foreach (Unit cur in Step5Info.units.Values)
                             {
@@ -1001,7 +1006,7 @@ namespace TripleAGameCreator
                             }
                         }
                     }
-                    else if (tabControl1.SelectedIndex == 10 && (territoryChange || force || !opened2))
+                    else if (mainTabControl.SelectedIndex == 10 && (territoryChange || force || !opened2))
                     {
                         opened2 = true;
                         TerritoryProductionsImageDrawer.Controls.Clear();
@@ -1014,7 +1019,7 @@ namespace TripleAGameCreator
                         TerritoryProductionsImageDrawer.BackgroundImage = Step1Info.MapImage;
                         TerritoryProductionsImageDrawer.Size = TerritoryProductionsImageDrawer.BackgroundImage.Size;
                     }
-                    else if (tabControl1.SelectedIndex == 11 && (territoryChange || force || !opened3))
+                    else if (mainTabControl.SelectedIndex == 11 && (territoryChange || force || !opened3))
                     {
                         opened3 = true;
                         CanalsImageDrawer.Controls.Clear();
@@ -1038,7 +1043,7 @@ namespace TripleAGameCreator
                         CanalsImageDrawer.BackgroundImage = Step1Info.MapImage;
                         CanalsImageDrawer.Size = CanalsImageDrawer.BackgroundImage.Size;
                     }
-                    else if (tabControl1.SelectedIndex == 12 && (territoryChange || force || !opened4))
+                    else if (mainTabControl.SelectedIndex == 12 && (territoryChange || force || !opened4))
                     {
                         opened4 = true;
                         List<Control> toDelete = new List<Control>();
@@ -1099,7 +1104,7 @@ namespace TripleAGameCreator
                             TerritoryOwnershipImageDrawer.Size = TerritoryOwnershipImageDrawer.BackgroundImage.Size;
                         }
                     }
-                    else if (tabControl1.SelectedIndex == 13 && (territoryChange || force || !opened5))
+                    else if (mainTabControl.SelectedIndex == 13 && (territoryChange || force || !opened5))
                     {
                         opened5 = true;
                         territoryChange = false;
@@ -1140,7 +1145,7 @@ namespace TripleAGameCreator
                         UnitPlacementsImageDrawer.BackgroundImage = Step1Info.MapImage;
                         UnitPlacementsImageDrawer.Size = UnitPlacementsImageDrawer.BackgroundImage.Size;
                     }
-                    else if (tabControl1.SelectedIndex == 14)
+                    else if (mainTabControl.SelectedIndex == 14)
                     {
                         //button27.Enabled = true;
                     }
@@ -1151,7 +1156,10 @@ namespace TripleAGameCreator
                 Back();
                 e.Cancel = true;
                 if (MessageBox.Show("An error occured while trying to process the data you entered. Please make sure you entered everything correctly and try again.\r\n\r\nDo you want to view the error message?", "Error Parsing Data", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
-                    throw ex;
+                {
+                    MessageBox.Show("The Exception Viewer feature has not been added yet.", "");
+                    //throw ex;
+                }
             }
             if (smallErrorOccured)
             {
@@ -1314,7 +1322,7 @@ namespace TripleAGameCreator
         Point olocaiton = new Point();
         void l_MouseClick(object sender, MouseEventArgs e)
         {
-            if (tabControl1.SelectedIndex == 1)
+            if (mainTabControl.SelectedIndex == 1)
             {
                 if (e.Button == MouseButtons.Left)
                 {
@@ -1380,7 +1388,7 @@ namespace TripleAGameCreator
                     }
                 }
             }
-            else if (tabControl1.SelectedIndex == 2)
+            else if (mainTabControl.SelectedIndex == 2)
             {
                 Label l = (Label)sender;
                 if (e.Button == MouseButtons.Left)
@@ -1429,7 +1437,7 @@ namespace TripleAGameCreator
                     }
                 }
             }
-            else if (tabControl1.SelectedIndex == 10)
+            else if (mainTabControl.SelectedIndex == 10)
             {
                 Label l = (Label)sender;
                 if (e.Button == MouseButtons.Left)
@@ -1450,7 +1458,7 @@ namespace TripleAGameCreator
                     }
                 }
             }
-            else if (tabControl1.SelectedIndex == 11)
+            else if (mainTabControl.SelectedIndex == 11)
             {
                 Label l = (Label)sender;
                 if (e.Button == MouseButtons.Left)
@@ -1462,30 +1470,60 @@ namespace TripleAGameCreator
                     }
                     else
                     {
-
-                        L1.ForeColor = Color.Black;
-                        if (MessageBox.Show("Do you want these territories to be a canal?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                        if (l == L1)
                         {
+                            L1.ForeColor = Color.Black;
+                            L1 = null;
+                            return;
+                        }
+                        Territory territory1 = Step2Info.territories[L1.Text];
+                        Territory territory2 = Step2Info.territories[l.Text];
+                        if (territory1.IsWater || territory2.IsWater)
+                        {
+                            MessageBox.Show("One or more of the territories you selected is a water territory. To create a canal you have to select the land territories that form the canal, not the sea zones connected by it.", "Invalid Canal");
+                            L1.ForeColor = Color.Black;
+                            L1 = null;
+                            return;
+                        }
+                        if (MessageBox.Show("Are you sure you want there to be a canal between these two territories?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                        {
+                            string canalName = RetrieveString("Enter the name of the canal", "Canal" + (canalsCreated + 1));
+                            if (canalName.Trim().Length == 0)
+                                return;
+                            canalsCreated++;
+                            L1.ForeColor = Color.Black;
+                            Canal c = new Canal() { Name = canalName};
+                            c.LandTerritories.Add(territory1);
+                            c.LandTerritories.Add(territory2);
+                            List<Territory> seaNeighborsOfT1 = getSeaNeighbors(territory1);
+                            foreach (Territory cur in getSeaNeighbors(territory2))
+                            {
+                                if (seaNeighborsOfT1.Contains(cur))
+                                    c.CanalSeaNeighbors.Add(cur);
+                            }
+                            if(Step12Info.Canals.ContainsKey(canalName))
+                            {
+                                if(MessageBox.Show("Another canal exists with the same name. Do you want to overwrite it?","Overwrite Canal",MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
+                                {
+                                    return;
+                                }
+                                Canal cTR = Step12Info.Canals[canalName];
+                                foreach (Control cur in CanalsImageDrawer.Controls)
+                                {
+                                    if (cur.BackColor == Color.Red)
+                                    {
+                                        foreach (Territory canalT in cTR.LandTerritories)
+                                        {
+                                            if(cur.Text == canalT.Name)
+                                                cur.BackColor = TerritoryDefinitionsImageDrawer.Controls[cur.Text].BackColor;
+                                        }
+                                    }
+                                }
+                                Step12Info.Canals.Remove(canalName);
+                            }
                             L1.BackColor = Color.Red;
                             l.BackColor = Color.Red;
-                            Canal c = new Canal() { Name = l.Text + "|" + L1.Text };
-                            c.CanalSeaNeighbors.Add(Step2Info.territories[L1.Text]);
-                            c.CanalSeaNeighbors.Add(Step2Info.territories[l.Text]);
-                            List<Territory> L1N = getLandNeighbors(Step2Info.territories[L1.Text]);
-                            foreach (Territory cur in getLandNeighbors(Step2Info.territories[l.Text]))
-                            {
-                                if (L1N.Contains(cur))
-                                    c.LandTerritories.Add(cur);
-                            }
-                            try
-                            {
-                                Step12Info.Canals.Add(l.Text + "|" + L1.Text, c);
-                            }
-                            catch
-                            {
-                                Step12Info.Canals.Remove(l.Text + "|" + L1.Text);
-                                Step12Info.Canals.Add(l.Text + "|" + L1.Text, c);
-                            }
+                            Step12Info.Canals.Add(canalName, c);                            
                         }
                         L1 = null;
                     }
@@ -1495,6 +1533,7 @@ namespace TripleAGameCreator
                     if (MessageBox.Show("Are you sure you want to remove all canals?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                     {
                         Step12Info.Canals.Clear();
+                        canalsCreated = 0;
                         foreach (Control cur in CanalsImageDrawer.Controls)
                         {
                             if (cur.BackColor == Color.Red)
@@ -1505,7 +1544,7 @@ namespace TripleAGameCreator
                     }
                 }
             }
-            else if (tabControl1.SelectedIndex == 12)
+            else if (mainTabControl.SelectedIndex == 12)
             {
                 Label l = (Label)sender;
                 if (e.Button == MouseButtons.Left)
@@ -1550,7 +1589,7 @@ namespace TripleAGameCreator
                     }
                 }
             }
-            else if (tabControl1.SelectedIndex == 13)
+            else if (mainTabControl.SelectedIndex == 13)
             {
                 Label l = (Label)sender;
                 if (e.Button == MouseButtons.Left)
@@ -1593,12 +1632,13 @@ namespace TripleAGameCreator
                 }
             }
         }
-        public List<Territory> getLandNeighbors(Territory t)
+        public int canalsCreated = 0;
+        public List<Territory> getSeaNeighbors(Territory t)
         {
             List<Territory> results = new List<Territory>();
             foreach (Territory cur in Step2Info.territories.Values)
             {
-                if (cur.IsWater == false)
+                if (cur.IsWater == true)
                 {
                     foreach (Connection cur2 in Step3Info.connections.Values)
                     {
@@ -1630,7 +1670,7 @@ namespace TripleAGameCreator
         public Label L2 = new Label();
         public Point GetPosition()
         {
-            return new Point(olocaiton.X - this.Location.X - this.tabControl1.Location.X - TerritoryDefinitionsImageDrawer.Location.X - 15, olocaiton.Y - this.Location.Y - this.tabControl1.Location.Y - TerritoryDefinitionsImageDrawer.Location.Y - 92);
+            return new Point(olocaiton.X - this.Location.X - this.mainTabControl.Location.X - TerritoryDefinitionsImageDrawer.Location.X - 15, olocaiton.Y - this.Location.Y - this.mainTabControl.Location.Y - TerritoryDefinitionsImageDrawer.Location.Y - 92);
         }
         StringRetriever sretriever = new StringRetriever();
         public String RetrieveString(string labelString)
@@ -1659,7 +1699,7 @@ namespace TripleAGameCreator
             Size change = new Size(Size.Width - origSize.Width, Size.Height - origSize.Height);
 
 
-            tabControl1.Size = ((Size)tabControl1.Tag); tabControl1.Size += change;
+            mainTabControl.Size = ((Size)mainTabControl.Tag); mainTabControl.Size += change;
             panel2.Location = ((Point)panel2.Tag); panel2.Location += new Size(change.Width / 2,change.Height);
             panel17.Location = ((Point)panel17.Tag); panel17.Location += new Size(change.Width / 2, change.Height);
             button26.Location = ((Point)button26.Tag); button26.Location += new Size(change.Width / 2, change.Height);            
@@ -1678,7 +1718,6 @@ namespace TripleAGameCreator
         int change = 0;
         private void button6_Click(object sender, EventArgs e)
         {
-            infochange1 = true;
             change += 25;
             panel5.Size += new Size(0, 25);
             button6.Location += new Size(0, 25);
@@ -1690,7 +1729,6 @@ namespace TripleAGameCreator
         {
             if (change > 0)
             {
-                infochange1 = true;
                 tabPage4.Controls.RemoveAt(tabPage4.Controls.Count - 1);
                 tabPage4.Controls.RemoveAt(tabPage4.Controls.Count - 1);
                 tabPage4.Controls.RemoveAt(tabPage4.Controls.Count - 1);
@@ -1757,7 +1795,7 @@ namespace TripleAGameCreator
             }
             else if (stepIndex == 12)
             {
-                MessageBox.Show("To add a new canal, click on both of the water territories touching the canal and click yes for each of them when it asks for confirmation. To remove all the canals right click on a territory and click yes", "Help On Current Step");
+                MessageBox.Show("To add a new canal, click on both of the land territories that form the canal and click yes when it asks for confirmation. To remove all the canals from the map, right click on one of the territories and confirm.", "Help On Current Step");
             }
             else if (stepIndex == 13)
             {
@@ -1787,8 +1825,6 @@ namespace TripleAGameCreator
         int change2 = 0;
         private void button10_Click(object sender, EventArgs e)
         {
-            infochange2 = true;
-            infochange3 = true;
             change2 += 25;
             panel6.Size += new Size(0, 25);
             button9.Location += new Size(0, 25);
@@ -1799,8 +1835,6 @@ namespace TripleAGameCreator
         {
             if (change2 > 0)
             {
-                infochange2 = true;
-                infochange3 = true;
                 tabPage5.Controls.RemoveAt(tabPage5.Controls.Count - 1);
                 tabPage5.Controls.RemoveAt(tabPage5.Controls.Count - 1);
                 tabPage5.Controls.RemoveAt(tabPage5.Controls.Count - 1);
@@ -1903,42 +1937,14 @@ namespace TripleAGameCreator
                     Write(d4.FileName);
                 }
         }
-        System.Windows.Forms.Timer t2;
-        Thread t = null;
-        public void Load2()
+        public void StartLoadingGame()
         {
-            t2 = new System.Windows.Forms.Timer();
-            t2.Interval = 500;
-            t2.Tick += new EventHandler(t2_Tick);
+            this.Text = defaultWindowText + " - Loading...";
             panel2.Enabled = false;
             button15.Enabled = false;
             button16.Enabled = false;
-            tabControl1.Enabled = false;
-            t2.Start();
-            t = new Thread(new ThreadStart(LoadMap));
-            Form1.CheckForIllegalCrossThreadCalls = false;
-            t.Start();
-            //do1();
-            //Stop();
-        }
-        int n2 = 1;
-        void t2_Tick(object sender, EventArgs e)
-        {
-            if(n2 == 1)
-            {
-                this.Text = "TripleA Map Creator - Part 2 (Loading.)";
-                n2++;
-            }
-            else if (n2 == 2)
-            {
-                this.Text = "TripleA Map Creator - Part 2 (Loading..)";
-                n2++;
-            }
-            else
-            {
-                this.Text = "TripleA Map Creator - Part 2 (Loading...)";
-                n2 = 1;
-            }
+            mainTabControl.Enabled = false;
+            LoadMap();
         }
         public void LoadMap()
         {
@@ -1964,7 +1970,7 @@ namespace TripleAGameCreator
                     oldStepIndex = 1;
                     surpress1 = true;
                     surpress2 = true;
-                    tabControl1.SelectedIndex = 0;
+                    mainTabControl.SelectedIndex = 0;
                     surpress1 = false;
                     surpress2 = false;
                     Point loc = new Point();
@@ -2522,24 +2528,33 @@ namespace TripleAGameCreator
                     Step1Info.LoadedFile = d4.FileName;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (MessageBox.Show(this, "An error occured when trying to setup the program for the Xml file. Make sure that all the map files, other than the xml file,(The map's centers.txt, polygons.txt, map.properties, etc.) have no errors in them.\r\n\r\nDo you want to view the error message?", "Error Reading Map Files", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
-                    throw ex;
+                {
+                    MessageBox.Show("The Exception Viewer feature has not been added yet.", "");
+                    //throw ex;
+                }
             }
             if (errorOccured)
             {
                 if (thrownException is KeyNotFoundException)
                 {
                     if (MessageBox.Show(this, "A \"KeyNotFoundException\" occured when trying to load the Xml file. Make sure the xml file has no errors.\r\n\r\nText that failed to load: " + textThatFailedParsing + "\r\nLocation of failed text in file: " + indexOfTextThatFailed + "\r\nGuessed Line Number: " + guessedLineNumberThatFailed + "\r\nCommon causes:\r\n1. The xml file contains text that references a territory or player that is spelled differently or doesn't exist.\r\n2. The xml file contains text that has information missing, like the owner name of a unit is missing from a unit placement declaration.\r\n\r\nDo you want to view the error message?", "Error Loading Xml File", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
-                        throw thrownException;
+                    {
+                        MessageBox.Show("The Exception Viewer feature has not been added yet.", "");
+                        //throw thrownException;
+                    }
                 }
                 else
                 {                    
                     string firstLetter = thrownException.GetType().Name.Substring(0,1);
                     char[] searchLetters = new char[] { 'a', 'e', 'i', 'o', 'u' };
                     if (MessageBox.Show(this, String.Concat("A",firstLetter.ToLower().IndexOfAny(searchLetters) == 0 ? "n" : "",thrownException.GetType().Name,"\" occured when trying to load the Xml file. Make sure the xml file has no errors.\r\n\r\nText that failed to load: ",textThatFailedParsing,"\r\nLocation of failed text in file: ",indexOfTextThatFailed,"\r\nGuessed Line Number: ",guessedLineNumberThatFailed,"\r\n\r\nDo you want to view the error message?"), "Error Loading Xml File", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
-                        throw thrownException;
+                    {
+                        MessageBox.Show("The Exception Viewer feature has not been added yet.", "");
+                        //throw thrownException;
+                    }
                 }
             }
             Stop();
@@ -2551,7 +2566,7 @@ namespace TripleAGameCreator
         }
         private void ClearAllData()
         {
-            foreach (TabPage cur in tabControl1.TabPages)
+            foreach (TabPage cur in mainTabControl.TabPages)
             {
                 cur.VerticalScroll.Value = 0;
             }
@@ -2581,9 +2596,6 @@ namespace TripleAGameCreator
             pfts.Clear();
             Step12Info.Canals.Clear();
             territoryChange = true;
-            infochange1 = true;
-            infochange2 = true;
-            infochange3 = true;
             opened1 = false;
             opened2 = false;
             opened3 = false;
@@ -2603,12 +2615,11 @@ namespace TripleAGameCreator
         }
         public void Stop()
         {
-            t2.Enabled = false;
             panel2.Enabled = true;
             button15.Enabled = true;
             button16.Enabled = true;
-            tabControl1.Enabled = true;
-            this.Text = "TripleA Map Creator - Part 2";
+            mainTabControl.Enabled = true;
+            this.Text = defaultWindowText;
         }
         Setting sta;
         string cn = "";
@@ -2758,7 +2769,6 @@ namespace TripleAGameCreator
         public void AddPlayer(string playerName,string playerAlliance,string playerResources)
         {
             Form1.CheckForIllegalCrossThreadCalls = false;
-            infochange1 = true;
             change += 25;
             panel5.Size += new Size(0, 25);
             button6.Location += new Size(0, 25);
@@ -2807,7 +2817,6 @@ namespace TripleAGameCreator
         }
         public void AddProductionFrontier(ProductionFrontier frontierToAdd)
         {
-            infochange2 = false;
             TabPage cur = new TabPage(frontierToAdd.Name);
             cur.Text = frontierToAdd.Name;
             cur.AutoScroll = true;
@@ -2876,7 +2885,6 @@ namespace TripleAGameCreator
         }
         public void AddUnitAttachment(Unit unitWA)
         {
-            infochange3 = false;
             TabPage cur = new TabPage(unitWA.Name);
             cur.Text = unitWA.Name;
             cur.AutoScroll = true;
@@ -2926,7 +2934,7 @@ namespace TripleAGameCreator
 
         private void button15_Click(object sender, EventArgs e)
         {
-            Load2();
+            StartLoadingGame();
         }
         [Serializable]
         public class SavePackage
@@ -3231,8 +3239,8 @@ namespace TripleAGameCreator
                     foreach (Canal cur in Step12Info.Canals.Values)
                     {
                         index++;
-                        lines.Add("				    <attatchment name=\"canalAttatchment" + index + "\" attatchTo=\"" + cur.CanalSeaNeighbors[0].Name + "\" javaClass=\"games.strategy.triplea.attatchments.CanalAttachment\" type=\"territory\">");
-                        lines.Add("				    	<option name=\"canalName\" value=\"canal" + index + "\"/>");
+                        lines.Add("			 <attatchment name=\"canalAttatchment" + index + "\" attatchTo=\"" + cur.CanalSeaNeighbors[0].Name + "\" javaClass=\"games.strategy.triplea.attatchments.CanalAttachment\" type=\"territory\">");
+                        lines.Add("			     <option name=\"canalName\" value=\"" + cur.Name + "\"/>");
                         string lt = "";
                         lt = cur.LandTerritories[0].Name;
                         if (cur.LandTerritories.Count > 1)
@@ -3245,13 +3253,13 @@ namespace TripleAGameCreator
                                 }
                             }
                         }
-                        lines.Add("				    	<option name=\"landTerritories\" value=\"" + lt + "\"/>");
-                        lines.Add("				    </attatchment>");
+                        lines.Add("			     <option name=\"landTerritories\" value=\"" + lt + "\"/>");
+                        lines.Add("			 </attatchment>");
 
-                        lines.Add("				    <attatchment name=\"canalAttatchment" + index + "\" attatchTo=\"" + cur.CanalSeaNeighbors[1].Name + "\" javaClass=\"games.strategy.triplea.attatchments.CanalAttachment\" type=\"territory\">");
-                        lines.Add("				    	<option name=\"canalName\" value=\"canal" + index + "\"/>");
-                        lines.Add("				    	<option name=\"landTerritories\" value=\"" + lt + "\"/>");
-                        lines.Add("				    </attatchment>");
+                        lines.Add("			 <attatchment name=\"canalAttatchment" + index + "\" attatchTo=\"" + cur.CanalSeaNeighbors[1].Name + "\" javaClass=\"games.strategy.triplea.attatchments.CanalAttachment\" type=\"territory\">");
+                        lines.Add("			     <option name=\"canalName\" value=\"" + cur.Name + "\"/>");
+                        lines.Add("			     <option name=\"landTerritories\" value=\"" + lt + "\"/>");
+                        lines.Add("			 </attatchment>");
                     }
                 }
                 catch { MessageBox.Show("Error writing canals. Please go back and make sure all the canals have at least one land territory connected to it."); return; }
@@ -3430,7 +3438,7 @@ namespace TripleAGameCreator
         {
             if (MessageBox.Show("Are you sure you want to use 'Auto-Fill'. Doing so will remove any information you entered in this step, and will try to enter the information using information from earlier steps or what a typical game would contain.", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
             {
-                if (tabControl1.SelectedIndex == 2)
+                if (mainTabControl.SelectedIndex == 2)
                 {
                     finder.main = this;
                     if (finder.ShowDialog(this) != DialogResult.None && !finder.hasCanceled && finder.connections.Count > 0)
@@ -3460,9 +3468,8 @@ namespace TripleAGameCreator
                     }
                     TerritoryConnectionsImageDrawer.Refresh();
                 }
-                if (tabControl1.SelectedIndex == 4)
+                if (mainTabControl.SelectedIndex == 4)
                 {
-                    infochange1 = true;
                     List<Control> toDelete = new List<Control>();
                     foreach (Control cur in tabPage5.Controls)
                     {
@@ -3493,10 +3500,8 @@ namespace TripleAGameCreator
                     button10.Location = new Point(102, 82 + 275);
                     panel6.Size = new Size(5, 36 + 275);
                 }
-                else if (tabControl1.SelectedIndex == 5)
+                else if (mainTabControl.SelectedIndex == 5)
                 {
-                    infochange2 = true;
-                    infochange3 = true;
                     List<Control> toDelete = new List<Control>();
                     foreach (Control cur in tabPage6.Controls)
                     {
@@ -3524,7 +3529,7 @@ namespace TripleAGameCreator
                     button12.Location = new Point(39, 93 + 200);
                     panel7.Size = new Size(5, 36 + 200);
                 }
-                else if (tabControl1.SelectedIndex == 6)
+                else if (mainTabControl.SelectedIndex == 6)
                 {
                     tabPage7.VerticalScroll.Value = 0;
                     tabPage7.HorizontalScroll.Value = 0;
@@ -3617,7 +3622,7 @@ namespace TripleAGameCreator
                     button14.Location = new Point(18, (93 + ch) - 25);
                     panel8.Size = new Size(5, (36 + ch) - 25);
                 }   
-                else if (tabControl1.SelectedIndex == 7)
+                else if (mainTabControl.SelectedIndex == 7)
                 {
                     tabPage8.VerticalScroll.Value = 0;
                     tabPage8.HorizontalScroll.Value = 0;
@@ -3671,7 +3676,7 @@ namespace TripleAGameCreator
                     button18.Location = new Point(62, (93 + ch) - 25);
                     panel9.Size = new Size(5, (36 + ch) - 25);
                 }
-                else if (tabControl1.SelectedIndex == 8) 
+                else if (mainTabControl.SelectedIndex == 8) 
                 {
                     TabPage cur = tabControl2.TabPages[tabControl2.SelectedIndex];
 
@@ -3711,7 +3716,7 @@ namespace TripleAGameCreator
                     b1.Location = new Point(189, (57 + ch) - 25);
                     b2.Location = new Point(39, (87 + ch) - 25);
                 }
-                else if (tabControl1.SelectedIndex == 9)
+                else if (mainTabControl.SelectedIndex == 9)
                 {
                     foreach (TabPage cur in tabControl3.TabPages)
                     {
@@ -3890,7 +3895,7 @@ namespace TripleAGameCreator
                         b2.Location = new Point(39, (87 + ch) - 25);
                     }
                 }
-                else if (tabControl1.SelectedIndex == 14)
+                else if (mainTabControl.SelectedIndex == 14)
                 {
                     List<Control> toDelete = new List<Control>();
                     foreach (Control cur in tabPage15.Controls)

@@ -45,7 +45,7 @@ namespace TripleAGameCreator
             this.button2 = new System.Windows.Forms.Button();
             this.button27 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.mainTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label48 = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
@@ -207,7 +207,7 @@ namespace TripleAGameCreator
             this.button15 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.mainTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -390,33 +390,33 @@ namespace TripleAGameCreator
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // tabControl1
+            // mainTabControl
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Controls.Add(this.tabPage5);
-            this.tabControl1.Controls.Add(this.tabPage6);
-            this.tabControl1.Controls.Add(this.tabPage7);
-            this.tabControl1.Controls.Add(this.tabPage8);
-            this.tabControl1.Controls.Add(this.tabPage9);
-            this.tabControl1.Controls.Add(this.tabPage10);
-            this.tabControl1.Controls.Add(this.tabPage11);
-            this.tabControl1.Controls.Add(this.tabPage12);
-            this.tabControl1.Controls.Add(this.tabPage13);
-            this.tabControl1.Controls.Add(this.tabPage14);
-            this.tabControl1.Controls.Add(this.tabPage15);
-            this.tabControl1.Controls.Add(this.tabPage16);
-            this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.tabControl1.Location = new System.Drawing.Point(180, -21);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(585, 414);
-            this.tabControl1.TabIndex = 0;
-            this.tabControl1.TabStop = false;
-            this.tabControl1.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
-            this.tabControl1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
+            this.mainTabControl.Controls.Add(this.tabPage1);
+            this.mainTabControl.Controls.Add(this.tabPage2);
+            this.mainTabControl.Controls.Add(this.tabPage3);
+            this.mainTabControl.Controls.Add(this.tabPage4);
+            this.mainTabControl.Controls.Add(this.tabPage5);
+            this.mainTabControl.Controls.Add(this.tabPage6);
+            this.mainTabControl.Controls.Add(this.tabPage7);
+            this.mainTabControl.Controls.Add(this.tabPage8);
+            this.mainTabControl.Controls.Add(this.tabPage9);
+            this.mainTabControl.Controls.Add(this.tabPage10);
+            this.mainTabControl.Controls.Add(this.tabPage11);
+            this.mainTabControl.Controls.Add(this.tabPage12);
+            this.mainTabControl.Controls.Add(this.tabPage13);
+            this.mainTabControl.Controls.Add(this.tabPage14);
+            this.mainTabControl.Controls.Add(this.tabPage15);
+            this.mainTabControl.Controls.Add(this.tabPage16);
+            this.mainTabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.mainTabControl.Location = new System.Drawing.Point(180, -21);
+            this.mainTabControl.Name = "mainTabControl";
+            this.mainTabControl.SelectedIndex = 0;
+            this.mainTabControl.Size = new System.Drawing.Size(585, 414);
+            this.mainTabControl.TabIndex = 0;
+            this.mainTabControl.TabStop = false;
+            this.mainTabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
+            this.mainTabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
             // 
             // tabPage1
             // 
@@ -647,6 +647,7 @@ namespace TripleAGameCreator
             // 
             // TerritoryDefinitionsImageDrawer
             // 
+            this.TerritoryDefinitionsImageDrawer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.TerritoryDefinitionsImageDrawer.Location = new System.Drawing.Point(0, 0);
             this.TerritoryDefinitionsImageDrawer.Name = "TerritoryDefinitionsImageDrawer";
             this.TerritoryDefinitionsImageDrawer.Size = new System.Drawing.Size(150, 150);
@@ -687,6 +688,7 @@ namespace TripleAGameCreator
             // 
             // TerritoryConnectionsImageDrawer
             // 
+            this.TerritoryConnectionsImageDrawer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.TerritoryConnectionsImageDrawer.Location = new System.Drawing.Point(0, 0);
             this.TerritoryConnectionsImageDrawer.Name = "TerritoryConnectionsImageDrawer";
             this.TerritoryConnectionsImageDrawer.Size = new System.Drawing.Size(150, 150);
@@ -1545,6 +1547,7 @@ namespace TripleAGameCreator
             // 
             // TerritoryProductionsImageDrawer
             // 
+            this.TerritoryProductionsImageDrawer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.TerritoryProductionsImageDrawer.Location = new System.Drawing.Point(0, 0);
             this.TerritoryProductionsImageDrawer.Name = "TerritoryProductionsImageDrawer";
             this.TerritoryProductionsImageDrawer.Size = new System.Drawing.Size(150, 150);
@@ -1593,6 +1596,7 @@ namespace TripleAGameCreator
             // 
             // CanalsImageDrawer
             // 
+            this.CanalsImageDrawer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.CanalsImageDrawer.Location = new System.Drawing.Point(0, 0);
             this.CanalsImageDrawer.Name = "CanalsImageDrawer";
             this.CanalsImageDrawer.Size = new System.Drawing.Size(150, 150);
@@ -1632,6 +1636,7 @@ namespace TripleAGameCreator
             // 
             // TerritoryOwnershipImageDrawer
             // 
+            this.TerritoryOwnershipImageDrawer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.TerritoryOwnershipImageDrawer.Location = new System.Drawing.Point(0, 0);
             this.TerritoryOwnershipImageDrawer.Name = "TerritoryOwnershipImageDrawer";
             this.TerritoryOwnershipImageDrawer.Size = new System.Drawing.Size(150, 150);
@@ -1672,6 +1677,7 @@ namespace TripleAGameCreator
             // 
             // UnitPlacementsImageDrawer
             // 
+            this.UnitPlacementsImageDrawer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.UnitPlacementsImageDrawer.Location = new System.Drawing.Point(0, 0);
             this.UnitPlacementsImageDrawer.Name = "UnitPlacementsImageDrawer";
             this.UnitPlacementsImageDrawer.Size = new System.Drawing.Size(150, 150);
@@ -2024,7 +2030,7 @@ namespace TripleAGameCreator
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(763, 427);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.mainTabControl);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
@@ -2053,7 +2059,7 @@ namespace TripleAGameCreator
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel2.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
+            this.mainTabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -2157,7 +2163,7 @@ namespace TripleAGameCreator
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl mainTabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label label19;
