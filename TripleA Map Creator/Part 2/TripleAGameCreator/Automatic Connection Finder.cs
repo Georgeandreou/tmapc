@@ -49,6 +49,7 @@ namespace TripleAGameCreator
         {
             public List<Point> points = new List<Point>();
             public string name = "";
+            public Rectangle polygonBounds = new Rectangle(-1,-1,1,1);
         }
         public List<Territory> territories = new List<Territory>();
         int n = 0;
@@ -173,27 +174,37 @@ namespace TripleAGameCreator
                     while(index < territories.Count)
                     {
                         Territory cur2 = territories[index];
-                        if (cur2.name != cur.name && (!checkPolygonBounds.Checked || Inflate(Rectangle.Round(new GraphicsPath(cur.points.ToArray(), getPolygonBytes(cur.points)).GetBounds()), (int)numericUpDown1.Value).IntersectsWith(Inflate(Rectangle.Round(new GraphicsPath(cur2.points.ToArray(), getPolygonBytes(cur2.points)).GetBounds()), (int)numericUpDown1.Value))))
+                        if (cur2.name != cur.name)
                         {
-                            foreach (Point p in cur.points)
+                            if (checkPolygonBounds.Checked)
                             {
-                                foreach (Point p2 in cur2.points)
+                                if (cur.polygonBounds.X == -1 && cur.polygonBounds.Y == -1 && cur.polygonBounds.Width == 1 && cur.polygonBounds.Height == 1)
+                                    cur.polygonBounds = Inflate(Rectangle.Round(new GraphicsPath(cur.points.ToArray(), getPolygonBytes(cur.points)).GetBounds()), (int)numericUpDown1.Value);
+                                if (cur2.polygonBounds.X == -1 && cur2.polygonBounds.Y == -1 && cur2.polygonBounds.Width == 1 && cur2.polygonBounds.Height == 1)
+                                    cur2.polygonBounds = Inflate(Rectangle.Round(new GraphicsPath(cur2.points.ToArray(), getPolygonBytes(cur2.points)).GetBounds()), (int)numericUpDown1.Value);
+                            }
+                            if(!checkPolygonBounds.Checked || cur.polygonBounds.IntersectsWith(cur2.polygonBounds))
+                            {
+                                foreach (Point p in cur.points)
                                 {
-                                    int xDiff = p.X - p2.X;
-                                    int yDiff = p.Y - p2.Y;
-                                    //if((xDiff > -33 && xDiff < 33 && yDiff > -33 && yDiff < 33))
-                                    //MessageBox.Show("Points: " + p.X + "," + p.Y + "|" + p2.X + "," + p2.Y + ". Diff: " + xDiff + "," + yDiff);
-                                    if (xDiff > -n && xDiff < n && yDiff > -n && yDiff < n)
+                                    foreach (Point p2 in cur2.points)
                                     {
-                                        connections.Add(new Connection() { t1 = cur, t2 = cur2 });
-                                        br = true;
+                                        int xDiff = p.X - p2.X;
+                                        int yDiff = p.Y - p2.Y;
+                                        //if((xDiff > -33 && xDiff < 33 && yDiff > -33 && yDiff < 33))
+                                        //MessageBox.Show("Points: " + p.X + "," + p.Y + "|" + p2.X + "," + p2.Y + ". Diff: " + xDiff + "," + yDiff);
+                                        if (xDiff > -n && xDiff < n && yDiff > -n && yDiff < n)
+                                        {
+                                            connections.Add(new Connection() { t1 = cur, t2 = cur2 });
+                                            br = true;
+                                            break;
+                                        }
+                                    }
+                                    if (br)
+                                    {
+                                        br = false;
                                         break;
                                     }
-                                }
-                                if (br)
-                                {
-                                    br = false;
-                                    break;
                                 }
                             }
                         }

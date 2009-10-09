@@ -1,24 +1,42 @@
+Changes for 1.0.1.0
+
+* Improved the way users create canals in Part 2. (SDW)
+
+* Fix problem where the user cannot add unit attachments to a new unit added to an already created map. (SDW)
+
+* Fix error where tab pages that are used for testing purposes are not being removed when the user starts making a new game. (SDW)
+
+* Move the loading method back into the main thread which allows the user to load maps more quickly and fixes the problem where the user cannot load a map, then load another map in the same program session. (SDW)
+
+* Rename some methods and objects to make the code more readable and understandable by other programmers. (SDW)
+
+* Fix big error where the user cannot advance to the next step in Part 2 if they're starting a new game. (SDW)
+
+* Increase the speed of the Automatic Connection Finder by having it store the polygon bounds when they're calculated so they don't have to be re-calculated later. (SDW)
+
+
 Changes for 1.0.0.9
 
-* Improved the Automatic Connection Finder by adding three more useful features. (SDW)
+* Improve the Automatic Connection Finder by adding three more useful features. (SDW)
 
 * Add the 'Increase Accuracy By Adding Points(Slow)' checkbox to the Automatic Connection Finder window that helps the program find sea zone connections more easily. (SDW)
 
-* Fixed error where the Automatic Connection Finder will replace all connections with found connections even when the user has canceled the Automatic Connection Finder. (SDW)
+* Fix error where the Automatic Connection Finder will replace all connections with found connections even when the user has canceled the Automatic Connection Finder. (SDW)
 
-* Added better error catching code when loading a map in Part 2. (SDW)
+* Add better error catching code when loading a map in Part 2. (SDW)
 
-* Increased the speed of the Automatic Connection Finder. (SDW)
+* Increase the speed of the Automatic Connection Finder. (SDW)
 
-* Fixed reintroduced problem from 1.0.0.8 that doesn't let the program load xml files that have xml "nodes?" spread over multiple lines. (SDW)
+* Fix reintroduced problem from 1.0.0.8 that doesn't let the program load xml files that have xml "nodes?" spread over multiple lines. (SDW)
 
-* Made it so the the users only have to specify the location of the 'triplea.jar' file once when running the utilities in Part 1. (SDW)
+* Make it so the the users only have to specify the location of the 'triplea.jar' file once when running the utilities in Part 1. (SDW)
 
 * Fix small error where the String Retriever window will not focus on the Combo-Box the first time it is opened. (SDW)
 
 * Fix big error where the program will crash if the user tries to load an xml file from a folder without the map data and without being in a TripleA folder. (SDW)
 
 * Fix error where the program would add another 'Tick' event to a timer everytime the user loaded a map. (SDW)
+
 
 Changes for 1.0.0.8
 
@@ -55,6 +73,7 @@ Changes for 1.0.0.8
 * Change the help for when Part 2 crashes when it tries to find the polygons for a territory and can't find it. (SDW)
 
 * Make it so Part 1 of the Map Creator resizes the step instructions buttons and centers the run utility button. (SDW)
+
 
 Changes for 1.0.0.7
 
