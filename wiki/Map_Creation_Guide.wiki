@@ -3,7 +3,7 @@
 
 = Map Creation Guide =
 
-This document is a guide to how to create a map using my program.
+This page is a guide to how to create a map using my program.
 
 1. Make a new folder for your map to be in. (It doesn't matter where you make this folder.)
 
