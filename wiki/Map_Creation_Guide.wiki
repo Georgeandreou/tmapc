@@ -197,7 +197,7 @@ This page is a guide to how to create a map using my program.
 55. If you want the program to automatically enter the default attachments for each of the units, click the 'Auto-Fill' button and click 'Yes'.
 
 56. If you want to enter the Unit Attachments yourself, do the following:
-    A. Go to each units's attachments tab, and do the following:
+A. Go to each units's attachments tab, and do the following:
         1. For each attachment you want to add to the unit's attachments, do the following:
 
             A. Click the 'New Attachment' button(If Needed)
