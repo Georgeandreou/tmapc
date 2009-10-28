@@ -201,7 +201,9 @@ This page is a guide to how to create a map using my program.
     A. Go to each units's attachments tab, and do the following:
         1. For each attachment you want to add to the unit's attachments, do the following:
             A. Click the 'New Attachment' button(If Needed)
+
             B. Enter the name of the attachment in the 'Attachment Name' textbox
+
             C. Enter the value of the attachment in the 'Value' textbox.
 
 57. Proceed to the next step.
