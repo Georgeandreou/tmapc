@@ -3,17 +3,24 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using System.Threading;
+using System.Net;
 
 namespace TripleA_Map_Image_Extractor
 {
     static class Program
     {
-        static ProgressBarWindow barW = new ProgressBarWindow();
+        static ProgressBarWindow barW;
         [STAThread]
         static void Main(string[] args)
         {
+            GC.Collect();
             try
             {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                InitializeForms();
+                CheckForUpdates();
                 barW.Opacity = 0;
                 barW.Show();
                 Size mapSize = new Size();
@@ -54,7 +61,7 @@ namespace TripleA_Map_Image_Extractor
                         int y = Convert.ToInt32(image.Name.Substring(image.Name.IndexOf("_") + 1, image.Name.Substring(image.Name.IndexOf("_") + 1).IndexOf(".")));
                         Image imageToPaste = Image.FromFile(image.FullName);
                         Point pasteLoc = new Point(x * 256, y * 256);
-                        WriteLine("Drawing base tile " + x + "," + y + " to the map image...");
+                        WriteLine(String.Concat("Drawing base tile ", x, ",", y, " to the map image..."));
                         grphx.DrawImage(imageToPaste, pasteLoc);
                         imageToPaste.Dispose();
                     }
@@ -80,8 +87,16 @@ namespace TripleA_Map_Image_Extractor
                 }
                 barW.Opacity = 0;
             }
-            catch { MessageBox.Show("An error occured when running the Map Image Extractor. Make sure you selected the correct folder and try again.", "Error Occurred"); }
+            catch (Exception ex) { if (MessageBox.Show("An error occured when running the Map Image Extractor. Make sure you selected the correct folder and try again. Do you want to view the error message?", "Error Occurred", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { exceptionViewerWindow.ShowInformationAboutException(ex, false); } }
+            GC.Collect();
         }
+
+        private static void InitializeForms()
+        {
+            barW = new ProgressBarWindow();
+            exceptionViewerWindow = new ExceptionViewer();
+        }
+        public static ExceptionViewer exceptionViewerWindow;
         public static Size getMapSize(DirectoryInfo baseTilesFolder)
         {
             Size result = new Size();
@@ -130,6 +145,62 @@ namespace TripleA_Map_Image_Extractor
         public static void WriteLine(string line)
         {
             Console.WriteLine(line);
+        }
+        private static Version usersVersion = new Version(1,0,1,1);
+        public static void CheckForUpdates()
+        {
+            Thread t = new Thread(new ThreadStart(update));
+            t.Priority = ThreadPriority.Lowest;
+            t.IsBackground = true;
+            t.Start();
+        }
+        private static void update()
+        {
+            WebClient client = new WebClient(); //http://tmapc.googlecode.com/files/TripleA%20Map%20Creator%20v1.0.0.8.zip
+            Version currentCheckingVersion = usersVersion;
+            Version newestVersionAvailable = usersVersion;
+            bool doBreak = false;
+            bool hasStartedFindingVersions = false;
+
+            while (!doBreak)
+            {
+                try
+                {
+                    Stream s = client.OpenRead("http://tmapc.googlecode.com/files/TripleA%20Map%20Creator%20v" + currentCheckingVersion.ToString() + ".zip");
+                    newestVersionAvailable = currentCheckingVersion;
+                    if (currentCheckingVersion.Revision < 9)
+                        currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build, currentCheckingVersion.Revision + 1);
+                    else if (currentCheckingVersion.Build < 9)
+                        currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build + 1, 0);
+                    else if (currentCheckingVersion.Minor < 9)
+                        currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor + 1, 0, 0);
+                    else if (currentCheckingVersion.Major < 9)
+                        currentCheckingVersion = new Version(currentCheckingVersion.Major + 1, 0, 0, 0);
+
+                    s.Close();
+                    hasStartedFindingVersions = true;
+                }
+                catch
+                {
+                    if (hasStartedFindingVersions)
+                        break;
+                    else
+                    {
+                        if (currentCheckingVersion.Revision < 9)
+                            currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build, currentCheckingVersion.Revision + 1);
+                        else if (currentCheckingVersion.Build < 9)
+                            currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build + 1, 0);
+                        else if (currentCheckingVersion.Minor < 9)
+                            currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor + 1, 0, 0);
+                        else if (currentCheckingVersion.Major < 9)
+                            currentCheckingVersion = new Version(currentCheckingVersion.Major + 1, 0, 0, 0);
+                    }
+                }
+            }
+            if (Convert.ToInt32(usersVersion.ToString().Replace(".", "")) < Convert.ToInt32(newestVersionAvailable.ToString().Replace(".", "")))
+            {
+                MessageBox.Show("There is a newer version of the Map Creator available.\r\nYour version: " + usersVersion.ToString() + ".\r\nNewest Version: " + newestVersionAvailable.ToString() + ".\r\n\r\nTo download the latest version, please go to \"http://code.google.com/p/tmapc/downloads/list\" and click on the latest download.", "Checking For Updates");
+            }
         }
     }
 }

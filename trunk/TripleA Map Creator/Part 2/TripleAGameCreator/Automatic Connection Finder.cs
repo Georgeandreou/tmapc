@@ -16,35 +16,42 @@ namespace TripleAGameCreator
         public Automatic_Connection_Finder()
         {
             InitializeComponent();
-            t = new Thread(new ThreadStart(do1));
+            Automatic_Connection_Finder.CheckForIllegalCrossThreadCalls = false;
+            SetUpForAnotherScan();
         }
         public Form1 main = null;
         private void button1_Click(object sender, EventArgs e)
         {
-            if (d)
+            if (!isScanningForConnections)
             {
                 button1.Text = "Cancel";
                 this.Text = "Automatic Connection Finder - Initializing...";
-                d = false;
-                Automatic_Connection_Finder.CheckForIllegalCrossThreadCalls = false;
-                n = Convert.ToInt32(numericUpDown1.Text);
-                t.Start();
+                isScanningForConnections = true;
+                lineWidth = Convert.ToInt32(numericUpDown1.Text);
                 hasCanceled = false;
                 groupBox1.Enabled = false;
+                scanningThread.Start();
             }
             else
             {
-                t.Abort();
-                t = new Thread(new ThreadStart(do1));
-                d = true;
-                this.Text = "Automatic Connection Finder";
-                button1.Text = "Start";
                 hasCanceled = true;
-                groupBox1.Enabled = true;
-                toolStripProgressBar1.Value = 0;
+                SetUpForAnotherScan();
             }
         }
-        Thread t = null;
+
+        public void SetUpForAnotherScan()
+        {
+            if(scanningThread != null && scanningThread.IsAlive)
+                scanningThread.Abort();
+            scanningThread = new Thread(new ThreadStart(startFindingConnections));
+            scanningThread.Priority = ThreadPriority.Lowest;
+            isScanningForConnections = false;
+            this.Text = "Automatic Connection Finder";
+            button1.Text = "Start";
+            groupBox1.Enabled = true;
+            toolStripProgressBar1.Value = 0;
+        }
+        public Thread scanningThread = null;
         public class Territory
         {
             public List<Point> points = new List<Point>();
@@ -52,10 +59,10 @@ namespace TripleAGameCreator
             public Rectangle polygonBounds = new Rectangle(-1,-1,1,1);
         }
         public List<Territory> territories = new List<Territory>();
-        int n = 0;
-        bool d = true;
+        public int lineWidth = 0;
+        public bool isScanningForConnections = false;
         public bool hasCanceled = false;
-        public void do1()
+        public void startFindingConnections()
         {
             try
             {
@@ -130,46 +137,68 @@ namespace TripleAGameCreator
                         return;
                     }
                 }
+                int gcCollectCountdown = 25;
                 foreach (string cur in full)
                 {
-                    //MessageBox.Show(cur);
-                    int curPointIndex = 0;
-                    Territory t = new Territory();
-                    while (true)
+                    string tName = cur.Substring(0, cur.IndexOf("<")).Trim();
+                    if (Step2Info.territories.ContainsKey(tName))
                     {
-                        try
+                        //MessageBox.Show(cur);
+                        int curPointIndex = 0;
+                        Territory t = new Territory();
+                        t.name = tName;
+                        while (true)
                         {
-                            curPointIndex = cur.Substring(curPointIndex).IndexOf("(") + curPointIndex;
-                            if (curPointIndex > -1)
+                            try
                             {
-                                string curPointSubstring = cur.Substring(curPointIndex, cur.Substring(curPointIndex).IndexOf(")"));
-                                Point curPoint = new Point(Convert.ToInt32(curPointSubstring.Substring(1, curPointSubstring.IndexOf(",") - 1)), Convert.ToInt32(curPointSubstring.Substring(curPointSubstring.IndexOf(",") + 1, curPointSubstring.Length - (curPointSubstring.IndexOf(",") + 1))));
-                                t.points.Add(curPoint);
-                                t.name = cur.Substring(0, cur.IndexOf("<")).Trim();
-                                curPointIndex += curPointSubstring.Length;
+                                curPointIndex = cur.Substring(curPointIndex).IndexOf("(") + curPointIndex;
+                                if (curPointIndex > -1)
+                                {
+                                    string curPointSubstring = cur.Substring(curPointIndex, cur.Substring(curPointIndex).IndexOf(")"));
+                                    Point curPoint = new Point(Convert.ToInt32(curPointSubstring.Substring(1, curPointSubstring.IndexOf(",") - 1)), Convert.ToInt32(curPointSubstring.Substring(curPointSubstring.IndexOf(",") + 1, curPointSubstring.Length - (curPointSubstring.IndexOf(",") + 1))));
+                                    t.points.Add(curPoint);
+                                    curPointIndex += curPointSubstring.Length;
+                                }
+                                else
+                                {
+                                    break;
+                                }
                             }
-                            else
+                            catch { break; }
+                        }
+                        if (increaseAccuracy.Checked && addPointsBeforeRunning.Checked && (!onlyAddPointsToSeaZones.Checked || Step2Info.territories[t.name].IsWater))
+                        {
+                            t.points = FillInPointsBetweenListOfPoints(t.points);
+                            gcCollectCountdown--;
+                            if (gcCollectCountdown <= 0)
                             {
-                                break;
+                                GC.Collect();
+                                gcCollectCountdown = 25;
                             }
                         }
-                        catch { break; }
+                        territories.Add(t);
                     }
-                    if (increaseAccuracy.Checked && addPointsBeforeRunning.Checked && (!onlyAddPointsToSeaZones.Checked || Step2Info.territories[t.name].IsWater))
-                        t.points = FillInPointsBetweenListOfPoints(t.points);
-                    territories.Add(t);
                 }
                 List<string> lines = new List<string>();
                 toolStripProgressBar1.Minimum = 0;
                 toolStripProgressBar1.Maximum = territories.Count;
                 bool br = false;
+                gcCollectCountdown = 25;
                 while (territories.Count > 0)
                 {
                     Territory cur = territories[0];
                     toolStripProgressBar1.Value++;
                     this.Text = String.Concat("Automatic Connection Finder - Processing ",toolStripProgressBar1.Value, " Of ", toolStripProgressBar1.Maximum);
                     if (increaseAccuracy.Checked && !addPointsBeforeRunning.Checked && (!onlyAddPointsToSeaZones.Checked || Step2Info.territories[cur.name].IsWater))
+                    {
                         cur.points = FillInPointsBetweenListOfPoints(cur.points);
+                        gcCollectCountdown--;
+                        if (gcCollectCountdown <= 0)
+                        {
+                            GC.Collect();
+                            gcCollectCountdown = 25;
+                        }
+                    }
                     int index = 0;
                     while(index < territories.Count)
                     {
@@ -193,7 +222,7 @@ namespace TripleAGameCreator
                                         int yDiff = p.Y - p2.Y;
                                         //if((xDiff > -33 && xDiff < 33 && yDiff > -33 && yDiff < 33))
                                         //MessageBox.Show("Points: " + p.X + "," + p.Y + "|" + p2.X + "," + p2.Y + ". Diff: " + xDiff + "," + yDiff);
-                                        if (xDiff > -n && xDiff < n && yDiff > -n && yDiff < n)
+                                        if (xDiff > -lineWidth && xDiff < lineWidth && yDiff > -lineWidth && yDiff < lineWidth)
                                         {
                                             connections.Add(new Connection() { t1 = cur, t2 = cur2 });
                                             br = true;
@@ -214,19 +243,14 @@ namespace TripleAGameCreator
                 }
                 toolStripProgressBar1.Value = 0;
                 this.Text = "Automatic Connection Finder";
-                d = true;
+                isScanningForConnections = false;
                 button1.Text = "Start";
                 groupBox1.Enabled = true;
                 this.Close();
-                //foreach (Connection cur in connections)
-                //{
-                //    lines.Add("                <connection t1=\"" + cur.t1.name + "\" t2=\"" + cur.t2.name + "\"/>");
-                //}
-                //File.WriteAllLines(Step1Info.MapImageLocation.Substring(0, Step1Info.MapImageLocation.LastIndexOf(@"\")) + "/cons.txt", lines.ToArray());
             }
-            catch(Exception ex){ if(connections.Count == 0 && !(ex is ThreadAbortException)) MessageBox.Show("An error occured trying to find the connections. Make sure the polygons file for the map has no errors in it. (Like misspelling a territory name.)", "Error Occured"); }
+            catch (Exception ex) { if (connections.Count == 0 && !(ex is ThreadAbortException)) if (MessageBox.Show("An error occured trying to find the connections. Make sure the polygons file for the map has no errors in it. (Like misspelling a territory name.) Do you want to view the error message", "Error Occured", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { exceptionViewerWindow.ShowInformationAboutException(ex, true); } }
         }
-
+        ExceptionViewer exceptionViewerWindow = new ExceptionViewer();
         private byte[] getPolygonBytes(List<Point> list)
         {
             byte[] result = new byte[list.Count];
@@ -252,7 +276,6 @@ namespace TripleAGameCreator
                 }
                 points.Add(curPoint);
             }
-            GC.Collect();
             return points;
         }
 
@@ -360,15 +383,16 @@ namespace TripleAGameCreator
 
         private void Automatic_Connection_Finder_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!d)
+            if (isScanningForConnections)
             {
                 e.Cancel = true;
                 MessageBox.Show("Please wait for the Automatic Connection Finder to finish running.", "Still Running");
             }
             else
             {
-                t.Abort();
-                t = new Thread(new ThreadStart(do1));
+                scanningThread.Abort();
+                scanningThread = new Thread(new ThreadStart(startFindingConnections));
+                scanningThread.Priority = ThreadPriority.Lowest;
             }
         }
 

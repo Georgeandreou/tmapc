@@ -165,11 +165,11 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        public System.Windows.Forms.Button button1;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.ProgressBar toolStripProgressBar1;
+        public System.Windows.Forms.ProgressBar toolStripProgressBar1;
         private System.Windows.Forms.CheckBox increaseAccuracy;
-        private System.Windows.Forms.GroupBox groupBox1;
+        public System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox addPointsBeforeRunning;
         private System.Windows.Forms.CheckBox onlyAddPointsToSeaZones;
         private System.Windows.Forms.CheckBox checkPolygonBounds;

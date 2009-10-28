@@ -39,11 +39,12 @@ namespace TripleA_Game_Creator
             RefreshSettings();
             CheckForUpdates();
         }
-        private Version usersVersion = new Version(1,0,1,0);
+        private Version usersVersion = new Version(1,0,1,1);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));
             t.Priority = ThreadPriority.Lowest;
+            t.IsBackground = true;
             t.Start();
         }
         private void update()
@@ -52,31 +53,41 @@ namespace TripleA_Game_Creator
             Version currentCheckingVersion = usersVersion;
             Version newestVersionAvailable = usersVersion;
             bool doBreak = false;
+            bool hasStartedFindingVersions = false;
 
-            for (int buildI = usersVersion.Build + 1; buildI < 10; buildI++)
-            {
-                try
-                {
-                    Version checkVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, buildI, 0);
-                    Stream s = client.OpenRead("http://tmapc.googlecode.com/files/TripleA%20Map%20Creator%20v" + checkVersion.ToString() + ".zip");
-                    newestVersionAvailable = checkVersion;
-                    currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, buildI, 1);
-                    s.Close();
-                }
-                catch { }
-            }
             while (!doBreak)
             {
                 try
                 {
                     Stream s = client.OpenRead("http://tmapc.googlecode.com/files/TripleA%20Map%20Creator%20v" + currentCheckingVersion.ToString() + ".zip");
                     newestVersionAvailable = currentCheckingVersion;
-                    currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build, currentCheckingVersion.Revision + 1);
+                    if (currentCheckingVersion.Revision < 9)
+                        currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build, currentCheckingVersion.Revision + 1);
+                    else if (currentCheckingVersion.Build < 9)
+                        currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build + 1, 0);
+                    else if (currentCheckingVersion.Minor < 9)
+                        currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor + 1, 0, 0);
+                    else if (currentCheckingVersion.Major < 9)
+                        currentCheckingVersion = new Version(currentCheckingVersion.Major + 1, 0, 0, 0);
+
                     s.Close();
+                    hasStartedFindingVersions = true;
                 }
                 catch
                 {
-                    break;
+                    if (hasStartedFindingVersions)
+                        break;
+                    else
+                    {
+                        if (currentCheckingVersion.Revision < 9)
+                            currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build, currentCheckingVersion.Revision + 1);
+                        else if (currentCheckingVersion.Build < 9)
+                            currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor, currentCheckingVersion.Build + 1, 0);
+                        else if (currentCheckingVersion.Minor < 9)
+                            currentCheckingVersion = new Version(currentCheckingVersion.Major, currentCheckingVersion.Minor + 1, 0, 0);
+                        else if (currentCheckingVersion.Major < 9)
+                            currentCheckingVersion = new Version(currentCheckingVersion.Major + 1, 0, 0, 0);
+                    }
                 }
             }
             if (Convert.ToInt32(usersVersion.ToString().Replace(".", "")) < Convert.ToInt32(newestVersionAvailable.ToString().Replace(".", "")))
@@ -111,15 +122,17 @@ namespace TripleA_Game_Creator
                             lines.Add("Java Heap Size=\"1000\"");
                             File.WriteAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf", lines.ToArray());
                         }
-                        catch { }
+                        catch(Exception ex) { exceptionViewerWindow.ShowInformationAboutException(ex, true); }
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("An error occured when trying to load the settings file for the program. Please make sure the \"Settings.inf\" file contains no errors.", "Error loading settings file.");
+                if (MessageBox.Show("An error occured when trying to load the settings file for the program. Please make sure the \"Settings.inf\" file contains no errors. Do you want to view the error message?", "Error loading settings file.", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                    exceptionViewerWindow.ShowInformationAboutException(ex, true);
             }
         }
+        ExceptionViewer exceptionViewerWindow = new ExceptionViewer();
         public static class Settings
         {
             public static int JavaHeapSize = 1000;
@@ -154,7 +167,7 @@ namespace TripleA_Game_Creator
                         }
                         Directory.Delete(cutPath);
                     }
-                    catch { }
+                    catch (Exception ex){ exceptionViewerWindow.ShowInformationAboutException(ex, true); }
                 }
             }
             else if (stepIndex == 7)
@@ -173,7 +186,7 @@ namespace TripleA_Game_Creator
                         Directory.Move(cutPath + "/reliefTiles/", textBox3.Text + "/reliefTiles");
                         Directory.Delete(cutPath);
                     }
-                    catch { }
+                    catch (Exception ex) { exceptionViewerWindow.ShowInformationAboutException(ex, true); }
                 }
             }
             else
@@ -513,7 +526,7 @@ namespace TripleA_Game_Creator
                     }
                 }
             }
-            catch { MessageBox.Show("An error occured when trying to write the map properties. Make sure you entered everything correctly and try again.", "Error Writing Map Properties"); e.Cancel = true; Back(); }
+            catch (Exception ex) { if (MessageBox.Show("An error occured when trying to write the map properties. Make sure you entered everything correctly and try again. Do you want to view the error message?", "Error Writing Map Properties", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { exceptionViewerWindow.ShowInformationAboutException(ex, true); } e.Cancel = true; Back(); }
         }
         FolderBrowserDialog d = new FolderBrowserDialog();
         private void button12_Click(object sender, EventArgs e)
@@ -533,7 +546,7 @@ namespace TripleA_Game_Creator
             if (!File.Exists(file))
             {
                 OpenFileDialog d2 = new OpenFileDialog();
-                d2.Multiselect = false;
+                d2.Multiselect = false; d2.Filter = "Jar Files|*.jar|All files (*.*)|*.*";
                 d2.InitialDirectory = tripleADirectory;
                 d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
                 if (d2.ShowDialog() == DialogResult.OK)
@@ -595,6 +608,7 @@ namespace TripleA_Game_Creator
             {
                 OpenFileDialog d2 = new OpenFileDialog();
                 d2.Multiselect = false;
+                d2.Filter = "Jar Files|*.jar|All files (*.*)|*.*";
                 d2.InitialDirectory = tripleADirectory;
                 d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
                 if (d2.ShowDialog() == DialogResult.OK)
@@ -614,7 +628,7 @@ namespace TripleA_Game_Creator
             if (!File.Exists(file))
             {
                 OpenFileDialog d2 = new OpenFileDialog();
-                d2.Multiselect = false;
+                d2.Multiselect = false; d2.Filter = "Jar Files|*.jar|All files (*.*)|*.*";
                 d2.InitialDirectory = tripleADirectory;
                 d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
                 if (d2.ShowDialog() == DialogResult.OK)
@@ -634,7 +648,7 @@ namespace TripleA_Game_Creator
             if (!File.Exists(file))
             {
                 OpenFileDialog d2 = new OpenFileDialog();
-                d2.Multiselect = false;
+                d2.Multiselect = false; d2.Filter = "Jar Files|*.jar|All files (*.*)|*.*";
                 d2.InitialDirectory = tripleADirectory;
                 d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
                 if (d2.ShowDialog() == DialogResult.OK)
@@ -675,7 +689,7 @@ namespace TripleA_Game_Creator
             if (!File.Exists(file))
             {
                 OpenFileDialog d2 = new OpenFileDialog();
-                d2.Multiselect = false;
+                d2.Multiselect = false; d2.Filter = "Jar Files|*.jar|All files (*.*)|*.*";
                 d2.InitialDirectory = tripleADirectory;
                 d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
                 if (d2.ShowDialog() == DialogResult.OK)
@@ -698,7 +712,7 @@ namespace TripleA_Game_Creator
             if (!File.Exists(file))
             {
                 OpenFileDialog d2 = new OpenFileDialog();
-                d2.Multiselect = false;
+                d2.Multiselect = false; d2.Filter = "Jar Files|*.jar|All files (*.*)|*.*";
                 d2.InitialDirectory = tripleADirectory;
                 d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
                 if (d2.ShowDialog() == DialogResult.OK)
@@ -724,7 +738,7 @@ namespace TripleA_Game_Creator
             if (!File.Exists(file))
             {
                 OpenFileDialog d2 = new OpenFileDialog();
-                d2.Multiselect = false;
+                d2.Multiselect = false; d2.Filter = "Jar Files|*.jar|All files (*.*)|*.*";
                 d2.InitialDirectory = tripleADirectory;
                 d2.Title = "Please locate the 'triplea.jar' file. (It should be in the TripleA Home folder, under a folder named 'bin'.)";
                 if (d2.ShowDialog() == DialogResult.OK)

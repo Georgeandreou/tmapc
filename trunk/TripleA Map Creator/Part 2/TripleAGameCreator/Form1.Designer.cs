@@ -30,6 +30,7 @@ namespace TripleAGameCreator
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -355,7 +356,7 @@ namespace TripleAGameCreator
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(103, 23);
             this.button3.TabIndex = 4;
-            this.button3.Text = "Cancel";
+            this.button3.Text = "Available Choices";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -578,9 +579,9 @@ namespace TripleAGameCreator
             this.label46.Font = new System.Drawing.Font("Verdana", 9F);
             this.label46.Location = new System.Drawing.Point(53, 189);
             this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(154, 14);
+            this.label46.Size = new System.Drawing.Size(117, 14);
             this.label46.TabIndex = 2;
-            this.label46.Text = "Centers File (Optional):";
+            this.label46.Text = "Map Centers File:";
             // 
             // label40
             // 
@@ -2050,9 +2051,9 @@ namespace TripleAGameCreator
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(771, 461);
             this.Name = "Form1";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TripleA Map Creator - Part 2";
             this.Load += new System.EventHandler(this.Form1_Load);

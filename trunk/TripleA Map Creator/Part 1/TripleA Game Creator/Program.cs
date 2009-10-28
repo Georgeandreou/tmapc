@@ -12,9 +12,15 @@ namespace TripleA_Game_Creator
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            GC.Collect();
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Form1());
+            }
+            catch (Exception ex) { new ExceptionViewer().ShowInformationAboutException(ex, false); }
+            GC.Collect();
         }
     }
 }
