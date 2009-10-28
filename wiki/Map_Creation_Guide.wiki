@@ -139,7 +139,7 @@ This document is a guide to how to create a map using my program.
 
 44. If you want the program to automatically enter the Gameplay Sequences, click the 'Auto-Fill' button and click 'Yes'.
 
-45. If you want to enter the Gameplay Sequences yourself, do the following for each sequence you want to add:
+45. If you want to enter the Gameplay Sequences yourself, do the following for each sequence you want to add: (You can click the "Available Choices" button to view all the gameplay sequences that are available.)
     A. If you need to, click the 'New Gameplay Sequence' button.
 
     B. In the 'Sequence Name' textbox, enter the name of the gameplay sequence.
@@ -167,7 +167,8 @@ This document is a guide to how to create a map using my program.
 
 49. If you want the program to automatically enter the Technologies according to the default, click the 'Auto-Fill' button and click 'Yes'.
 
-50. If you want to enter the Technologies yourself, do the following:
+50. If you want to enter the Technologies yourself, do the following: (You can click the "Available Choices" button to view all the technologies that are available.)
+
     A. If you need to, click the 'New Technology' button.
 
     B. In the 'Technology Name' textbox, enter the name of the technology.
@@ -188,7 +189,7 @@ This document is a guide to how to create a map using my program.
 
 55. If you want the program to automatically enter the unit attachments, click the 'Auto-Fill' button and click 'Yes'.
 
-56. If you want to enter the Unit Attachments yourself, do the following:
+56. If you want to enter the Unit Attachments yourself, do the following: (You can click the "Available Choices" button to view all the unit attachment that are available.)
 
 A. Go to each units's attachments tab, and do the following:
     1. For each attachment you want to add to the unit's attachments, do the following:
@@ -222,7 +223,7 @@ A. Go to each units's attachments tab, and do the following:
 
 66. If you want the program to automatically enter the In-Game Settings (It just enters what a normal game would contain), click the 'Auto-Fill' button and click 'Yes'.
 
-50. If you want to enter the In-Game Settings yourself, do the following for each Setting you want to add:
+50. If you want to enter the In-Game Settings yourself, do the following for each Setting you want to add: (You can click the "Available Choices" button to view all the game settings that are available.)
     A. If you need to, click the 'New Setting' button.
 
     B. In the 'Setting Name' textbox, enter the name of the setting.
