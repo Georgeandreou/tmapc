@@ -214,6 +214,7 @@ This page is a guide to how to create a map using my program.
 
 60. For each canal you want to add, do the following:
     A. Click on the first land territory that forms the canal.
+
     B. Click on the second land territory that forms the canal and click 'Yes'.
 
 61. Proceed to the next step.
