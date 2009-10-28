@@ -1,3 +1,33 @@
+Changes for 1.0.1.1
+
+* Add the "Available Choices" button to the Gameplay Sequences, Technologies, Unit Attachments, and Game Settings steps which displays all the available choices. (SDW)
+
+* Make it so Part 2 allows users to start a new map or mod without having access to the image file. (SDW)
+
+* Fix problem where if a map's polygons file contains a territory that isn't added in the 'Territory Definitions' step, the Automatic Connection Finder will stop working. (SDW)
+
+* Make it so the map utilites do "Garbage Collection" when starting and when closing. (SDW)
+
+* Increased the maximum Java heap size to 5GB. (SDW)
+
+* Make it so the file selection dialog in Part 1 uses a filter to remove confusion as to what file to select. (SDW)
+
+* Add the checking for updates feature to all the map utilites. (SDW)
+
+* Improve the way the program checks for updates. (SDW)
+
+* Add the Exception Viewer feature. (SDW)
+
+* Fix error where Part 2 will not display canals correctly when they are loaded from a saved xml file. (SDW)
+
+* Rename some methods and objects to make the code more readable and understandable by other programmers. (SDW)
+
+* Make it so each Map Creator window shows the Map Creator icon in the top-left. (SDW)
+
+* Update the program icon. (SDW)
+
+* Add the TripleA Map Resizer program to the TripleA package. (SDW)
+
 Changes for 1.0.1.0
 
 * Improved the way users create canals in Part 2. (SDW)

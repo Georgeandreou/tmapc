@@ -963,9 +963,9 @@ namespace TripleA_Game_Creator
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label0);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(777, 525);
             this.Name = "Form1";
-            this.ShowIcon = false;
             this.Text = "TripleA Map Creator - Part 1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
