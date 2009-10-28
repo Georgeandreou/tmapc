@@ -2,8 +2,8 @@
 #labels Phase-Support
 
 = Map Creation Guide =
-
-{{{This page is a guide to how to create a map using my program.
+{{{
+This page is a guide to how to create a map using my program.
 
 1. Make a new folder for your map to be in. (It doesn't matter where you make this folder.)
 
@@ -249,4 +249,5 @@
 
 53. Congratulations!! You're Done!!! You've created you're own map!! If you want to post your map so others can use it, go to the TripleA Maps And Mods Forums located here: "http://n2.nabble.com/Maps-and-Mods-f1671664.html", and create a new post(topic) with information about and a link to your map.
 
-Note: If you want to save your progress in-between, click the 'Save' button in the bottom left of the window.}}}
+Note: If you want to save your progress in-between, click the 'Save' button in the bottom left of the window.
+}}}
