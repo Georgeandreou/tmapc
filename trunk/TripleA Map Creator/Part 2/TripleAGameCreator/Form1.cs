@@ -256,6 +256,7 @@ namespace TripleAGameCreator
             oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
             newControl.Font = new Font(newControl.Font, FontStyle.Bold);
             UpdateWindowText();
+            allowTerritoryRecreation = true;
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -357,6 +358,7 @@ namespace TripleAGameCreator
         bool force = false;
         public int capitolsFound = 0;
         public bool territoryChange = false;
+        bool allowTerritoryRecreation = true;
         private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e) //Re-Structure this entire method completely!
         {
             Exception smallExceptionThrown = null;
@@ -792,7 +794,7 @@ namespace TripleAGameCreator
                 {
                     if (mainTabControl.SelectedIndex == 1) //These methods are like instantiation methods, they preset the tabs when they are opened
                     {
-                        if (Step1Info.CentersLocation.Trim().Length > 0)
+                        if (Step1Info.CentersLocation.Trim().Length > 0 && allowTerritoryRecreation)
                         {
                             List<Label> labels = new List<Label>();
                             String[] lines = File.ReadAllLines(Step1Info.CentersLocation);
@@ -2582,6 +2584,7 @@ namespace TripleAGameCreator
                     }
                 }
             }
+            allowTerritoryRecreation = false;
             Stop();
         }
         private void ClearAllDataAndControls()
