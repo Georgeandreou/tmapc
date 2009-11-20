@@ -122,6 +122,9 @@
     <EmbeddedResource Include="StringRetriever.resx">
       <DependentUpon>StringRetriever.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UnitAddingWindow.resx">
+      <DependentUpon>UnitAddingWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -143,6 +146,12 @@
     </Compile>
     <Compile Include="StringRetriever.Designer.cs">
       <DependentUpon>StringRetriever.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UnitAddingWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UnitAddingWindow.Designer.cs">
+      <DependentUpon>UnitAddingWindow.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

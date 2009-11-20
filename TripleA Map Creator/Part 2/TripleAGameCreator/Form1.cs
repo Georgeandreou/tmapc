@@ -52,7 +52,7 @@ namespace TripleAGameCreator
             tabControl2.TabPages.Clear();
             tabControl3.TabPages.Clear();
         }
-        private Version usersVersion = new Version(1, 0, 1, 1);
+        private Version usersVersion = new Version(1, 0, 1, 2);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));
@@ -117,10 +117,6 @@ namespace TripleAGameCreator
                     string[] lines = File.ReadAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf");
                     foreach (string cur in lines)
                     {
-                        if (cur.Contains("Display Current Units When Entering New Units=\""))
-                        {
-                            Settings.DisplayCurrentUnitsWhenEnteringNewUnits = Convert.ToBoolean(cur.Substring(cur.IndexOf("New Units=\"") + 11, cur.Substring(cur.IndexOf("New Units=\"") + 11).IndexOf("\"")));
-                        }
                         if (cur.Contains("Stop Loading XML File When Error Is Found=\""))
                         {
                             Settings.StopLoadingXMLWhenErrorFound = Convert.ToBoolean(cur.Substring(cur.IndexOf("Is Found=\"") + 10, cur.Substring(cur.IndexOf("Is Found=\"") + 10).IndexOf("\"")));
@@ -134,7 +130,6 @@ namespace TripleAGameCreator
                         try
                         {
                             List<string> lines = new List<string>();
-                            lines.Add("Display Current Units When Entering New Units=\"true\"");
                             lines.Add("Stop Loading XML File When Error Is Found=\"false\"");
                             lines.Add("Java Heap Size=\"1000\"");
                             File.WriteAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf", lines.ToArray());
@@ -151,7 +146,6 @@ namespace TripleAGameCreator
         }
         public static class Settings
         {
-            public static bool DisplayCurrentUnitsWhenEnteringNewUnits = false;
             public static bool StopLoadingXMLWhenErrorFound = false;
         }
         private void button2_Click(object sender, EventArgs e)
@@ -317,19 +311,19 @@ namespace TripleAGameCreator
         {
             if(stepIndex == 6)
             {
-                MessageBox.Show("Here is a list of all the available gameplay sequences with their class name and display name:\r\n\r\n initDelegate-InitializationDelegate-Initializing Delegates,\r\n bid-BidPurchaseDelegate-Bid Purchase,\r\n placeBid-BidPlaceDelegate-Bid Placement,\r\n tech-TechnologyDelegate-Research Technology,\r\n tech_Activation-TechActivationDelegate-Activate Technology,\r\n purchase-PurchaseDelegate-Purchase Units,\r\n move-MoveDelegate-Combat Move,\r\n battle-BattleDelegate-Combat,\r\n place-PlaceDelegate-Place Units,\r\n endTurn-EndTurnDelegate-Turn Complete,\r\n endRound-EndRoundDelegate-Round Complete", "List Of Available Gameplay Sequence Choices (As Of This Version)");
+                MessageBox.Show("Here is a list of all the available gameplay sequences with their class name and display name:\r\n\r\n initDelegate-InitializationDelegate-Initializing Delegates,\r\n bid-BidPurchaseDelegate-Bid Purchase,\r\n placeBid-BidPlaceDelegate-Bid Placement,\r\n tech-TechnologyDelegate-Research Technology,\r\n tech_Activation-TechActivationDelegate-Activate Technology,\r\n purchase-PurchaseDelegate-Purchase Units,\r\n move-MoveDelegate-Combat Move,\r\n battle-BattleDelegate-Combat,\r\n place-PlaceDelegate-Place Units,\r\n endTurn-EndTurnDelegate-Turn Complete,\r\n endRound-EndRoundDelegate-Round Complete", "List Of Available Gameplay Sequence Choices (As Of TripleA 1.0.3.4)");
             }
             else if(stepIndex == 8)
             {
-                MessageBox.Show("Here is a list of all the available technology types: heavyBomber, longRangeAir, jetPower, rocket, industrialTechnology, superSub, destroyerBombard, improvedArtillerySupport, paratroopers, increasedFactoryProduction, warBonds, mechanizedInfantry, aARadar, shipyards", "List Of Available Technology Choices (As Of This Version)");
+                MessageBox.Show("Here is a list of all the available technology types: heavyBomber, longRangeAir, jetPower, rocket, industrialTechnology, superSub, destroyerBombard, improvedArtillerySupport, paratroopers, increasedFactoryProduction, warBonds, mechanizedInfantry, aARadar, shipyards", "List Of Available Technology Choices (As Of TripleA 1.0.3.4)");
             }
             else if(stepIndex == 10)
             {
-                MessageBox.Show("Here is a list of all the available unit attachments: movement, attack, defense, isAir, isSea, isAA, isTank, isFactory, canBlitz, isSub, canBombard, isStrategicBomber, isTwoHit, isDestroyer, isArtillery, isArtillerySupportable, isMarine, isInfantry, isParatroop, isMechanized, transportCapacity, transportCost, carrierCapacity, carrierCost", "List Of Available Unit Attachment Choices (As Of This Version)");
+                MessageBox.Show("Here is a list of all the available unit attachments: movement, attack, defense, isAir, isSea, isAA, isTank, isFactory, canBlitz, isSub, canBombard, isStrategicBomber, isTwoHit, isDestroyer, isArtillery, isArtillerySupportable, isMarine, isInfantry, isParatroop, isMechanized, transportCapacity, transportCost, carrierCapacity, carrierCost", "List Of Available Unit Attachment Choices (As Of TripleA 1.0.3.4)");
             }
             else if (stepIndex == 15)
             {
-                MessageBox.Show("Here is a list of all the available game settings: neutralCharge, maxFactoriesPerTerritory, Always on AA, Produce fighters on carriers, LHTR Carrier production rules, Two hit battleship, 4th Edition, Partial Amphibious Retreat, Total Victory, Honorable Surrender, Projection of Power, All Rockets Attack, Neutrals Are Impassable, Rockets Can Violate Neutrality, Rockets Can Fly Over Impassables, Pacific Edition, Anniversary Edition, No Economic Victory, Anniversary Edition Land Production, Anniversary Edition Air Naval, Placement Restricted By Factory, Selectable Tech Roll, AA50 Tech Model, Tech Development, Transport Restricted Unload, Random AA Casualties, Roll AA Individually, Limit SBR Damage To Factory Production, Limit SBR Damage To Factory Production, Limit SBR Damage Per Turn, Limit Rocket Damage Per Turn, Territory Turn Limit, SBR Victory Points, Rocket Attack Per Factory Restricted, Allied Air Dependents, Defending Subs Sneak Attack, Attacker Retreat Planes, Surviving Air Move To Land, Naval Bombard Casualties Return Fire Restricted, Blitz Through Factories And AA Restricted, Unit Placement In Enemy Seas, Sub Control Sea Zone Restricted, Transport Control Sea Zone, Production Per X Territories Restricted, Production Per Valued Territory Restricted, Place in Any Territory, Unit Placement Per Territory Restricted, Movement By Territory Restricted, Transport Casualties Restricted, Ignore Transport In Movement, Ignore Sub In Movement, Hari-Kari Units, Occupied Territories, Unplaced units live when not placed, Air Attack Sub Restricted, Sub Retreat Before Battle, Sub Retreat DD Restricted, Shore Bombard Per Ground Unit Restricted, SBR Affects Unit Production, AA Territory Restricted, National Objectives, Continuous Research", "List Of Available Game Settings Choices (As Of This Version)");
+                MessageBox.Show("Here is a list of all the available game settings: neutralCharge, maxFactoriesPerTerritory, Always on AA, Produce fighters on carriers, LHTR Carrier production rules, Two hit battleship, 4th Edition, Partial Amphibious Retreat, Total Victory, Honorable Surrender, Projection of Power, All Rockets Attack, Neutrals Are Impassable, Rockets Can Violate Neutrality, Rockets Can Fly Over Impassables, Pacific Edition, Anniversary Edition, No Economic Victory, Anniversary Edition Land Production, Anniversary Edition Air Naval, Placement Restricted By Factory, Selectable Tech Roll, AA50 Tech Model, Tech Development, Transport Restricted Unload, Random AA Casualties, Roll AA Individually, Limit SBR Damage To Factory Production, Limit SBR Damage To Factory Production, Limit SBR Damage Per Turn, Limit Rocket Damage Per Turn, Territory Turn Limit, SBR Victory Points, Rocket Attack Per Factory Restricted, Allied Air Dependents, Defending Subs Sneak Attack, Attacker Retreat Planes, Surviving Air Move To Land, Naval Bombard Casualties Return Fire Restricted, Blitz Through Factories And AA Restricted, Unit Placement In Enemy Seas, Sub Control Sea Zone Restricted, Transport Control Sea Zone, Production Per X Territories Restricted, Production Per Valued Territory Restricted, Place in Any Territory, Unit Placement Per Territory Restricted, Movement By Territory Restricted, Transport Casualties Restricted, Ignore Transport In Movement, Ignore Sub In Movement, Hari-Kari Units, Occupied Territories, Unplaced units live when not placed, Air Attack Sub Restricted, Sub Retreat Before Battle, Sub Retreat DD Restricted, Shore Bombard Per Ground Unit Restricted, SBR Affects Unit Production, AA Territory Restricted, National Objectives, Continuous Research", "List Of Available Game Settings Choices (As Of TripleA 1.0.3.4)");
             }
         }
 
@@ -702,8 +696,11 @@ namespace TripleAGameCreator
                                 string tag = ((string)cur.Tag).Trim();
                                 Dictionary<string,Unit>.Enumerator en = Step5Info.units.GetEnumerator();
                                 en.MoveNext();
+                                if (tag.Length == 0)
+                                    continue;
                                 string tag1 = String.Concat(tag.Substring(0, ((string)cur.Tag).IndexOf("|")),",",en.Current.Value.Name,":1");
-                                string tag2 = tag.Substring(tag.IndexOf("|") + 1);
+                                string tag2 = cur.Name;
+                                Step2Info.territories[cur.Name].Units.Clear();
                                 foreach (Unit cur2 in Step5Info.units.Values)
                                 {
                                     try
@@ -744,7 +741,7 @@ namespace TripleAGameCreator
                                     catch { }
                                 }
                             }
-                            catch { /*smallErrorOccured = true;*/ }
+                            catch (Exception ex) { smallErrorOccured = true; smallExceptionThrown = ex; }
                         }
                     }
                     else if (oldStepIndex == 15)
@@ -809,6 +806,8 @@ namespace TripleAGameCreator
                                     labels.Add(new Label() { Text = name.Trim(), BackColor = Step1Info.WaterTerritoryFilter.Trim().Length > 0 && name.Contains(Step1Info.WaterTerritoryFilter) ? Color.DodgerBlue : Color.LightGreen, Font = new Font(label1.Font, FontStyle.Bold), Location = new Point(point.X - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(name, new Font(label1.Font, FontStyle.Bold)).Width / 2), point.Y) });
                                 }
                             }
+                            TerritoryDefinitionsImageDrawer.Controls.Clear();
+                            Step2Info.territories.Clear();
                             foreach (Label cur in labels)
                             {
                                 if (!Step2Info.territories.ContainsKey(cur.Text))
@@ -1151,7 +1150,7 @@ namespace TripleAGameCreator
                             Label l;
                             if (cur.Units.Count > 0)
                             {
-                                l = new Label() { Text = cur.Name, Name = cur.Name, BackColor = Color.LightGray, Font = TerritoryOwnershipImageDrawer.Controls[cur.Name].Font, AutoSize = true, Location = cur.Label.Location };
+                                l = new Label() { Text = cur.Name + ":" + cur.Units.Count, Name = cur.Name, BackColor = Color.LightGray, Font = TerritoryOwnershipImageDrawer.Controls[cur.Name].Font, AutoSize = true, Location = cur.Label.Location };
                                 Dictionary<string, int> unitsTA = new Dictionary<string, int>();
                                 foreach (Unit cur2 in cur.Units)
                                 {
@@ -1167,11 +1166,11 @@ namespace TripleAGameCreator
                                 {
                                     l.Tag += cur2.Key + ":" + cur2.Value + ",";
                                 }
-                                l.Tag = ((string)l.Tag).Substring(0, ((string)l.Tag).Length - 1);
-                                l.Tag += "|" + l.Text;
+                                l.Tag = ((string)l.Tag).Substring(0, ((string)l.Tag).Length - 1) + "|" + l.Text;
+
                             }
                             else
-                                l = new Label() { Text = cur.Name, Tag = "", BackColor = cur.Label.BackColor, Font = TerritoryOwnershipImageDrawer.Controls[cur.Name].Font, AutoSize = true, Location = cur.Label.Location };
+                                l = new Label() { Text = cur.Name + ":" + cur.Units.Count, Tag = "",Name = cur.Name, BackColor = cur.Label.BackColor, Font = TerritoryOwnershipImageDrawer.Controls[cur.Name].Font, AutoSize = true, Location = cur.Label.Location };
 
                             if (cur.IsWater == false && cur.Owner.Name.Trim().Length > 0)
                                 l.AccessibleName = cur.Owner.Name;
@@ -1311,7 +1310,7 @@ namespace TripleAGameCreator
         void c4_Click2(object sender, EventArgs e)
         {
             int change6 = (int)tabControl3.TabPages[tabControl3.SelectedIndex].Tag;
-            if (change6 > -25)
+            if (change6 > 0)
             {
                 tabControl3.TabPages[tabControl3.SelectedIndex].Tag = Convert.ToInt32(tabControl3.TabPages[tabControl3.SelectedIndex].Tag) - 25;
                 Button remove = new Button();
@@ -1357,62 +1356,106 @@ namespace TripleAGameCreator
         Point olocaiton = new Point();
         void l_MouseClick(object sender, MouseEventArgs e)
         {
-            if (mainTabControl.SelectedIndex == 1)
+            try
             {
-                if (e.Button == MouseButtons.Left)
+                if (mainTabControl.SelectedIndex == 1)
                 {
-                    ((Label)sender).Tag = "";
-                    DialogResult result = MessageBox.Show("Is territory \"" + ((Label)sender).Text + "\" water?", "Is Territory Water?", MessageBoxButtons.YesNoCancel);
-                    if (result == DialogResult.Yes)
+                    if (e.Button == MouseButtons.Left)
                     {
-                        ((Label)sender).BackColor = Color.DodgerBlue;
-                        if (((Label)sender).Tag is string)
-                            ((Label)sender).Tag = ((string)((Label)sender).Tag) + "Water";
+                        ((Label)sender).Tag = "";
+                        DialogResult result = MessageBox.Show("Is territory " + ((Label)sender).Text + " water?", "Is Territory Water?", MessageBoxButtons.YesNoCancel);
+                        if (result == DialogResult.Yes)
+                        {
+                            ((Label)sender).BackColor = Color.DodgerBlue;
+                            if (((Label)sender).Tag is string)
+                                ((Label)sender).Tag = ((string)((Label)sender).Tag) + "Water";
+                        }
+                        else if (result == DialogResult.Cancel)
+                            return;
+                        else
+                        {
+                            ((Label)sender).BackColor = Color.LightGreen;
+                            result = MessageBox.Show("Is territory " + ((Label)sender).Text + " a victory city?", "Is Territory Victory City?", MessageBoxButtons.YesNoCancel);
+                            if (result == DialogResult.Yes)
+                            {
+                                ((Label)sender).BackColor = Color.Red;
+                                if (((Label)sender).Tag is string)
+                                    ((Label)sender).Tag = ((string)((Label)sender).Tag) + "VictoryCity";
+                            }
+                            else if (result == DialogResult.Cancel)
+                                return;
+                            result = MessageBox.Show("Is territory " + ((Label)sender).Text + " impassable?", "Is Territory Impassable?", MessageBoxButtons.YesNoCancel);
+                            if (result == DialogResult.Yes)
+                            {
+                                ((Label)sender).BackColor = Color.DarkGray;
+                                if (((Label)sender).Tag is string)
+                                    ((Label)sender).Tag = ((string)((Label)sender).Tag) + "Impassable";
+                            }
+                            else if (result == DialogResult.Cancel)
+                                return;
+                            result = MessageBox.Show("Is territory " + ((Label)sender).Text + " a capitol?", "Is Territory Capitol?", MessageBoxButtons.YesNoCancel);
+                            if (result == DialogResult.Yes)
+                            {
+                                ((Label)sender).BackColor = Color.Violet;
+                                if (((Label)sender).Tag is string)
+                                    ((Label)sender).Tag = ((string)((Label)sender).Tag) + "Capitol";
+                            }
+                            else if (result == DialogResult.Cancel)
+                                return;
+                        }
                     }
-                    else if (result == DialogResult.Cancel)
-                        return;
                     else
                     {
-                        ((Label)sender).BackColor = Color.LightGreen;
-                        result = MessageBox.Show("Is territory \"" + ((Label)sender).Text + "\" a victory city?", "Is Territory Victory City?", MessageBoxButtons.YesNoCancel);
-                        if (result == DialogResult.Yes)
+                        if (MessageBox.Show("Are you sure you want to remove this territory?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                         {
-                            ((Label)sender).BackColor = Color.Red;
-                            if (((Label)sender).Tag is string)
-                                ((Label)sender).Tag = ((string)((Label)sender).Tag) + "VictoryCity";
+                            TerritoryDefinitionsImageDrawer.Controls.Remove((Control)sender);
+                            Step2Info.territories.Remove(((Control)sender).Text);
+                            List<Connection> ToRemove = new List<Connection>();
+                            foreach (String cur in Step3Info.connections.Keys)
+                            {
+                                if (cur.Contains(((Control)sender).Text))
+                                    ToRemove.Add(Step3Info.connections[cur]);
+                            }
+                            for (int i = 0; i < ToRemove.Count; i++)
+                            {
+                                Connection cur = ToRemove[i];
+                                Step3Info.connections.Remove(cur.t1.Name + "|" + cur.t2.Name);
+                            }
                         }
-                        else if (result == DialogResult.Cancel)
-                            return;
-                        result = MessageBox.Show("Is territory \"" + ((Label)sender).Text + "\" impassable?", "Is Territory Impassable?", MessageBoxButtons.YesNoCancel);
-                        if (result == DialogResult.Yes)
-                        {
-                            ((Label)sender).BackColor = Color.DarkGray;
-                            if (((Label)sender).Tag is string)
-                                ((Label)sender).Tag = ((string)((Label)sender).Tag) + "Impassable";
-                        }
-                        else if (result == DialogResult.Cancel)
-                            return;
-                        result = MessageBox.Show("Is territory \"" + ((Label)sender).Text + "\" a capitol?", "Is Territory Capitol?", MessageBoxButtons.YesNoCancel);
-                        if (result == DialogResult.Yes)
-                        {
-                            ((Label)sender).BackColor = Color.Violet;
-                            if (((Label)sender).Tag is string)
-                                ((Label)sender).Tag = ((string)((Label)sender).Tag) + "Capitol";
-                        }
-                        else if (result == DialogResult.Cancel)
-                            return;
                     }
                 }
-                else
+                else if (mainTabControl.SelectedIndex == 2)
                 {
-                    if (MessageBox.Show("Are you sure you want to remove this territory?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                    Label l = (Label)sender;
+                    if (e.Button == MouseButtons.Left)
                     {
-                        TerritoryDefinitionsImageDrawer.Controls.Remove((Control)sender);
-                        Step2Info.territories.Remove(((Control)sender).Text);
+                        if (L1 == null)
+                        {
+                            L1 = l;
+                            l.ForeColor = Color.Yellow;
+                        }
+                        else
+                        {
+                            L2 = l;
+                            L1.ForeColor = Color.Black;
+                            if (L1.Text != L2.Text)
+                            {
+                                Step3Info.connections.Add(L1.Text + "|" + L2.Text, new Connection() { t1 = Step2Info.territories[L1.Text], t2 = Step2Info.territories[L2.Text] });
+                                Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, L1.Location + new Size(L1.Size.Width / 2, 0), L2.Location + new Size(L2.Size.Width / 2, 0));
+                                TerritoryConnectionsImageDrawer.Refresh();
+                            }
+                            L1 = null;
+                        }
+                    }
+                    else
+                    {
+                        Step1Info.MapImageWL = new Bitmap(Step1Info.MapImage);
+                        TerritoryConnectionsImageDrawer.BackgroundImage = Step1Info.MapImageWL;
+                        TerritoryConnectionsImageDrawer.Size = TerritoryDefinitionsImageDrawer.BackgroundImage.Size;
                         List<Connection> ToRemove = new List<Connection>();
                         foreach (String cur in Step3Info.connections.Keys)
                         {
-                            if (cur.Contains(((Control)sender).Text))
+                            if (cur.ToLower().Contains(l.Text.ToLower()))
                                 ToRemove.Add(Step3Info.connections[cur]);
                         }
                         for (int i = 0; i < ToRemove.Count; i++)
@@ -1420,248 +1463,225 @@ namespace TripleAGameCreator
                             Connection cur = ToRemove[i];
                             Step3Info.connections.Remove(cur.t1.Name + "|" + cur.t2.Name);
                         }
+                        foreach (Connection cur in Step3Info.connections.Values)
+                        {
+                            Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, cur.t1.Label.Location + new Size(cur.t1.Label.Size.Width / 2, 0), cur.t2.Label.Location + new Size(cur.t2.Label.Size.Width / 2, 0));
+                        }
                     }
                 }
-            }
-            else if (mainTabControl.SelectedIndex == 2)
-            {
-                Label l = (Label)sender;
-                if (e.Button == MouseButtons.Left)
+                else if (mainTabControl.SelectedIndex == 10)
                 {
-                    if (L1 == null)
+                    Label l = (Label)sender;
+                    if (e.Button == MouseButtons.Left)
                     {
-                        L1 = l;
-                        l.ForeColor = Color.Yellow;
-                    }
-                    else
-                    {
-                        L2 = l;
-                        L1.ForeColor = Color.Black;
-                        if (L1.Text != L2.Text)
+                        String s;
+                        s = RetrieveString("Enter territory " + l.Tag.ToString() + "'s production amount.", Convert.ToInt32(l.Text)).Trim();
+                        if (s.Length > 0)
                         {
-                            Step3Info.connections.Add(L1.Text + "|" + L2.Text, new Connection() { t1 = Step2Info.territories[L1.Text], t2 = Step2Info.territories[L2.Text] });
-                            Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, L1.Location + new Size(L1.Size.Width / 2, 0), L2.Location + new Size(L2.Size.Width / 2, 0));
-                            TerritoryConnectionsImageDrawer.Refresh();
-                        }
-                        L1 = null;
-                    }
-                }
-                else
-                {
-                    Step1Info.MapImageWL = new Bitmap(Step1Info.MapImage);
-                    TerritoryConnectionsImageDrawer.BackgroundImage = Step1Info.MapImageWL;
-                    TerritoryConnectionsImageDrawer.Size = TerritoryDefinitionsImageDrawer.BackgroundImage.Size;
-                    List<Connection> ToRemove = new List<Connection>();
-                    foreach (String cur in Step3Info.connections.Keys)
-                    {
-                        if (cur.ToLower().Contains(l.Text.ToLower()))
-                            ToRemove.Add(Step3Info.connections[cur]);
-                    }
-                    for (int i = 0; i < ToRemove.Count; i++)
-                    {
-                        Connection cur = ToRemove[i];
-                        Step3Info.connections.Remove(cur.t1.Name + "|" + cur.t2.Name);
-                    }
-                    foreach (Connection cur in Step3Info.connections.Values)
-                    {
-                        Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage).DrawLine(Pens.Red, cur.t1.Label.Location + new Size(cur.t1.Label.Size.Width / 2, 0), cur.t2.Label.Location + new Size(cur.t2.Label.Size.Width / 2, 0));
-                    }
-                }
-            }
-            else if (mainTabControl.SelectedIndex == 10)
-            {
-                Label l = (Label)sender;
-                if (e.Button == MouseButtons.Left)
-                {
-                    String s;
-                    //if (Settings.DisplayCurrentUnitsWhenEnteringNewUnits == false)
-                    s = RetrieveString("Enter territory \"" + l.Tag.ToString() + "\"'s production amount.", Convert.ToInt32(l.Text)).Trim();
-                    //else
-                    //    s = RetrieveString("Enter territory \"" + l.Tag.ToString() + "\"'s production amount.", Step2Info.territories[l.Tag.ToString()].Production.ToString());
-                    if (s.Length > 0)
-                    {
-                        try
-                        {
-                            int i = Convert.ToInt32(s);
-                            l.Text = s;
-                        }
-                        catch (Exception ex) { MessageBox.Show("The value you entered is not a valid integer. Please enter another value.", "Invalid Value"); }
-                    }
-                }
-            }
-            else if (mainTabControl.SelectedIndex == 11)
-            {
-                Label l = (Label)sender;
-                if (e.Button == MouseButtons.Left)
-                {
-                    if (L1 == null)
-                    {
-                        l.ForeColor = Color.Yellow;
-                        L1 = l;
-                    }
-                    else
-                    {
-                        if (l == L1)
-                        {
-                            L1.ForeColor = Color.Black;
-                            L1 = null;
-                            return;
-                        }
-                        Territory territory1 = Step2Info.territories[L1.Text];
-                        Territory territory2 = Step2Info.territories[l.Text];
-                        if (territory1.IsWater || territory2.IsWater)
-                        {
-                            MessageBox.Show("One or more of the territories you selected is a water territory. To create a canal you have to select the land territories that form the canal, not the sea zones connected by it.", "Invalid Canal");
-                            L1.ForeColor = Color.Black;
-                            L1 = null;
-                            return;
-                        }
-                        if (MessageBox.Show("Are you sure you want there to be a canal between these two territories?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
-                        {
-                            string canalName = RetrieveString("Enter the name of the canal", "Canal" + (canalsCreated + 1));
-                            if (canalName.Trim().Length == 0)
-                                return;
-                            canalsCreated++;
-                            L1.ForeColor = Color.Black;
-                            Canal c = new Canal() { Name = canalName};
-                            c.LandTerritories.Add(territory1);
-                            c.LandTerritories.Add(territory2);
-                            List<Territory> seaNeighborsOfT1 = getSeaNeighbors(territory1);
-                            foreach (Territory cur in getSeaNeighbors(territory2))
+                            try
                             {
-                                if (seaNeighborsOfT1.Contains(cur))
-                                    c.CanalSeaNeighbors.Add(cur);
+                                int i = Convert.ToInt32(s);
+                                l.Text = s;
                             }
-                            if(Step12Info.Canals.ContainsKey(canalName))
+                            catch (Exception ex) { MessageBox.Show("The value you entered is not a valid integer. Please enter another value.", "Invalid Value"); }
+                        }
+                    }
+                }
+                else if (mainTabControl.SelectedIndex == 11)
+                {
+                    Label l = (Label)sender;
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        if (L1 == null)
+                        {
+                            l.ForeColor = Color.Yellow;
+                            L1 = l;
+                        }
+                        else
+                        {
+                            if (l == L1)
                             {
-                                if(MessageBox.Show("Another canal exists with the same name. Do you want to overwrite it?","Overwrite Canal",MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
-                                {
+                                L1.ForeColor = Color.Black;
+                                L1 = null;
+                                return;
+                            }
+                            Territory territory1 = Step2Info.territories[L1.Text];
+                            Territory territory2 = Step2Info.territories[l.Text];
+                            if (territory1.IsWater || territory2.IsWater)
+                            {
+                                MessageBox.Show("One or more of the territories you selected is a water territory. To create a canal you have to select the land territories that form the canal, not the sea zones connected by it.", "Invalid Canal");
+                                L1.ForeColor = Color.Black;
+                                L1 = null;
+                                return;
+                            }
+                            if (MessageBox.Show("Are you sure you want there to be a canal between these two territories?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                            {
+                                string canalName = RetrieveString("Enter the name of the canal", "Canal" + (canalsCreated + 1));
+                                if (canalName.Trim().Length == 0)
                                     return;
-                                }
-                                Canal cTR = Step12Info.Canals[canalName];
-                                foreach (Control cur in CanalsImageDrawer.Controls)
+                                canalsCreated++;
+                                L1.ForeColor = Color.Black;
+                                Canal c = new Canal() { Name = canalName };
+                                c.LandTerritories.Add(territory1);
+                                c.LandTerritories.Add(territory2);
+                                List<Territory> seaNeighborsOfT1 = getSeaNeighbors(territory1);
+                                foreach (Territory cur in getSeaNeighbors(territory2))
                                 {
-                                    if (cur.BackColor == Color.Red)
+                                    if (seaNeighborsOfT1.Contains(cur))
+                                        c.CanalSeaNeighbors.Add(cur);
+                                }
+                                if (Step12Info.Canals.ContainsKey(canalName))
+                                {
+                                    if (MessageBox.Show("Another canal exists with the same name. Do you want to overwrite it?", "Overwrite Canal", MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
                                     {
-                                        foreach (Territory canalT in cTR.LandTerritories)
+                                        return;
+                                    }
+                                    Canal cTR = Step12Info.Canals[canalName];
+                                    foreach (Control cur in CanalsImageDrawer.Controls)
+                                    {
+                                        if (cur.BackColor == Color.Red)
                                         {
-                                            if(cur.Text == canalT.Name)
-                                                cur.BackColor = TerritoryDefinitionsImageDrawer.Controls[cur.Text].BackColor;
+                                            foreach (Territory canalT in cTR.LandTerritories)
+                                            {
+                                                if (cur.Text == canalT.Name)
+                                                    cur.BackColor = TerritoryDefinitionsImageDrawer.Controls[cur.Text].BackColor;
+                                            }
                                         }
                                     }
+                                    Step12Info.Canals.Remove(canalName);
                                 }
-                                Step12Info.Canals.Remove(canalName);
+                                L1.BackColor = Color.Red;
+                                l.BackColor = Color.Red;
+                                Step12Info.Canals.Add(canalName, c);
                             }
-                            L1.BackColor = Color.Red;
-                            l.BackColor = Color.Red;
-                            Step12Info.Canals.Add(canalName, c);                            
-                        }
-                        L1 = null;
-                    }
-                }
-                else if (e.Button == MouseButtons.Right)
-                {
-                    if (MessageBox.Show("Are you sure you want to remove all canals?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
-                    {
-                        Step12Info.Canals.Clear();
-                        canalsCreated = 0;
-                        foreach (Control cur in CanalsImageDrawer.Controls)
-                        {
-                            if (cur.BackColor == Color.Red)
-                            {
-                                cur.BackColor = TerritoryDefinitionsImageDrawer.Controls[cur.Text].BackColor;
-                            }
+                            L1 = null;
                         }
                     }
-                }
-            }
-            else if (mainTabControl.SelectedIndex == 12)
-            {
-                Label l = (Label)sender;
-                if (e.Button == MouseButtons.Left)
-                {
-                    String s;
-                    //if (Settings.DisplayCurrentUnitsWhenEnteringNewUnits == false)
-                    s = RetrieveString("Enter territory \"" + l.Tag + "\"'s new owner.", l.Text, getPlayersWithNeutral()).Trim();
-                    //else
-                    //    s = RetrieveString("Enter territory \"" + l.Tag + "\"'s new owner.", Step2Info.territories[(string)l.Tag].Owner.Name);
-                    if (s.Length > 0)
+                    else if (e.Button == MouseButtons.Right)
                     {
-                        l.Location = new Point((l.Location.X + ((int)(l.Size.Width / 2))) - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(s, l.Font).Width / 2), l.Location.Y);
-                        int index = 0;
-                        bool found = false;
-                        foreach (Player cur in Step4Info.players.Values)
+                        if (MessageBox.Show("Are you sure you want to remove all canals?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                         {
-                            if (cur.Name == s)
+                            Step12Info.Canals.Clear();
+                            canalsCreated = 0;
+                            foreach (Control cur in CanalsImageDrawer.Controls)
                             {
-                                found = true;
-                                break;
+                                if (cur.BackColor == Color.Red)
+                                {
+                                    try
+                                    {
+                                        cur.BackColor = TerritoryDefinitionsImageDrawer.Controls[cur.Text].BackColor;
+                                    }
+                                    catch
+                                    {
+                                        cur.BackColor = Color.LightGreen;
+                                    }
+                                }
                             }
-                            index++;
                         }
-                        if (index == 0)
-                            l.BackColor = Color.Red;
-                        else if (index == 1)
-                            l.BackColor = Color.Orange;
-                        else if (index == 2)
-                            l.BackColor = Color.Yellow;
-                        else if (index == 3)
-                            l.BackColor = Color.Green;
-                        else if (index == 4)
-                            l.BackColor = Color.Blue;
-                        else if (index == 5)
-                            l.BackColor = Color.Indigo;
-                        else if (index == 6)
-                            l.BackColor = Color.Violet;
+                    }
+                }
+                else if (mainTabControl.SelectedIndex == 12)
+                {
+                    Label l = (Label)sender;
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        String s = RetrieveString("Enter territory " + l.Tag + "'s new owner.", l.Text, getPlayersWithNeutral()).Trim();
+                        if (s.Length > 0)
+                        {
+                            l.Location = new Point((l.Location.X + ((int)(l.Size.Width / 2))) - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(s, l.Font).Width / 2), l.Location.Y);
+                            int index = 0;
+                            bool found = false;
+                            foreach (Player cur in Step4Info.players.Values)
+                            {
+                                if (cur.Name == s)
+                                {
+                                    found = true;
+                                    break;
+                                }
+                                index++;
+                            }
+                            if (index == 0)
+                                l.BackColor = Color.Red;
+                            else if (index == 1)
+                                l.BackColor = Color.Orange;
+                            else if (index == 2)
+                                l.BackColor = Color.Yellow;
+                            else if (index == 3)
+                                l.BackColor = Color.Green;
+                            else if (index == 4)
+                                l.BackColor = Color.Blue;
+                            else if (index == 5)
+                                l.BackColor = Color.Indigo;
+                            else if (index == 6)
+                                l.BackColor = Color.Violet;
 
-                        if (!found)
-                            l.BackColor = Color.White;
-                        l.Text = s;
-                    }
-                }
-            }
-            else if (mainTabControl.SelectedIndex == 13)
-            {
-                Label l = (Label)sender;
-                if (e.Button == MouseButtons.Left)
-                {
-                    //try
-                    //{
-                    //    if (((string)l.Tag).Contains("|"))
-                    //        sretriever.textBox1.Text = ((string)l.Tag).Substring(((string)l.Tag).IndexOf("|") + 1);
-                    //}
-                    //catch { }
-                    String s;
-                    if (Settings.DisplayCurrentUnitsWhenEnteringNewUnits == false)
-                        s = RetrieveString("Enter territory \"" + l.Text + "\"'s units.").Trim();
-                    else
-                    {
-                        try
-                        {
-                            s = RetrieveString("Enter territory \"" + l.Text + "\"'s units.", l.Tag.ToString().Substring(0, l.Tag.ToString().IndexOf("|"))).Trim();
+                            if (!found)
+                                l.BackColor = Color.White;
+                            l.Text = s;
                         }
-                        catch { s = RetrieveString("Enter territory \"" + l.Text + "\"'s units.", "").Trim(); }
                     }
-                    string s2 = "";
-                    if (Step2Info.territories[l.Text].IsWater)
+                }
+                else if (mainTabControl.SelectedIndex == 13)
+                {
+                    Label l = (Label)sender;
+                    if (e.Button == MouseButtons.Left)
                     {
-                        s2 = RetrieveString("Enter the owner of these units.", "Neutral", getPlayersWithNeutral());
-                        if (s2.ToLower().Trim() == "neutral")
-                            s2 = "";
-                        l.AccessibleName = s2;
-                    }
-                    else
-                    {
-                        l.AccessibleName = Step2Info.territories[l.Text].Owner.Name;
-                    }
-                    if (s.Length > 0 || !s.ToLower().Trim().Equals((string)l.Tag))
-                    {
-                        l.BackColor = Color.LightGray;
-                        l.Tag = s;
-                        l.Tag += "|" + l.Text;
+                        //try
+                        //{
+                        //    if (((string)l.Tag).Contains("|"))
+                        //        sretriever.textBox1.Text = ((string)l.Tag).Substring(((string)l.Tag).IndexOf("|") + 1);
+                        //}
+                        //catch { }
+                        String s = ShowUnitAddingWindowAndRetrieveTerritorysUnits(Step2Info.territories[l.Name], l.Tag.ToString().Length > 0 ? l.Tag.ToString().Substring(0, l.Tag.ToString().IndexOf("|")) : "").Trim();
+                        if (s.Trim().Length > 0)
+                        {
+                            string s2 = "";
+                            if (Step2Info.territories[l.Name].IsWater)
+                            {
+                                s2 = RetrieveString("Enter the owner of these units.", "Neutral", getPlayersWithNeutral());
+                                if (s2.ToLower().Trim() == "neutral")
+                                    s2 = "";
+                                l.AccessibleName = s2;
+                            }
+                            else
+                            {
+                                l.AccessibleName = Step2Info.territories[l.Name].Owner.Name;
+                            }
+                            int unitsAmount = CountUnits(s);
+                            l.Text = l.Text.Substring(0, l.Text.IndexOf(":")) + ":" + unitsAmount;
+                        }
+                        if (s.Trim().Length > 0 && !s.ToLower().Trim().Equals((string)l.Tag))
+                        {
+                            l.BackColor = Color.LightGray;
+                            l.Tag = s;
+                            l.Tag += "|" + l.Text.Substring(0, l.Text.IndexOf(":"));
+                        }
                     }
                 }
             }
+            catch (Exception ex) { exceptionViewerWindow.ShowInformationAboutException(ex, true); }
+        }
+
+        private int CountUnits(string s)
+        {
+            int result = 0;
+            int index = 0;
+            while (index < s.Length)
+            {
+                string cur = s.Substring(index);
+                if (cur.Contains(":"))
+                {
+                    string numAndAfter = cur.Substring(cur.IndexOf(":") + 1);
+                    if (numAndAfter.Contains(","))
+                        result += Convert.ToInt32(numAndAfter.Substring(0, numAndAfter.IndexOf(",")).Trim());
+                    else
+                        result += Convert.ToInt32(numAndAfter.Trim());
+                    index += cur.IndexOf(":") + 1;
+                }
+                else
+                    break;
+            }
+            return result;
         }
         public int canalsCreated = 0;
         public List<Territory> getSeaNeighbors(Territory t)
@@ -1703,7 +1723,12 @@ namespace TripleAGameCreator
         {
             return new Point(olocaiton.X - this.Location.X - this.mainTabControl.Location.X - TerritoryDefinitionsImageDrawer.Location.X - 15, olocaiton.Y - this.Location.Y - this.mainTabControl.Location.Y - TerritoryDefinitionsImageDrawer.Location.Y - 92);
         }
+        public String ShowUnitAddingWindowAndRetrieveTerritorysUnits(Territory territory,string currentUnitsString)
+        {
+            return unitAddingWindow.RetrieveUnitsString(territory,currentUnitsString);
+        }
         StringRetriever sretriever = new StringRetriever();
+        UnitAddingWindow unitAddingWindow = new UnitAddingWindow();
         public String RetrieveString(string labelString)
         {
             sretriever.parent = this;
@@ -1782,7 +1807,7 @@ namespace TripleAGameCreator
         {
             if (stepIndex == 1)
             {
-                MessageBox.Show("Map Name: The name of the map. Examples: Revised, Classic, Big World, and Great War\r\n\r\nMap Version: The map release version. Examples: 1.0.0.0, 2.5.0.0, and 1.7.0.1\r\n\r\nResource Name: The name of the resource to use in the map. Examples: IPCs, Gold, and Silver\r\n\r\nMap Image Location: The location of the map image. Example: C:/My Maps/Sleeping Giant/full_map.png\r\n\r\nMap Centers File: The location of a premade centers file produced by the 'Center Picker' program. It is used to automatically add territories by using the centers file content. Example: C:/My Maps/Sleeping Giant/centers.txt\r\n\r\nWater Territory Filter: An optional setting that makes the program automatically apply the 'Is Water' property to every territory that contains the filter text. Examples: SZ, Sea Zone, Pacific, and Atlantic.", "Help On Current Step");
+                MessageBox.Show("Map Name: The name of the map. Examples: Revised, Classic, Big World, and Great War\r\n\r\nMap Version: The map release version. Examples: 1.0.0.0, 2.5.0.0, and 1.7.0.1\r\n\r\nResource Name: The name of the resource to use in the map. Examples: PUs, Gold, and Silver\r\n\r\nMap Image Location: The location of the map image. Example: C:/My Maps/Sleeping Giant/full_map.png\r\n\r\nMap Centers File: The location of a premade centers file produced by the 'Center Picker' program. It is used to automatically add territories by using the centers file content. Example: C:/My Maps/Sleeping Giant/centers.txt\r\n\r\nWater Territory Filter: An optional setting that makes the program automatically apply the 'Is Water' property to every territory that contains the filter text. Examples: SZ, Sea Zone, Pacific, and Atlantic.", "Help On Current Step");
             }
             else if (stepIndex == 2)
             {
@@ -1794,7 +1819,7 @@ namespace TripleAGameCreator
             }
             else if (stepIndex == 4)
             {
-                MessageBox.Show("Player Name: The name of the player. Examples: Russians, Germans, British, Americans, Chinese, and Italians.\r\n\r\nPlayer Alliance: The alliance the player belongs to. Examples: Allies, and Axis.\r\n\r\nInitial Resources: The amount of resources(IPCs) the player gets in the beginning.", "Help On Current Step");
+                MessageBox.Show("Player Name: The name of the player. Examples: Russians, Germans, British, Americans, Chinese, and Italians.\r\n\r\nPlayer Alliance: The alliance the player belongs to. Examples: Allies, and Axis.\r\n\r\nInitial Resources: The amount of resources(PUs) the player gets in the beginning.", "Help On Current Step");
             }
             else if (stepIndex == 5)
             {
@@ -2206,18 +2231,22 @@ namespace TripleAGameCreator
                         }
                     }
                     ClearAllDataAndControls();
+                    ResetTemporaryMapLoadingValues();
                     try
                     {
                         List<Label> labels = new List<Label>();
-                        String[] lines = File.ReadAllLines(centerLocation);
+                        string centersText = File.ReadAllText(centerLocation);
                         TerritoryDefinitionsImageDrawer.Controls.Clear();
                         Step2Info.territories.Clear();
-                        foreach (String cur2 in lines)
+                        int textIndex = 0;
+                        while (textIndex < centersText.Length)
                         {
-                            String name = cur2.Substring(0, cur2.IndexOf('('));
-                            String sPoint = cur2.Substring(cur2.IndexOf('(') + 1, cur2.LastIndexOf(")") - (cur2.IndexOf("(") + 1));
+                            string centerText = centersText.Substring(textIndex, centersText.Substring(textIndex).IndexOf(")") + 1);
+                            String name = centerText.Substring(0, centerText.IndexOf('('));
+                            String sPoint = centerText.Substring(centerText.IndexOf('(') + 1, centerText.LastIndexOf(")") - (centerText.IndexOf("(") + 1));
                             Point point = new Point(Convert.ToInt32(sPoint.Substring(0, sPoint.IndexOf(","))), Convert.ToInt32(sPoint.Substring(sPoint.IndexOf(",") + 1, sPoint.Length - sPoint.IndexOf(",") - 1)));
                             labels.Add(new Label() { Text = name.Trim(), BackColor = textBox8.Text.Trim().Length > 0 && name.Contains(textBox8.Text) ? Color.DodgerBlue : Color.LightGreen, Font = new Font(label1.Font, FontStyle.Bold), Location = new Point(point.X - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(name, new Font(label1.Font, FontStyle.Bold)).Width / 2), point.Y) });
+                            textIndex += centerText.Length;
                         }
                         foreach (Label cur2 in labels)
                         {
@@ -2557,8 +2586,8 @@ namespace TripleAGameCreator
         }
         private void ClearAllDataAndControls()
         {
-            ClearAllControls();
             ClearAllData();
+            ClearAllControls();
         }
         private void ClearAllData()
         {
@@ -2603,6 +2632,20 @@ namespace TripleAGameCreator
             ClearTechs();
             ClearUnitAttachments();
             ClearInGameSettings();
+        }
+        private void ResetTemporaryMapLoadingValues()
+        {
+            canalName_TA = "";
+            tTName = "";
+            seaZoneThatCanalIsAttachedTo_TA = "";
+            pfTName = "";
+            ttplayer = "";
+            productionRuleUnitName_TA = "";
+            unitTName2 = "";
+            techs = new List<Technology>();
+            tplayers = new Dictionary<string, Player>();
+            tunits = new Dictionary<string, Unit>();
+            pfts = new Dictionary<string, ProductionFrontier>();
         }
         public void Stop()
         {

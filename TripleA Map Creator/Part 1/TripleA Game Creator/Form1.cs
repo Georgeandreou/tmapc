@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using System.Net;
 using System.Threading;
+using System.Diagnostics;
 
 namespace TripleA_Game_Creator
 {
@@ -39,7 +40,8 @@ namespace TripleA_Game_Creator
             RefreshSettings();
             CheckForUpdates();
         }
-        private Version usersVersion = new Version(1,0,1,1);
+        PerformanceCounter availableMemoryRequester = new PerformanceCounter("Memory", "Available MBytes");
+        private Version usersVersion = new Version(1,0,1,2);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));
@@ -117,9 +119,8 @@ namespace TripleA_Game_Creator
                         try
                         {
                             List<string> lines = new List<string>();
-                            lines.Add("Display Current Units When Entering New Units=\"true\"");
                             lines.Add("Stop Loading XML File When Error Is Found=\"false\"");
-                            lines.Add("Java Heap Size=\"1000\"");
+                            lines.Add("Java Heap Size=\"5000\"");
                             File.WriteAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf", lines.ToArray());
                         }
                         catch(Exception ex) { exceptionViewerWindow.ShowInformationAboutException(ex, true); }
@@ -135,7 +136,7 @@ namespace TripleA_Game_Creator
         ExceptionViewer exceptionViewerWindow = new ExceptionViewer();
         public static class Settings
         {
-            public static int JavaHeapSize = 1000;
+            public static int JavaHeapSize = 5000;
         }
         private void button2_Click(object sender, EventArgs e)
         {
@@ -150,25 +151,30 @@ namespace TripleA_Game_Creator
         {
             if (stepIndex == 5)
             {
-                if (MessageBox.Show("WARNING!! If the 'Auto-Placement Finder' is still running, some files will be incomplete. Do you want to continue?", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                Control oldControl = getControl("label" + stepIndex);
+                oldStepIndex = stepIndex;
+                if (stepIndex > 0)
+                    stepIndex--;
+                Control newControl = getControl("label" + stepIndex);
+                oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
+                newControl.Font = new Font(newControl.Font, FontStyle.Bold);
+                try
                 {
-                    Control oldControl = getControl("label" + stepIndex);
-                    oldStepIndex = stepIndex;
-                    if (stepIndex > 0)
-                        stepIndex--;
-                    Control newControl = getControl("label" + stepIndex);
-                    oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
-                    newControl.Font = new Font(newControl.Font, FontStyle.Bold);
-                    try
+                    if (Directory.Exists(cutPath))
                     {
                         foreach (string cur in Directory.GetFiles(cutPath))
                         {
-                            File.Copy(cur, textBox3.Text + "/" + new FileInfo(cur).Name, true);
+                            //File.Copy(cur, textBox3.Text + "/" + new FileInfo(cur).Name, true);
+                            try
+                            {
+                                File.Delete(cur);
+                            }
+                            catch { }
                         }
                         Directory.Delete(cutPath);
                     }
-                    catch (Exception ex){ exceptionViewerWindow.ShowInformationAboutException(ex, true); }
                 }
+                catch (Exception ex) { exceptionViewerWindow.ShowInformationAboutException(ex, true); }
             }
             else if (stepIndex == 7)
             {
@@ -183,8 +189,11 @@ namespace TripleA_Game_Creator
                     newControl.Font = new Font(newControl.Font, FontStyle.Bold);
                     try
                     {
-                        Directory.Move(cutPath + "/reliefTiles/", textBox3.Text + "/reliefTiles");
-                        Directory.Delete(cutPath);
+                        if (Directory.Exists(cutPath))
+                        {
+                            Directory.Move(cutPath + "/reliefTiles/", textBox3.Text + "/reliefTiles");
+                            Directory.Delete(cutPath);
+                        }
                     }
                     catch (Exception ex) { exceptionViewerWindow.ShowInformationAboutException(ex, true); }
                 }
@@ -267,14 +276,8 @@ namespace TripleA_Game_Creator
         private string defaultWindowText = "TripleA Map Creator - Part 1";
         private void Next()
         {
-            if (stepIndex == 5)
-            {
-                if (MessageBox.Show("WARNING!! If the 'Auto-Placement Finder' is still running, some files will be incomplete. Do you want to continue?", "Confirmation", MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
-                {
-                    return;
-                }
-            }
-            else if (stepIndex == 7)
+
+            if (stepIndex == 7)
             {
                 if (MessageBox.Show("WARNING!! If the 'Relief Image Breaker' is still running, some files will be incomplete. Do you want to continue?", "Confirmation", MessageBoxButtons.YesNoCancel) != DialogResult.Yes)
                 {
@@ -341,7 +344,19 @@ namespace TripleA_Game_Creator
             {
                 try
                 {
-                    Directory.Delete(cutPath,true);
+                    if (Directory.Exists(cutPath))
+                    {
+                        foreach (string cur in Directory.GetFiles(cutPath))
+                        {
+                            //File.Copy(cur, textBox3.Text + "/" + new FileInfo(cur).Name, true);
+                            try
+                            {
+                                File.Delete(cur);
+                            }
+                            catch { }
+                        }
+                        Directory.Delete(cutPath);
+                    }
                 }
                 catch { }
             }
@@ -349,8 +364,11 @@ namespace TripleA_Game_Creator
             {
                 try
                 {
-                    Directory.Move(cutPath + "/reliefTiles/", textBox3.Text + "/reliefTiles");
-                    Directory.Delete(cutPath,true);
+                    if (Directory.Exists(cutPath))
+                    {
+                        Directory.Move(cutPath + "/reliefTiles/", textBox3.Text + "/reliefTiles");
+                        Directory.Delete(cutPath, true);
+                    }
                 }
                 catch { }
             }
@@ -552,8 +570,9 @@ namespace TripleA_Game_Creator
                 if (d2.ShowDialog() == DialogResult.OK)
                     file = d2.FileName;
             }
+            float availableMemory = availableMemoryRequester.NextValue();
             if(File.Exists(file))
-            System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/CenterPicker");
+                System.Diagnostics.Process.Start("java", "-Xmx" + (availableMemory < Settings.JavaHeapSize ? availableMemory - 10 : Settings.JavaHeapSize) + "m" + " -classpath \"" + file + "\" util/image/CenterPicker");
         }
         public void SetNewestTripleAVersion()
         {
@@ -614,8 +633,9 @@ namespace TripleA_Game_Creator
                 if (d2.ShowDialog() == DialogResult.OK)
                     file = d2.FileName;
             }
+            float availableMemory = availableMemoryRequester.NextValue();
             if (File.Exists(file))
-                System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/PolygonGrabber");
+                System.Diagnostics.Process.Start("java", "-Xmx" + (availableMemory < Settings.JavaHeapSize ? availableMemory - 10 : Settings.JavaHeapSize) + "m" + " -classpath \"" + file + "\" util/image/PolygonGrabber");
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -634,8 +654,9 @@ namespace TripleA_Game_Creator
                 if (d2.ShowDialog() == DialogResult.OK)
                     file = d2.FileName;
             }
+            float availableMemory = availableMemoryRequester.NextValue();
             if (File.Exists(file))
-                System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/PlacementPicker");
+                System.Diagnostics.Process.Start("java", "-Xmx" + (availableMemory < Settings.JavaHeapSize ? availableMemory - 10 : Settings.JavaHeapSize) + "m" + " -classpath \"" + file + "\" util/image/PlacementPicker");
         }
         string cutPath = "";
         private void button16_Click(object sender, EventArgs e)
@@ -672,10 +693,11 @@ namespace TripleA_Game_Creator
                     }
                 }
                 double unitsScale = getUnitScale(new DirectoryInfo(textBox3.Text));
+                float availableMemory = availableMemoryRequester.NextValue();
                 if (unitsScale != 0)
-                    System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder " + unitsScale.ToString());
+                    System.Diagnostics.Process.Start("java", "-Xmx" + (availableMemory < Settings.JavaHeapSize ? availableMemory - 10 : Settings.JavaHeapSize) + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder " + unitsScale.ToString());
                 else
-                    System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder");
+                    System.Diagnostics.Process.Start("java", "-Xmx" + (availableMemory < Settings.JavaHeapSize ? availableMemory - 10 : Settings.JavaHeapSize) + "m" + " -classpath \"" + file + "\" util/image/AutoPlacementFinder");
             }
         }
 
@@ -697,9 +719,9 @@ namespace TripleA_Game_Creator
             }
             if (!Directory.Exists(textBox3.Text + @"\baseTiles\"))
                 Directory.CreateDirectory(textBox3.Text + @"\baseTiles\");
-
+            float availableMemory = availableMemoryRequester.NextValue();
             if (File.Exists(file))
-                System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/TileImageBreaker");
+                System.Diagnostics.Process.Start("java", "-Xmx" + (availableMemory < Settings.JavaHeapSize ? availableMemory - 10 : Settings.JavaHeapSize) + "m" + " -classpath \"" + file + "\" util/image/TileImageBreaker");
         }
 
         private void button20_Click(object sender, EventArgs e)
@@ -724,8 +746,9 @@ namespace TripleA_Game_Creator
             {
                 File.Copy(cur, cutPath + new FileInfo(cur).Name, true);
             }
+            float availableMemory = availableMemoryRequester.NextValue();
             if (File.Exists(file))
-                System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/ReliefImageBreaker");
+                System.Diagnostics.Process.Start("java", "-Xmx" + (availableMemory < Settings.JavaHeapSize ? availableMemory - 10 : Settings.JavaHeapSize) + "m" + " -classpath \"" + file + "\" util/image/ReliefImageBreaker");
         }
 
         private void button22_Click(object sender, EventArgs e)
@@ -744,8 +767,9 @@ namespace TripleA_Game_Creator
                 if (d2.ShowDialog() == DialogResult.OK)
                     file = d2.FileName;
             }
+            float availableMemory = availableMemoryRequester.NextValue();
             if (File.Exists(file))
-                System.Diagnostics.Process.Start("java", "-Xmx" + Settings.JavaHeapSize + "m" + " -classpath \"" + file + "\" util/image/ImageShrinker");
+                System.Diagnostics.Process.Start("java", "-Xmx" + (availableMemory < Settings.JavaHeapSize ? availableMemory - 10 : Settings.JavaHeapSize) + "m" + " -classpath \"" + file + "\" util/image/ImageShrinker");
         }
         public static double getUnitScale(DirectoryInfo mapFolder)
         {
@@ -832,10 +856,14 @@ namespace TripleA_Game_Creator
         private void button23_Click(object sender, EventArgs e)
         {
             if (File.Exists(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + @"\TripleA Map Creator Part 2.exe"))
+            {
                 System.Diagnostics.Process.Start((new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + @"\TripleA Map Creator Part 2.exe"));
+                this.Close();
+            }
             else
-                MessageBox.Show("Unable to find Part 2 of the Map Creator. The program will now close.","Cannot locate Part 2.");
-            Environment.Exit(0);
+            {
+                MessageBox.Show("Unable to find Part 2 of the Map Creator.", "Cannot locate Part 2.");
+            }
         }
     }
 }

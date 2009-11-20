@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using System.Net;
+using System.Drawing.Drawing2D;
 
 namespace TripleA_Map_Resizer
 {
@@ -16,10 +17,11 @@ namespace TripleA_Map_Resizer
         public Main()
         {
             InitializeComponent();
+            exceptionViewerWindow.main = this;
             Main.CheckForIllegalCrossThreadCalls = false;
             CheckForUpdates();
         }
-        private Version usersVersion = new Version(1, 0, 1, 1);
+        private Version usersVersion = new Version(1, 0, 1, 2);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));
@@ -354,6 +356,11 @@ namespace TripleA_Map_Resizer
         {
             try
             {
+                if (!ValidateMapFilesAndFolders())
+                {
+                    MessageBox.Show("Some of the map files and/or folders are invalid, do not exist, or are required and are not entered. The program cannot preview the resized map until all the files and folders are valid.", "Invalid Files Or Folders");
+                    return;
+                }
                 FileInfo propertiesFile = new FileInfo(propertiesFileTB.Text);
                 if (!propertiesFile.Exists)
                 {
@@ -392,6 +399,8 @@ namespace TripleA_Map_Resizer
             catch (Exception ex) { if (MessageBox.Show("An error occured when trying to preview the resized map image. Do you want to view the error message?", "Error Previewing Resized Image", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { exceptionViewerWindow.ShowInformationAboutException(ex, true); } }
             //catch { }
         }
+        public delegate void setClipboardTextDel(string clipboardTextPar);
+        //public Delegate setClipboardTextDelegate = Delegate.CreateDelegate(null, null);
         ExceptionViewer exceptionViewerWindow = new ExceptionViewer();
         private Bitmap ReconstructMapImageUsingBaseTiles(DirectoryInfo baseTilesFolder,Size mapSize)
         {
@@ -464,7 +473,7 @@ namespace TripleA_Map_Resizer
             {
                 if (!ValidateMapFilesAndFolders())
                 {
-                    MessageBox.Show("Some of the map files or folders are invalid or do not exist. The program cannot resize the map until all the files and folders are valid.", "Invalid Files Or Folders");
+                    MessageBox.Show("Some of the map files and/or folders are invalid, do not exist, or are required and are not entered. The program cannot resize the map until all the files and folders are valid.", "Invalid Files Or Folders");
                     return;
                 }
                 resizeMapThread = new Thread(resizeMapMethod);
@@ -563,7 +572,7 @@ namespace TripleA_Map_Resizer
                     statusLabel.Invalidate();
                     statusStrip1.Update();
                     Directory.CreateDirectory(reliefTilesFolderTW.FullName);
-                    BreakDownImageAndSaveToDirectory(ResizeImage((Bitmap)ReconstructImageUsingReliefTiles(new DirectoryInfo(reliefTilesFolderTB.Text),resizedBitmap.Size),newSize), reliefTilesFolderTW);
+                    BreakDownImageAndSaveToDirectory(ResizeImage((Bitmap)ReconstructImageUsingReliefTiles(new DirectoryInfo(reliefTilesFolderTB.Text), resizedBitmap.Size), newSize), reliefTilesFolderTW);
                 }
                 if (centersFileTB.Text.Trim().Length > 0 && File.Exists(centersFileTB.Text))
                 {
@@ -637,12 +646,14 @@ namespace TripleA_Map_Resizer
                     ScalePointsAndWriteResults(scaleRatio, KamikazePlacementFileTB.Text, kamikazePlacementFileTW.Open(FileMode.Create, FileAccess.Write));
                 }
             }
+            catch (ThreadAbortException ex) { }
             catch (FileNotFoundException ex)
             { MessageBox.Show("One of the files that was going to be processed does not exist. Cancelling resizing operation.", "File Not Found"); }
             catch (Exception ex) { if (MessageBox.Show("An error occured when trying to resize the map. Do you want to view the error message?", "Error Resizing Map", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { exceptionViewerWindow.ShowInformationAboutException(ex, true); } }
             StartAllowingEditing();
             statusLabel.Text = "Ready...";
             progressBar.Value = 0;
+            MessageBox.Show("The map was successfully resized.", "Resizing Completed");
             //catch { }
         }
 
@@ -662,7 +673,6 @@ namespace TripleA_Map_Resizer
             grphx.Dispose();
             return result;
         }
-
         private Image ReconstructImageUsingReliefTiles(DirectoryInfo reliefTilesFolder, Size mapSize)
         {
             List<FileInfo> files = new List<FileInfo>(reliefTilesFolder.GetFiles());
@@ -695,25 +705,41 @@ namespace TripleA_Map_Resizer
         private void StopAllowingEditing()
         {
             resizeMapFilesBTN.Text = "Cancel";
-            previewResizedMapBTN.Enabled = false;
+            shiftMapFilesButton.Text = "Cancel";
             groupBox1.Enabled = false;
-            useImageSmoothing.Enabled = false;
-            mapScaleUPDOWN.Enabled = false;
-            mapSizeTB.Enabled = false;
+
             radioButton1.Enabled = false;
             radioButton2.Enabled = false;
+            label15.Enabled = false;
+            mapScaleUPDOWN.Enabled = false;
+            mapSizeTB.Enabled = false;
+            useImageSmoothing.Enabled = false;
+            previewResizedMapBTN.Enabled = false;
+            label16.Enabled = false;
+            shiftingAmountTextbox.Enabled = false;
+            previewResizedMapBTN.Enabled = false;
+            previewShiftedMapButton.Enabled = false;
         }
         private void StartAllowingEditing()
         {
             progressBar.Value = 0;
             statusLabel.Text = "Ready...";
             resizeMapFilesBTN.Text = "Resize Map Files";
-            previewResizedMapBTN.Enabled = true;
+            shiftMapFilesButton.Text = "Shift Map Files";
             groupBox1.Enabled = true;
-            useImageSmoothing.Enabled = true;
+            radioButton1_CheckedChanged(new object(), new EventArgs());
+
             radioButton1.Enabled = true;
             radioButton2.Enabled = true;
-            radioButton1_CheckedChanged(new object(), new EventArgs());
+            label15.Enabled = true;
+            mapScaleUPDOWN.Enabled = true;
+            mapSizeTB.Enabled = true;
+            useImageSmoothing.Enabled = true;
+            previewResizedMapBTN.Enabled = true;
+            label16.Enabled = true;
+            shiftingAmountTextbox.Enabled = true;
+            previewResizedMapBTN.Enabled = true;
+            previewShiftedMapButton.Enabled = true;
         }
 
         private void UpdateMapSizeAndWriteResults(Size size, string readFileLocation, FileStream fileStream)
@@ -821,7 +847,7 @@ namespace TripleA_Map_Resizer
                 if (indexOfPointEnd <= 0)
                 {
                     textBuilder.Append(remainingTextToProcess);
-                    progressBar.Value = 100;
+                    progressBar.Value = progressBar.Maximum;
                     break;
                 }
                 else
@@ -849,6 +875,16 @@ namespace TripleA_Map_Resizer
         }
         private bool ValidateMapFilesAndFolders()
         {
+            if (mapFolderTB.Text.Trim().Length == 0)
+                return false;
+            if (baseTilesFolderTB.Text.Trim().Length == 0)
+                return false;
+            if (centersFileTB.Text.Trim().Length == 0)
+                return false;
+            if (polygonsFileTB.Text.Trim().Length == 0)
+                return false;
+            if (propertiesFileTB.Text.Trim().Length == 0)
+                return false;
             if (mapFolderTB.Text.Trim().Length > 0 && !Directory.Exists(mapFolderTB.Text))
                 return false;
             if (baseTilesFolderTB.Text.Trim().Length > 0 && !Directory.Exists(baseTilesFolderTB.Text))
@@ -899,6 +935,366 @@ namespace TripleA_Map_Resizer
         private void baseTilesFolderTB_TextChanged(object sender, EventArgs e)
         {
             needToReconstructMapImage = true;
+        }
+
+        private void previewShiftedMapButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!ValidateMapFilesAndFolders())
+                {
+                    MessageBox.Show("Some of the map files and/or folders are invalid, do not exist, or are required and are not entered. The program cannot preview the shifted map until all the files and folders are valid.", "Invalid Files Or Folders");
+                    return;
+                }
+                FileInfo propertiesFile = new FileInfo(propertiesFileTB.Text);
+                if (!propertiesFile.Exists)
+                {
+                    MessageBox.Show("Unable to recreate the map image from the base tiles bacause the map properties file is invalid or does not exist.", "Unable To Recreate Map Image");
+                    return;
+                }
+                Size oldSize = getMapSize(propertiesFile);
+                if (needToReconstructMapImage)
+                {
+                    needToReconstructMapImage = false;
+                    DirectoryInfo baseTilesFolder = new DirectoryInfo(baseTilesFolderTB.Text);
+                    if (!baseTilesFolder.Exists)
+                    {
+                        MessageBox.Show("Unable to recreate the map image from the base tiles bacause the base tiles folder is invalid or does not exist.", "Unable To Recreate Map Image");
+                        return;
+                    }
+                    reconstructedMapImage = ReconstructMapImageUsingBaseTiles(baseTilesFolder, oldSize);
+                }
+                Size shiftingAmount = getShiftingAmount();
+                Size newSize = getShiftedSize(oldSize,shiftingAmount);
+                Bitmap resizedBitmap = new Bitmap(newSize.Width, newSize.Height);
+                Graphics grphx = Graphics.FromImage(resizedBitmap);
+                grphx.DrawImageUnscaled(reconstructedMapImage, new Rectangle(new Point(shiftingAmount.Width,shiftingAmount.Height), newSize));
+                mapPreviewWindow.DisplayImage(resizedBitmap);
+                grphx.Dispose();
+            }
+            catch (FileNotFoundException ex)
+            { MessageBox.Show("The map image file does not exist.", "File Not Found"); }
+            catch (Exception ex) { if (MessageBox.Show("An error occured when trying to preview the shifted map image. Do you want to view the error message?", "Error Previewing Resized Image", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { exceptionViewerWindow.ShowInformationAboutException(ex, true); } }
+            //catch { }
+        }
+
+        private Size getShiftingAmount()
+        {
+            return new Size(Convert.ToInt32(shiftingAmountTextbox.Text.Substring(0, shiftingAmountTextbox.Text.IndexOf(","))), Convert.ToInt32(shiftingAmountTextbox.Text.Substring(shiftingAmountTextbox.Text.IndexOf(",") + 1)));
+        }
+        private Size getShiftedSize(Size oldSize,Size shiftingAmount)
+        {
+            return new Size(oldSize.Width + shiftingAmount.Width, oldSize.Height + shiftingAmount.Height);
+        }
+        public void SetClipboardText(string clipboardText)
+        {
+            Clipboard.SetText(clipboardText);
+        }
+        private void shiftMapFilesButton_Click(object sender, EventArgs e)
+        {
+            if (shiftMapThread == null || !shiftMapThread.IsAlive)
+            {
+                if (!ValidateMapFilesAndFolders())
+                {
+                    MessageBox.Show("Some of the map files and/or folders are invalid, do not exist, or are required and are not entered. The program cannot shift the map until all the files and folders are valid.", "Invalid Files Or Folders");
+                    return;
+                }
+                shiftMapThread = new Thread(shiftMapMethod);
+                shiftMapThread.Start();
+            }
+            else
+            {
+                shiftMapThread.Suspend();
+                if (MessageBox.Show("Are you sure you want to cancel the shifting of the map files and folders?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    shiftMapThread.Resume();
+                    shiftMapThread.Abort();
+                    StartAllowingEditing();
+                }
+                else
+                {
+                    shiftMapThread.Resume();
+                }
+            }
+        }
+        Thread shiftMapThread;
+        public void shiftMapMethod()
+        {
+            try
+            {
+                StopAllowingEditing();
+                FileInfo propertiesFile = new FileInfo(propertiesFileTB.Text);
+                if (!propertiesFile.Exists)
+                {
+                    MessageBox.Show("Unable to recreate the map image from the base tiles bacause the map properties file is invalid or does not exist.", "Unable To Recreate Map Image");
+                    return;
+                }
+                Size oldSize = getMapSize(propertiesFile);
+                if (oldSize.Width == 0 || oldSize.Height == 0)
+                {
+                    MessageBox.Show("Unable to recreate the map image from the base tiles bacause the map properties file is invalid or does not exist.", "Unable To Recreate Map Image");
+                    return;
+                }
+                if (needToReconstructMapImage)
+                {
+                    needToReconstructMapImage = false;
+                    DirectoryInfo baseTilesFolder = new DirectoryInfo(baseTilesFolderTB.Text);
+                    if (!baseTilesFolder.Exists)
+                    {
+                        MessageBox.Show("Unable to recreate the map image from the base tiles bacause the base tiles folder is invalid or does not exist.", "Unable To Recreate Map Image");
+                        return;
+                    }
+                    reconstructedMapImage = ReconstructMapImageUsingBaseTiles(baseTilesFolder, oldSize);
+                }
+                Size shiftingAmount = getShiftingAmount();
+                Size newSize = getShiftedSize(oldSize, shiftingAmount);
+                Bitmap resizedBitmap = ShiftImage(reconstructedMapImage, shiftingAmount);
+                DialogResult result = MessageBox.Show("Do you want to overwrite the original map data with the shifted files and folders?", "Overwrite Map Files", MessageBoxButtons.YesNoCancel);
+                DirectoryInfo mapFolderTW;
+                if (result == DialogResult.Yes)
+                {
+                    mapFolderTW = new DirectoryInfo(mapFolderTB.Text);
+                }
+                else if (result == DialogResult.No)
+                {
+                    mapFolderTW = new DirectoryInfo(mapFolderTB.Text + @"\Shifted Map Files");
+                }
+                else
+                {
+                    StartAllowingEditing();
+                    statusLabel.Text = "Ready...";
+                    progressBar.Value = 0;
+                    return;
+                }
+                DirectoryInfo baseTilesFolderTW = new DirectoryInfo(mapFolderTW.FullName + @"\baseTiles");
+                FileInfo centersFileTW = new FileInfo(mapFolderTW.FullName + @"\centers.txt");
+                FileInfo polygonsFileTW = new FileInfo(mapFolderTW.FullName + @"\polygons.txt");
+                FileInfo propertiesFileTW = new FileInfo(mapFolderTW.FullName + @"\map.properties");
+                DirectoryInfo reliefTilesFolderTW = new DirectoryInfo(mapFolderTW.FullName + @"\reliefTiles");
+                FileInfo imageFileTW = new FileInfo(mapFolderTW.FullName + @"\resizedMapImage.png");
+                FileInfo placementFileTW = new FileInfo(mapFolderTW.FullName + @"\place.txt");
+                FileInfo namePlacementFileTW = new FileInfo(mapFolderTW.FullName + @"\name_place.txt");
+                FileInfo victoryCitiesFileTW = new FileInfo(mapFolderTW.FullName + @"\vc.txt");
+                FileInfo ipcPlacementFileTW = new FileInfo(mapFolderTW.FullName + @"\ipc_place.txt");
+                FileInfo decorationsFileTW = new FileInfo(mapFolderTW.FullName + @"\decorations.txt");
+                FileInfo capitolsFileTW = new FileInfo(mapFolderTW.FullName + @"\capitols.txt");
+                FileInfo kamikazePlacementFileTW = new FileInfo(mapFolderTW.FullName + @"\kamikaze_place.txt");
+
+                Directory.CreateDirectory(mapFolderTW.FullName);
+                if (baseTilesFolderTB.Text.Trim().Length > 0 && Directory.Exists(baseTilesFolderTB.Text))
+                {
+                    statusLabel.Text = "Processing Base Tiles...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    Directory.CreateDirectory(baseTilesFolderTW.FullName);
+                    BreakDownImageAndSaveToDirectory(resizedBitmap, baseTilesFolderTW);
+                }
+                if (reliefTilesFolderTB.Text.Trim().Length > 0 && Directory.Exists(reliefTilesFolderTB.Text))
+                {
+                    statusLabel.Text = "Processing Relief Tiles...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    Directory.CreateDirectory(reliefTilesFolderTW.FullName);
+                    BreakDownImageAndSaveToDirectory(ShiftImage((Bitmap)ReconstructImageUsingReliefTiles(new DirectoryInfo(reliefTilesFolderTB.Text), oldSize), shiftingAmount), reliefTilesFolderTW);
+                }
+                if (centersFileTB.Text.Trim().Length > 0 && File.Exists(centersFileTB.Text))
+                {
+                    statusLabel.Text = "Processing Centers File...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    ShiftPointsAndWriteResults(shiftingAmount, centersFileTB.Text, centersFileTW.Open(FileMode.Create, FileAccess.Write));
+                }
+                if (polygonsFileTB.Text.Trim().Length > 0 && File.Exists(polygonsFileTB.Text))
+                {
+                    statusLabel.Text = "Processing Polygons File...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    ShiftPolygonPointsAndWriteResults(shiftingAmount, polygonsFileTB.Text, polygonsFileTW.Open(FileMode.Create, FileAccess.Write),new Rectangle(0,0,newSize.Width,newSize.Height));
+                }
+                if (propertiesFileTB.Text.Trim().Length > 0 && File.Exists(propertiesFileTB.Text))
+                {
+                    statusLabel.Text = "Processing Properties File...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    UpdateMapSizeAndWriteResults(resizedBitmap.Size, propertiesFileTB.Text, propertiesFileTW.Open(FileMode.Create, FileAccess.Write));
+                }
+                resizedBitmap.Save(imageFileTW.Open(FileMode.Create, FileAccess.Write), System.Drawing.Imaging.ImageFormat.Png);
+                if (placementFileTB.Text.Trim().Length > 0 && File.Exists(placementFileTB.Text))
+                {
+                    statusLabel.Text = "Processing Placements File...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    ShiftPointsAndWriteResults(shiftingAmount, placementFileTB.Text, placementFileTW.Open(FileMode.Create, FileAccess.Write));
+                }
+                if (namePlacementFileTB.Text.Trim().Length > 0 && File.Exists(namePlacementFileTB.Text))
+                {
+                    statusLabel.Text = "Processing Name Placements File...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    ShiftPointsAndWriteResults(shiftingAmount, namePlacementFileTB.Text, namePlacementFileTW.Open(FileMode.Create, FileAccess.Write));
+                }
+                if (vcTB.Text.Trim().Length > 0 && File.Exists(vcTB.Text))
+                {
+                    statusLabel.Text = "Processing Victory Cities File...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    ShiftPointsAndWriteResults(shiftingAmount, vcTB.Text, victoryCitiesFileTW.Open(FileMode.Create, FileAccess.Write));
+                }
+                if (ipcPlacementTB.Text.Trim().Length > 0 && File.Exists(ipcPlacementTB.Text))
+                {
+                    statusLabel.Text = "Processing Ipc Placements File...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    ShiftPointsAndWriteResults(shiftingAmount, ipcPlacementTB.Text, ipcPlacementFileTW.Open(FileMode.Create, FileAccess.Write));
+                }
+                if (decorationsFileTB.Text.Trim().Length > 0 && File.Exists(decorationsFileTB.Text))
+                {
+                    statusLabel.Text = "Processing Decorations File...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    ShiftPointsAndWriteResults(shiftingAmount, decorationsFileTB.Text, decorationsFileTW.Open(FileMode.Create, FileAccess.Write));
+                }
+                if (capitolsFileTB.Text.Trim().Length > 0 && File.Exists(capitolsFileTB.Text))
+                {
+                    statusLabel.Text = "Processing Capitols File...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    ShiftPointsAndWriteResults(shiftingAmount, capitolsFileTB.Text, capitolsFileTW.Open(FileMode.Create, FileAccess.Write));
+                }
+                if (KamikazePlacementFileTB.Text.Trim().Length > 0 && File.Exists(KamikazePlacementFileTB.Text))
+                {
+                    statusLabel.Text = "Processing Kamikaze Placements File...";
+                    statusLabel.Invalidate();
+                    statusStrip1.Update();
+                    ShiftPointsAndWriteResults(shiftingAmount, KamikazePlacementFileTB.Text, kamikazePlacementFileTW.Open(FileMode.Create, FileAccess.Write));
+                }
+            }
+            catch (ThreadAbortException ex) { }
+            catch (FileNotFoundException ex)
+            { MessageBox.Show("One of the files that was going to be processed does not exist. Cancelling resizing operation.", "File Not Found"); }
+            catch (Exception ex) { if (MessageBox.Show("An error occured when trying to shift the map. Do you want to view the error message?", "Error Resizing Map", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { exceptionViewerWindow.ShowInformationAboutException(ex, true); } }
+            StartAllowingEditing();
+            statusLabel.Text = "Ready...";
+            progressBar.Value = 0;
+            MessageBox.Show("The map was successfully shifted.", "Shifting Completed");
+            //catch { }
+        }
+        private Bitmap ShiftImage(Bitmap image, Size shiftingAmount)
+        {
+            Bitmap result = new Bitmap(image.Width + shiftingAmount.Width, image.Height + shiftingAmount.Height);
+            Graphics grphx = Graphics.FromImage(result);
+            grphx.DrawImageUnscaled(image, new Point(shiftingAmount.Width, shiftingAmount.Height));
+            grphx.Dispose();
+            return result;
+        }
+        private void ShiftPointsAndWriteResults(Size shiftingAmount, string readFileLocation, FileStream fileStream)
+        {
+            progressBar.Visible = true;
+            int index = 0;
+            string text = File.ReadAllText(readFileLocation);
+            StringBuilder textBuilder = new StringBuilder();
+            progressBar.Value = 0;
+            progressBar.Minimum = 0;
+            progressBar.Maximum = text.Length;
+            while (index < text.Length)
+            {
+                string remainingTextToProcess = text.Substring(index);
+                int indexOfPointEnd = remainingTextToProcess.IndexOf(")");
+                if (indexOfPointEnd <= 0)
+                {
+                    textBuilder.Append(remainingTextToProcess);
+                    progressBar.Value = progressBar.Maximum;
+                    break;
+                }
+                else
+                {
+                    string cur = text.Substring(index, indexOfPointEnd + 1);
+                    textBuilder.Append(GetShiftedPointText(cur, shiftingAmount));
+                    index += cur.Length;
+                    progressBar.Value = index;
+                }
+            }
+            progressBar.Value = 0;
+            byte[] bytes = Encoding.ASCII.GetBytes(textBuilder.ToString());
+            fileStream.Write(bytes, 0, bytes.Length);
+            fileStream.Close();
+        }
+        private void ShiftPolygonPointsAndWriteResults(Size shiftingAmount, string readFileLocation, FileStream fileStream, Rectangle mapRectangle)
+        {
+            string originalLabelText = statusLabel.Text;
+            string[] lines = File.ReadAllLines(readFileLocation);
+            List<string> territoriesGone = new List<string>();
+            StringBuilder mainTextBuilder = new StringBuilder();
+            progressBar.Visible = false;
+            int length = 0;
+            foreach (string cur in lines)
+                length += cur.Length;
+            int max = length;
+            int value = 0;
+            foreach (string text in lines)
+            {
+                StringBuilder textBuilder = new StringBuilder();
+                int index = 0;
+                List<Point> points = new List<Point>();
+                List<byte> extras = new List<byte>();
+                while (index < text.Length)
+                {
+                    string remainingTextToProcess = text.Substring(index);
+                    int indexOfPointEnd = remainingTextToProcess.IndexOf(")");
+                    if (indexOfPointEnd <= 0)
+                    {
+                        textBuilder.Append(remainingTextToProcess);
+                        statusLabel.Text = String.Concat(originalLabelText, " (", value, "/", max,")");
+                        break;
+                    }
+                    else
+                    {
+                        string cur = text.Substring(index, indexOfPointEnd + 1);
+                        string shiftedPointText = GetShiftedPointText(cur, shiftingAmount);
+                        textBuilder.Append(shiftedPointText);
+                        points.Add(new Point(Convert.ToInt32(shiftedPointText.Substring(shiftedPointText.IndexOf("(") + 1, shiftedPointText.Substring(shiftedPointText.IndexOf("(") + 1).IndexOf(","))), Convert.ToInt32(shiftedPointText.Substring(shiftedPointText.IndexOf(",")+ 1, shiftedPointText.Substring(shiftedPointText.IndexOf(",")+ 1).IndexOf(")")))));
+                        extras.Add(1);
+                        index += cur.Length;
+                        value += cur.Length;
+                        statusLabel.Text = String.Concat(originalLabelText, " (", value, "/", max,")");
+                    }
+                }
+                string textBuilderString = textBuilder.ToString();
+                if (!new GraphicsPath(points.ToArray(),extras.ToArray(),FillMode.Alternate).GetBounds().IntersectsWith(mapRectangle))
+                {   
+                    territoriesGone.Add(textBuilderString.Substring(0, textBuilderString.IndexOf("<")).Trim());
+                }
+                else
+                {
+                    mainTextBuilder.Append(textBuilderString);
+                    mainTextBuilder.Append("\r\n");
+                }
+            }
+            byte[] bytes = Encoding.ASCII.GetBytes(mainTextBuilder.ToString());
+            fileStream.Write(bytes, 0, bytes.Length);
+            fileStream.Close();
+            if(territoriesGone.Count > 0)
+            {
+                StringBuilder builder = new StringBuilder("The following territories were pushed off the map when the map was shifted: ");
+                foreach(string terr in territoriesGone)
+                {
+                    builder.Append(terr);
+                    builder.Append(", ");
+                }
+                builder.Remove(builder.Length - 2,2);
+                builder.Append(" Please remove these territories from the game's xml file, centers file, etc. to make sure the game will run in TripleA.");
+                MessageBox.Show(builder.ToString(), "Territories Shifted Off Map");
+            }
+            progressBar.Visible = true;
+        }
+        private string GetShiftedPointText(string cur, Size shiftingAmount)
+        {
+            indexOfPointStart = cur.IndexOf("(");
+            string prePointPart = cur.Substring(0, indexOfPointStart);
+            string pointPart = cur.Substring(indexOfPointStart + 1, cur.Length - (indexOfPointStart + 2));
+            Point oldPoint = new Point(Convert.ToInt32(pointPart.Substring(0, pointPart.IndexOf(","))), Convert.ToInt32(pointPart.Substring(pointPart.IndexOf(",") + 1)));
+            Point newPoint = new Point((oldPoint.X + shiftingAmount.Width > 0 ? oldPoint.X + shiftingAmount.Width : 0), (oldPoint.Y + shiftingAmount.Height > 0 ? oldPoint.Y + shiftingAmount.Height : 0));
+            return String.Concat(prePointPart, "(", newPoint.X, ", ", newPoint.Y, ")");
         }
     }
 }

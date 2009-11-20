@@ -83,9 +83,19 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.previewShiftedMapButton = new System.Windows.Forms.Button();
+            this.shiftingAmountTextbox = new System.Windows.Forms.TextBox();
+            this.shiftMapFilesButton = new System.Windows.Forms.Button();
+            this.label16 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mapScaleUPDOWN)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -134,7 +144,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(433, 364);
+            this.groupBox1.Size = new System.Drawing.Size(454, 364);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Map Information Files (* Required)";
@@ -510,7 +520,7 @@
             // previewResizedMapBTN
             // 
             this.previewResizedMapBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.previewResizedMapBTN.Location = new System.Drawing.Point(6, 423);
+            this.previewResizedMapBTN.Location = new System.Drawing.Point(6, 53);
             this.previewResizedMapBTN.Name = "previewResizedMapBTN";
             this.previewResizedMapBTN.Size = new System.Drawing.Size(214, 35);
             this.previewResizedMapBTN.TabIndex = 1;
@@ -521,7 +531,7 @@
             // resizeMapFilesBTN
             // 
             this.resizeMapFilesBTN.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.resizeMapFilesBTN.Location = new System.Drawing.Point(225, 423);
+            this.resizeMapFilesBTN.Location = new System.Drawing.Point(225, 53);
             this.resizeMapFilesBTN.Name = "resizeMapFilesBTN";
             this.resizeMapFilesBTN.Size = new System.Drawing.Size(214, 35);
             this.resizeMapFilesBTN.TabIndex = 2;
@@ -533,7 +543,7 @@
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 377);
+            this.radioButton1.Location = new System.Drawing.Point(6, 7);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(120, 17);
             this.radioButton1.TabIndex = 4;
@@ -545,7 +555,7 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(209, 376);
+            this.radioButton2.Location = new System.Drawing.Point(209, 6);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(133, 17);
             this.radioButton2.TabIndex = 4;
@@ -554,7 +564,7 @@
             // 
             // mapScaleUPDOWN
             // 
-            this.mapScaleUPDOWN.Location = new System.Drawing.Point(127, 376);
+            this.mapScaleUPDOWN.Location = new System.Drawing.Point(127, 6);
             this.mapScaleUPDOWN.Maximum = new decimal(new int[] {
             500,
             0,
@@ -577,7 +587,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(191, 379);
+            this.label15.Location = new System.Drawing.Point(191, 9);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(15, 13);
             this.label15.TabIndex = 6;
@@ -587,15 +597,16 @@
             // 
             this.mapSizeTB.AcceptsReturn = true;
             this.mapSizeTB.Enabled = false;
-            this.mapSizeTB.Location = new System.Drawing.Point(341, 375);
+            this.mapSizeTB.Location = new System.Drawing.Point(341, 5);
             this.mapSizeTB.Name = "mapSizeTB";
             this.mapSizeTB.Size = new System.Drawing.Size(98, 20);
             this.mapSizeTB.TabIndex = 7;
+            this.mapSizeTB.Text = "0,0";
             // 
             // useImageSmoothing
             // 
             this.useImageSmoothing.AutoSize = true;
-            this.useImageSmoothing.Location = new System.Drawing.Point(157, 402);
+            this.useImageSmoothing.Location = new System.Drawing.Point(157, 32);
             this.useImageSmoothing.Name = "useImageSmoothing";
             this.useImageSmoothing.Size = new System.Drawing.Size(130, 17);
             this.useImageSmoothing.TabIndex = 8;
@@ -607,9 +618,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel,
             this.progressBar});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 463);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 497);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(445, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(466, 22);
             this.statusStrip1.TabIndex = 9;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -624,28 +635,104 @@
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(250, 16);
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(6, 373);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(454, 118);
+            this.tabControl1.TabIndex = 10;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.Controls.Add(this.radioButton1);
+            this.tabPage1.Controls.Add(this.useImageSmoothing);
+            this.tabPage1.Controls.Add(this.previewResizedMapBTN);
+            this.tabPage1.Controls.Add(this.mapSizeTB);
+            this.tabPage1.Controls.Add(this.resizeMapFilesBTN);
+            this.tabPage1.Controls.Add(this.label15);
+            this.tabPage1.Controls.Add(this.radioButton2);
+            this.tabPage1.Controls.Add(this.mapScaleUPDOWN);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(446, 92);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Map Resizing";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage2.Controls.Add(this.label16);
+            this.tabPage2.Controls.Add(this.previewShiftedMapButton);
+            this.tabPage2.Controls.Add(this.shiftingAmountTextbox);
+            this.tabPage2.Controls.Add(this.shiftMapFilesButton);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(446, 92);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Map Shifting";
+            // 
+            // previewShiftedMapButton
+            // 
+            this.previewShiftedMapButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.previewShiftedMapButton.Location = new System.Drawing.Point(6, 53);
+            this.previewShiftedMapButton.Name = "previewShiftedMapButton";
+            this.previewShiftedMapButton.Size = new System.Drawing.Size(214, 35);
+            this.previewShiftedMapButton.TabIndex = 9;
+            this.previewShiftedMapButton.Text = "Preview Shifted Map";
+            this.previewShiftedMapButton.UseVisualStyleBackColor = true;
+            this.previewShiftedMapButton.Click += new System.EventHandler(this.previewShiftedMapButton_Click);
+            // 
+            // shiftingAmountTextbox
+            // 
+            this.shiftingAmountTextbox.AcceptsReturn = true;
+            this.shiftingAmountTextbox.AcceptsTab = true;
+            this.shiftingAmountTextbox.Location = new System.Drawing.Point(141, 17);
+            this.shiftingAmountTextbox.Name = "shiftingAmountTextbox";
+            this.shiftingAmountTextbox.Size = new System.Drawing.Size(98, 20);
+            this.shiftingAmountTextbox.TabIndex = 15;
+            this.shiftingAmountTextbox.Text = "0,0";
+            // 
+            // shiftMapFilesButton
+            // 
+            this.shiftMapFilesButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.shiftMapFilesButton.Location = new System.Drawing.Point(225, 53);
+            this.shiftMapFilesButton.Name = "shiftMapFilesButton";
+            this.shiftMapFilesButton.Size = new System.Drawing.Size(214, 35);
+            this.shiftMapFilesButton.TabIndex = 10;
+            this.shiftMapFilesButton.Text = "Shift Map Files";
+            this.shiftMapFilesButton.UseVisualStyleBackColor = true;
+            this.shiftMapFilesButton.Click += new System.EventHandler(this.shiftMapFilesButton_Click);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(6, 20);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(129, 13);
+            this.label16.TabIndex = 16;
+            this.label16.Text = "Shifting(Panning) Amount:";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(445, 485);
+            this.ClientSize = new System.Drawing.Size(466, 519);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.useImageSmoothing);
-            this.Controls.Add(this.mapSizeTB);
-            this.Controls.Add(this.label15);
-            this.Controls.Add(this.mapScaleUPDOWN);
-            this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.radioButton1);
-            this.Controls.Add(this.resizeMapFilesBTN);
-            this.Controls.Add(this.previewResizedMapBTN);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "TripleA Map Resizer";
+            this.Text = "TripleA Map Resizer And Shifter";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.groupBox1.ResumeLayout(false);
@@ -653,6 +740,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.mapScaleUPDOWN)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -714,6 +806,13 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.ToolStripProgressBar progressBar;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Button previewShiftedMapButton;
+        private System.Windows.Forms.TextBox shiftingAmountTextbox;
+        private System.Windows.Forms.Button shiftMapFilesButton;
+        private System.Windows.Forms.Label label16;
     }
 }
 

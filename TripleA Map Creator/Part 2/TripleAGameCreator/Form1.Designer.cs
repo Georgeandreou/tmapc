@@ -467,7 +467,7 @@ namespace TripleAGameCreator
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(56, 14);
             this.label43.TabIndex = 4;
-            this.label43.Text = "e. g. \'IPCs\'";
+            this.label43.Text = "e. g. \'PUs\'";
             // 
             // label42
             // 
