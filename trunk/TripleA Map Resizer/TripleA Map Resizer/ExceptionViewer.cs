@@ -14,6 +14,7 @@ namespace TripleA_Map_Resizer
         {
             InitializeComponent();
         }
+        public Main main = null;
         public void ShowInformationAboutException(Exception ex, bool allowContinue)
         {
             exceptionInformationTB.Text = String.Concat(ex.GetType().FullName, ": ", ex.Message, "\r\n", ex.StackTrace);
@@ -36,10 +37,9 @@ namespace TripleA_Map_Resizer
         {
             Environment.Exit(0);
         }
-
         private void copyIntoClipboardBTN_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(exceptionInformationTB.Text);
+            main.Invoke(Delegate.CreateDelegate(typeof(Main.setClipboardTextDel),main,"SetClipboardText"),new object[]{exceptionInformationTB.Text});
         }
 
         private void ExceptionViewer_FormClosing(object sender, FormClosingEventArgs e)

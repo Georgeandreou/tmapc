@@ -1,3 +1,33 @@
+Changes for 1.0.1.2
+
+* Fix problem where the Unit Placements step will add all the territory units without first removing them which causes units to be added more than once. (SDW)
+
+* Make it so the labels in the Unit Placements step show how many units are in the territory. (SDW)
+
+* Add a unit adding window that lets users easily add and remove units from a territory. (SDW)
+
+* Fix problem where Part 1 will not get the correct default max java heap size when the settings file is missing. (SDW)
+
+* Remove the useless "Display Current Units When Entering New Units" setting. (SDW)
+
+* Fix problem where Part 2 will not load the centers file for a map correctly when some of the territory names are numbers and some of the locations are thought to be the beggining of a territory's center location or when multiple centers are found on one line. (SDW)
+
+* Fix big error where if the user loads a map, and then loads another one, some of the values from the first map where kept and added into the second maps information. (SDW)
+ 
+* Fix some problems with the Map Resizer And Shifter. (SDW)
+
+* Add the Map Shifting feature to the Map Resizer utility, and rename the TripleA Map Resizer to TripleA Map Resizer And Shifter. (SDW)
+
+* Make it so that Part 1 starts the map utilities with no more than 10MB less than the memory available. (SDW)
+
+* Fix error that occurs in the Map Resizer Exception Viewer when an error that occured while resizing a map is being viewed and the user presses the "Copy Exception Information Into Clipboard" button. (SDW)
+
+* Fix error where the user is allowed to remove all the unit attachments from a unit. (SDW)
+
+* Fix error where the program will ask for the owner of sea units, even if the user presses cancel when asked to enter the units. (SDW)
+
+* Fix error where the program will remove the units from a territory when the user presses cancel when asked to enter the units. (SDW)
+
 Changes for 1.0.1.1
 
 * Add the "Available Choices" button to the Gameplay Sequences, Technologies, Unit Attachments, and Game Settings steps which displays all the available choices. (SDW)

@@ -56,3 +56,4 @@ C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\T
 C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\TripleA Map Creator\TripleA Map Creator\Part 2\TripleAGameCreator\obj\Debug\TripleA Map Creator.exe.manifest
 C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\TripleA Map Creator\TripleA Map Creator\Part 2\TripleAGameCreator\obj\Debug\TripleA Map Creator.application
 C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\TripleA Map Creator\TripleA Map Creator\Part 2\TripleAGameCreator\obj\Debug\TripleAGameCreator.ExceptionViewer.resources
+C:\Documents and Settings\Stephen\Desktop\Programming\Projects\Online Projects\TripleA Map Creator\TripleA Map Creator\Part 2\TripleAGameCreator\obj\Debug\TripleAGameCreator.UnitAddingWindow.resources
