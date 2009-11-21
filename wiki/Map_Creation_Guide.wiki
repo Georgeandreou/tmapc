@@ -217,7 +217,7 @@ A. Go to each units's attachments tab, and do the following:
 
 63. Proceed to the next step.
 
-64. For each territory, click on the territory and enter the territory's units in the window that appears. (Example: infantry:2,artillery:2,armour:4,fighter:2)
+64. For each territory, click on the territory and enter the territory's units in the window that appears. To do so, use the + and - buttons under each unit's name to add or remove one of that unit. The changes made using the + and - buttons will update the textbox at the bottom which actually sets the units of the territory. If you would like, you can also edit the text in the textbox directly which will cause the unit amounts shown above it to be updated. (Example: infantry:2,artillery:2,armour:4,fighter:2)
 
 65. Proceed to the next step.
 
