@@ -22,7 +22,7 @@ This document is a guide to how to create a map using my program.
 
 4. Make a new folder named 'units' in your maps folder.
 
-5. For every player that is not already included in the TripleA Game's images, do this:
+5. For every player that is not already included in the TripleA Game's images(Americans, Australians, British, Canadians, Chinese, Germans, Italians, Japanese, Neutral, Puppet_States, Russians), do this:
     A. Make an image for the players flag and save it in the 'flags' folder using the player's name as the image name.
 
     B. Make a new folder the same name as the player in the 'units' folder you made earlier.
