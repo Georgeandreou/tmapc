@@ -17,12 +17,14 @@ namespace TripleA_Map_Resizer
         public Main main = null;
         public void ShowInformationAboutException(Exception ex, bool allowContinue)
         {
+            ex = ex.GetBaseException();
             exceptionInformationTB.Text = String.Concat(ex.GetType().FullName, ": ", ex.Message, "\r\n", ex.StackTrace);
             ContinueRunningBTN.Enabled = allowContinue;
             this.ShowDialog();
         }
         public void ShowInformationAboutException(Exception ex, bool allowContinue, IWin32Window parent)
         {
+            ex = ex.GetBaseException();
             exceptionInformationTB.Text = String.Concat(ex.GetType().FullName, ": ", ex.Message, "\r\n", ex.StackTrace);
             ContinueRunningBTN.Enabled = allowContinue;
             this.ShowDialog(parent);
@@ -39,7 +41,14 @@ namespace TripleA_Map_Resizer
         }
         private void copyIntoClipboardBTN_Click(object sender, EventArgs e)
         {
-            main.Invoke(Delegate.CreateDelegate(typeof(Main.setClipboardTextDel),main,"SetClipboardText"),new object[]{exceptionInformationTB.Text});
+            try
+            {
+                Clipboard.SetText(exceptionInformationTB.Text);
+            }
+            catch
+            {
+                main.Invoke(Delegate.CreateDelegate(typeof(Main.setClipboardTextDel), main, "SetClipboardText"), new object[] { exceptionInformationTB.Text });
+            }
         }
 
         private void ExceptionViewer_FormClosing(object sender, FormClosingEventArgs e)

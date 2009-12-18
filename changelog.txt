@@ -1,3 +1,121 @@
+Changes for 1.0.1.3
+
+* Fix problem where Part 2 will not finish saving a map if there is an error saving the canals. (SDW)
+
+* Fix problem where Part 2 will think that the user loaded a map even if they canceled the loading. (SDW)
+
+* Fix error that occurs in Part 1 when the user tries to move away from the 'Relief Tiles' step and the relief tiles folder doesn't exist. (SDW)
+
+* Update the map utilities instruction in Part 1. (SDW)
+ 
+* Update the in-program help in Part 2. (SDW)
+
+* Update the readme, map creation guide, and mod creation guide files. (SDW)
+
+* Rename the 'In-Game Settings' step to 'Game Settings'. (SDW)
+
+* Make it so that Part 2 disables the Back or Next buttons when at the first or last step. (SDW)
+
+* Make it so that the Game Settings step in Part 2 does not enable the Min. N. and Max. N. textboxes unless the Value textbox is a number. (SDW)  
+
+* Fix error that occurs when the user tries to load the centers for some maps such as the 'big_world' map in TripleA 1.0.0.3. (SDW)
+
+* Fix problem where many of the file open dialogs in Part 2 are not displayed over the main window. (SDW)
+
+* Fix problem where the Automatic Connection Finder will not set the window up for another scan when an error occurs. (SDW)
+
+* Fix error that occurs when the Automatic Connection Finder encounters an empty line. (SDW)
+
+* Update the color for canal land territories so that it is a different color than victory cities are shown as. (SDW)
+
+* Make sure that Part 2 uses lower case for all program-added units, etc.
+
+* Fix some window handle problems with the unit adding window. (SDW)
+
+* Fix multiple problems with the unit placements in Part 2. (SDW)
+
+* Fix problem where some of the combo-box's are not created with the correct choices shown. (SDW)
+
+* Fix problem where Part 2 will not save the production frontiers for the countries correctly. (SDW)
+
+* Fix error that occurs in Part 2 when the user removes all the units from a production frontier and then tries to add a unit. (SDW)
+
+* Make it so that the program draws the connection lines using anti-aliasing. (SDW)
+
+* Fix the double-buffered graphics. (SDW)
+
+* Fix error that occurs when the user tries to add a connection that already exists. (SDW)
+
+* Make it so that the initial size for Part 2 is the current Minimum Size and update all the controls in it to reflect the size change. (SDW)
+
+* Add a menu-strip to Part 2 containing a file menu, a navigate menu, an Information menu, and a help menu. (SDW)
+
+* Fix problem where html notes are not saved correctly. (SDW)
+
+* Fix problem where Part 2 sets the incorrect color for neutral land territories. (SDW)
+
+* Make it so that Part 2 uses an XML Reader instead of reading the text directly. (SDW)
+
+* Fix problem where the exception viewer doesn't always show the base exception when an error occurs. (SDW)
+
+* Change the extension of the settings file to .txt and update the programs to find it and write to it using the new extension. (SDW)
+
+* Fix problem where Part 2 will stop the running of the step set-up code instead of the step data applying code and vice-versa. (SDW)
+
+* Fix problem where Part 1 will remove the contents of the place file for the map being used when the user clicks the "Run Auto-Placement-Finder" button. (SDW)
+
+* Fix problem where Part 2 will not load any game settings that are not all on one line. (SDW)
+
+* Fix problem where Part 2 will save xml files incorrectly when some of the player sequences max run amount are set to 0. (SDW)
+
+* Fix error that occurs when the user tries to load a map that contains a space between the attribute name and the " in xml nodes. (SDW)
+
+* Fix error that occurs when the map creator tries to load a map with industrial technology production rules. (SDW)
+
+* Fix problem where the map loading method sometimes shows the incorrect error location to the user. (SDW)
+
+* Make it so that the ownership colors are picked from a larger number of colors. (SDW)
+
+* Make it so that the Unit Placements and Territory Productions steps in Part 2 use the same colors as in the Territory Ownership step. (SDW)
+
+* Fix problem where the program will still change a territory's units even when the user presses cancel when asked for the unit's owner. (SDW)
+
+* Fix problem where the TripleA Map Resizer And Shifter will crash unnecessarily if some of the 'required' files and folders are missing. (SDW)
+
+* Make it so that the TripleA Map Resizer And Shifter allows users to leave some of the required files and folders blank and still shift or resize the map by asking if the user wants the program to proceed anyway. (SDW)
+
+* Fix problem where users are able to change the tab page when the Map Resizer And Shifter is shifting or resizing a map. (SDW)
+
+* Make it so that the TripleA Map Resizer And Shifter displays the percent done with processing the map when the polygons file or the centers file is being processed. (SDW)
+
+* Use GC collecting with repetitive code in the TripleA Map Resizer And Shifter. (SDW)
+
+* Add a note that tells users in Part 1 which players and units are added to the TripleA images folder initially. (SDW)
+
+* Fix problem where Part 2 loads all the game sequences including the initDelegate and the endRound delegate which are not supposed to be loaded into the program. (SDW)
+
+* Fix problem where Part 2 will auto-fill the player sequences by naming the bid placement phases as the country name plus "PlaceBid" instead of the country name plus "BidPlace". (SDW)
+
+* Fix problem where the program will auto-fill incorrectly in the player delegates step by not placing all the bid sequences at the start. (SDW)
+
+* Make it so that it is obvious that the map properties do not have to be entered in Part 1 unless it doesn't exist yet. (SDW)
+
+* Fix incorrect message that is displayed when the user doesn't supply all the information in the Map Properties step in Part 1. (SDW)
+
+* Fix problem where the color choosers in Part 1 will return the selected color as the color name instead of the HTML six-digit color number. (SDW)
+
+* Make it so that Part 1 disables the back and next buttons when there are none before or after a step. (SDW)
+
+* Fix some threading problems with the TripleA Map Resizer And Shifter. (SDW)
+
+* Make the Unit Adding Window use layout suspending and resuming while adding unit panels. (SDW)
+
+* Update the readme.txt file to mention the map shifting feature. (SDW)
+
+* Update the Map Creation Guide to include information about the unit adding window and how to use it. (SDW)
+
+* Update the in-program help in Part 2 to include information about the unit adding window and how to use it. (SDW)
+
 Changes for 1.0.1.2
 
 * Fix problem where the Unit Placements step will add all the territory units without first removing them which causes units to be added more than once. (SDW)

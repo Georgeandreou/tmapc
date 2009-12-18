@@ -69,8 +69,8 @@ namespace TripleAGameCreator
                 territories.Clear();
                 connections.Clear();
                 string[] full;
-                Step1Info.LoadedFile.Replace("/",@"\");
-                Step1Info.MapImageLocation.Replace("/",@"\");
+                Step1Info.LoadedFile.Replace("/", @"\");
+                Step1Info.MapImageLocation.Replace("/", @"\");
                 if (Step1Info.MapImageLocation.Contains(@"\"))
                 {
                     if (File.Exists(Step1Info.MapImageLocation.Substring(0, Step1Info.MapImageLocation.LastIndexOf(@"\")) + "/polygons.txt"))
@@ -86,7 +86,7 @@ namespace TripleAGameCreator
                             OpenFileDialog open = new OpenFileDialog();
                             open.Title = "Unable to locate the needed polygons file. Please select the 'polygons.txt' file for the map.";
                             open.Filter = "Text Files|*.txt|All files (*.*)|*.*";
-                            if (open.ShowDialog() != DialogResult.Cancel)
+                            if (open.ShowDialog(this) != DialogResult.Cancel)
                                 full = File.ReadAllLines(open.FileName);
                             else
                             {
@@ -112,11 +112,11 @@ namespace TripleAGameCreator
                             OpenFileDialog open = new OpenFileDialog();
                             open.Title = "Unable to locate the needed polygons file. Please select the 'polygons.txt' file for the map.";
                             open.Filter = "Text Files|*.txt|All files (*.*)|*.*";
-                            if (open.ShowDialog() != DialogResult.Cancel)
+                            if (open.ShowDialog(this) != DialogResult.Cancel)
                                 full = File.ReadAllLines(open.FileName);
                             else
                             {
-                                MessageBox.Show(this,"You need to specify a polygons file for the program to be able to find the connectons.", "Unable To Find Connections");
+                                MessageBox.Show(this, "You need to specify a polygons file for the program to be able to find the connectons.", "Unable To Find Connections");
                                 this.Close();
                                 return;
                             }
@@ -128,7 +128,7 @@ namespace TripleAGameCreator
                     OpenFileDialog open = new OpenFileDialog();
                     open.Title = "Unable to locate the needed polygons file. Please select the 'polygons.txt' file for the map.";
                     open.Filter = "Text Files|*.txt|All files (*.*)|*.*";
-                    if (open.ShowDialog() != DialogResult.Cancel)
+                    if (open.ShowDialog(this) != DialogResult.Cancel)
                         full = File.ReadAllLines(open.FileName);
                     else
                     {
@@ -137,9 +137,11 @@ namespace TripleAGameCreator
                         return;
                     }
                 }
-                int gcCollectCountdown = 25;
+                int gcCollectCountdown = 35;
                 foreach (string cur in full)
                 {
+                    if (!cur.Contains("<"))
+                        continue;
                     string tName = cur.Substring(0, cur.IndexOf("<")).Trim();
                     if (Step2Info.territories.ContainsKey(tName))
                     {
@@ -173,7 +175,7 @@ namespace TripleAGameCreator
                             if (gcCollectCountdown <= 0)
                             {
                                 GC.Collect();
-                                gcCollectCountdown = 25;
+                                gcCollectCountdown = 35;
                             }
                         }
                         territories.Add(t);
@@ -183,12 +185,12 @@ namespace TripleAGameCreator
                 toolStripProgressBar1.Minimum = 0;
                 toolStripProgressBar1.Maximum = territories.Count;
                 bool br = false;
-                gcCollectCountdown = 25;
+                gcCollectCountdown = 35;
                 while (territories.Count > 0)
                 {
                     Territory cur = territories[0];
                     toolStripProgressBar1.Value++;
-                    this.Text = String.Concat("Automatic Connection Finder - Processing ",toolStripProgressBar1.Value, " Of ", toolStripProgressBar1.Maximum);
+                    this.Text = String.Concat("Automatic Connection Finder - Processing ", toolStripProgressBar1.Value, " Of ", toolStripProgressBar1.Maximum);
                     if (increaseAccuracy.Checked && !addPointsBeforeRunning.Checked && (!onlyAddPointsToSeaZones.Checked || Step2Info.territories[cur.name].IsWater))
                     {
                         cur.points = FillInPointsBetweenListOfPoints(cur.points);
@@ -196,11 +198,11 @@ namespace TripleAGameCreator
                         if (gcCollectCountdown <= 0)
                         {
                             GC.Collect();
-                            gcCollectCountdown = 25;
+                            gcCollectCountdown = 35;
                         }
                     }
                     int index = 0;
-                    while(index < territories.Count)
+                    while (index < territories.Count)
                     {
                         Territory cur2 = territories[index];
                         if (cur2.name != cur.name)
@@ -212,7 +214,7 @@ namespace TripleAGameCreator
                                 if (cur2.polygonBounds.X == -1 && cur2.polygonBounds.Y == -1 && cur2.polygonBounds.Width == 1 && cur2.polygonBounds.Height == 1)
                                     cur2.polygonBounds = Inflate(Rectangle.Round(new GraphicsPath(cur2.points.ToArray(), getPolygonBytes(cur2.points)).GetBounds()), (int)numericUpDown1.Value);
                             }
-                            if(!checkPolygonBounds.Checked || cur.polygonBounds.IntersectsWith(cur2.polygonBounds))
+                            if (!checkPolygonBounds.Checked || cur.polygonBounds.IntersectsWith(cur2.polygonBounds))
                             {
                                 foreach (Point p in cur.points)
                                 {
@@ -248,7 +250,11 @@ namespace TripleAGameCreator
                 groupBox1.Enabled = true;
                 this.Close();
             }
-            catch (Exception ex) { if (connections.Count == 0 && !(ex is ThreadAbortException)) if (MessageBox.Show("An error occured trying to find the connections. Make sure the polygons file for the map has no errors in it. (Like misspelling a territory name.) Do you want to view the error message", "Error Occured", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { exceptionViewerWindow.ShowInformationAboutException(ex, true); } }
+            catch (ThreadAbortException ex)
+            {
+                return;
+            }
+            catch (Exception ex) { if (connections.Count == 0) if (MessageBox.Show("An error occured trying to find the connections. Make sure the polygons file for the map has no errors in it. (Like misspelling a territory name.) Do you want to view the error message", "Error Occured", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { SetUpForAnotherScan(); exceptionViewerWindow.ShowInformationAboutException(ex, true); } }
         }
         ExceptionViewer exceptionViewerWindow = new ExceptionViewer();
         private byte[] getPolygonBytes(List<Point> list)

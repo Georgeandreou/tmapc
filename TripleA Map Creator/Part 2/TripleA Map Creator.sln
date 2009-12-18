@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C# Express 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripleAGameCreator", "TripleAGameCreator\TripleAGameCreator.csproj", "{A936E3F5-5584-4568-A606-F1A3CAEC6484}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripleA Map Creator", "TripleAGameCreator\TripleA Map Creator.csproj", "{A936E3F5-5584-4568-A606-F1A3CAEC6484}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

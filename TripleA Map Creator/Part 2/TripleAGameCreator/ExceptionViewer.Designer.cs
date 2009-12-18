@@ -52,6 +52,7 @@ namespace TripleAGameCreator
             this.exceptionInformationTB.Multiline = true;
             this.exceptionInformationTB.Name = "exceptionInformationTB";
             this.exceptionInformationTB.ReadOnly = true;
+            this.exceptionInformationTB.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.exceptionInformationTB.Size = new System.Drawing.Size(430, 193);
             this.exceptionInformationTB.TabIndex = 1;
             // 
@@ -97,10 +98,10 @@ namespace TripleAGameCreator
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "ExceptionViewer";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.Name = "ExceptionViewer";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TripleA Map Creator Exception Viewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ExceptionViewer_FormClosing);
             this.ResumeLayout(false);

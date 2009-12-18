@@ -16,12 +16,14 @@ namespace TripleAGameCreator
         }
         public void ShowInformationAboutException(Exception ex,bool allowContinue)
         {
+            ex = ex.GetBaseException();
             exceptionInformationTB.Text = String.Concat(ex.GetType().FullName,": ",ex.Message,"\r\n",ex.StackTrace);
             ContinueRunningBTN.Enabled = allowContinue;
             this.ShowDialog();
         }
         public void ShowInformationAboutException(Exception ex, bool allowContinue,IWin32Window parent)
         {
+            ex = ex.GetBaseException();
             exceptionInformationTB.Text = String.Concat(ex.GetType().FullName, ": ", ex.Message, "\r\n", ex.StackTrace);
             ContinueRunningBTN.Enabled = allowContinue;
             this.ShowDialog(parent);
