@@ -6,7 +6,7 @@ This page is a guide to creating a mod from an existing xml file.
 
 1. Open the second part of the map creator.
 
-2. Press the 'Load' button in the bottom-left.
+2. Select the 'Load Map Xml' in the 'File' menu.
 
 3. Locate the xml file to base your mod off of.
 
@@ -14,10 +14,8 @@ This page is a guide to creating a mod from an existing xml file.
 
 5. If you have access to the map's image, locate it and continue.
 
-6. The program will now load all the contents of the xml file into the program.
+The program will now load all the contents of the xml file into the program... 
 
-7. Go to each step that you want to change something on and edit the information.
+6. Go to each step that has information you want to change and edit the information.
 
-8. Click the 'Save' button in the bottom-left and select where you want to save the edited xml file.
-
-9. Click 'Save' and you're done!
+7. Save the edited xml file by selecting the 'Save Map Xml' in the 'File' menu.
