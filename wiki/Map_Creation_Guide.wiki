@@ -15,7 +15,7 @@ This page is a guide to how to create a map using the map creator.
     C. Draw all the border lines for the territories using the color black. (It must be completely black to work: #000000)
  
     D. Use the paint can or fill tool and fill in all the sea territories with the color blue. (You can actually use any color you want, but blue is the only one that makes sense.)
-    E. Save the image you created in your map's folder. (The one you made earlier.)
+    E. {{{Save the image you created in your map's folder}}}. (The one you made earlier.)
 
 3. Create a folder named 'flags' in your maps folder.
 
