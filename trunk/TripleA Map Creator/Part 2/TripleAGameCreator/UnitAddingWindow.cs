@@ -36,11 +36,17 @@ namespace TripleAGameCreator
         private void UpdateUnitPanels(Dictionary<string,Unit>.ValueCollection units)
         {
             nextLocation = new Point(0,0);
+            v_unitsPanelsHolderPanel.SuspendLayout();
+            foreach (Control cur in v_unitsPanelsHolderPanel.Controls)
+            {
+                System.Windows.Forms.NativeWindow.FromHandle(cur.Handle).DestroyHandle();
+            }
             v_unitsPanelsHolderPanel.Controls.Clear();
             foreach (Unit unit in units)
             {
                 AddUnitPanel(CreateUnitPanel(unit));
             }
+            v_unitsPanelsHolderPanel.ResumeLayout();
         }
         private void AddUnitPanel(Panel panel)
         {
@@ -70,9 +76,49 @@ namespace TripleAGameCreator
             {
                 string afterName = resultText.Substring(resultText.IndexOf(unit.Name) + unit.Name.Length);
                 if (afterName.Contains(","))
-                    unitAmountNC.Text = afterName.Substring(afterName.IndexOf(":") + 1, afterName.Substring(afterName.IndexOf(":") + 1).IndexOf(",")).Trim();
+                {
+                    string num = afterName.Substring(afterName.IndexOf(":") + 1, afterName.Substring(afterName.IndexOf(":") + 1).IndexOf(",")).Trim();
+                    try
+                    {
+                        unitAmountNC.Value = Convert.ToInt32(num);
+                    }
+                    catch (OverflowException ex) { unitAmountNC.Value = unitAmountNC.Maximum; }
+                    catch (ArgumentOutOfRangeException ex) 
+                    {
+                        try
+                        {
+                            if (Convert.ToDouble(num) > 0)
+                                unitAmountNC.Value = unitAmountNC.Maximum;
+                            else
+                                unitAmountNC.Text = "0";
+                        }
+                        catch { unitAmountNC.Text = "0"; }
+                    }
+                    catch (FormatException ex) { unitAmountNC.Text = "0"; }
+                    catch (ArgumentException ex) { unitAmountNC.Text = "0"; }
+                }
                 else
-                    unitAmountNC.Text = afterName.Substring(afterName.IndexOf(":") + 1).Trim();
+                {
+                    string num = unitAmountNC.Text = afterName.Substring(afterName.IndexOf(":") + 1).Trim();
+                    try
+                    {
+                        unitAmountNC.Value = Convert.ToInt32(num);
+                    }
+                    catch (OverflowException ex) { unitAmountNC.Value = unitAmountNC.Maximum; }
+                    catch (ArgumentOutOfRangeException ex)
+                    {
+                        try
+                        {
+                            if (Convert.ToDouble(num) > 0)
+                                unitAmountNC.Value = unitAmountNC.Maximum;
+                            else
+                                unitAmountNC.Text = "0";
+                        }
+                        catch { unitAmountNC.Text = "0"; }
+                    }
+                    catch (FormatException ex) { unitAmountNC.Text = "0"; }
+                    catch (ArgumentException ex) { unitAmountNC.Text = "0"; }
+                }
             }
             else
                 unitAmountNC.Value = 0;

@@ -35,27 +35,29 @@ namespace TripleA_Game_Creator
             this.button5 = new System.Windows.Forms.Button();
             this.label19 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.button12 = new System.Windows.Forms.Button();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
+            this.v_mapPropertiesInformationGroupBox = new System.Windows.Forms.GroupBox();
+            this.v_mapPropertiesPanel = new System.Windows.Forms.Panel();
             this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.label90 = new System.Windows.Forms.Label();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button8 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.button12 = new System.Windows.Forms.Button();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.button14 = new System.Windows.Forms.Button();
@@ -90,8 +92,8 @@ namespace TripleA_Game_Creator
             this.button4 = new System.Windows.Forms.Button();
             this.label28 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.v_backButton = new System.Windows.Forms.Button();
+            this.v_nextButton = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -102,10 +104,12 @@ namespace TripleA_Game_Creator
             this.label1 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label27 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.v_mapPropertiesInformationGroupBox.SuspendLayout();
+            this.v_mapPropertiesPanel.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
@@ -158,9 +162,9 @@ namespace TripleA_Game_Creator
             this.button5.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control;
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.button5.Location = new System.Drawing.Point(29, 42);
+            this.button5.Location = new System.Drawing.Point(6, 45);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(522, 381);
+            this.button5.Size = new System.Drawing.Size(569, 386);
             this.button5.TabIndex = 2;
             this.button5.Text = resources.GetString("button5.Text");
             this.button5.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -181,27 +185,10 @@ namespace TripleA_Game_Creator
             this.tabPage2.AutoScroll = true;
             this.tabPage2.BackColor = System.Drawing.SystemColors.Control;
             this.tabPage2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.tabPage2.Controls.Add(this.label26);
-            this.tabPage2.Controls.Add(this.label25);
-            this.tabPage2.Controls.Add(this.comboBox2);
-            this.tabPage2.Controls.Add(this.comboBox1);
-            this.tabPage2.Controls.Add(this.panel4);
+            this.tabPage2.Controls.Add(this.v_mapPropertiesInformationGroupBox);
             this.tabPage2.Controls.Add(this.button12);
-            this.tabPage2.Controls.Add(this.textBox7);
-            this.tabPage2.Controls.Add(this.textBox4);
             this.tabPage2.Controls.Add(this.textBox3);
-            this.tabPage2.Controls.Add(this.label15);
-            this.tabPage2.Controls.Add(this.label13);
-            this.tabPage2.Controls.Add(this.label14);
-            this.tabPage2.Controls.Add(this.label12);
             this.tabPage2.Controls.Add(this.label11);
-            this.tabPage2.Controls.Add(this.button3);
-            this.tabPage2.Controls.Add(this.button8);
-            this.tabPage2.Controls.Add(this.button11);
-            this.tabPage2.Controls.Add(this.label10);
-            this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.textBox1);
-            this.tabPage2.Controls.Add(this.textBox2);
             this.tabPage2.Controls.Add(this.label20);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -210,23 +197,133 @@ namespace TripleA_Game_Creator
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             // 
+            // v_mapPropertiesInformationGroupBox
+            // 
+            this.v_mapPropertiesInformationGroupBox.Controls.Add(this.v_mapPropertiesPanel);
+            this.v_mapPropertiesInformationGroupBox.Location = new System.Drawing.Point(8, 78);
+            this.v_mapPropertiesInformationGroupBox.Name = "v_mapPropertiesInformationGroupBox";
+            this.v_mapPropertiesInformationGroupBox.Size = new System.Drawing.Size(563, 362);
+            this.v_mapPropertiesInformationGroupBox.TabIndex = 13;
+            this.v_mapPropertiesInformationGroupBox.TabStop = false;
+            this.v_mapPropertiesInformationGroupBox.Text = "Map Properties Information (Not Required If The Map Already Contains A Map Proper" +
+                "ties File)";
+            // 
+            // v_mapPropertiesPanel
+            // 
+            this.v_mapPropertiesPanel.AutoScroll = true;
+            this.v_mapPropertiesPanel.Controls.Add(this.label12);
+            this.v_mapPropertiesPanel.Controls.Add(this.label10);
+            this.v_mapPropertiesPanel.Controls.Add(this.label26);
+            this.v_mapPropertiesPanel.Controls.Add(this.label15);
+            this.v_mapPropertiesPanel.Controls.Add(this.textBox2);
+            this.v_mapPropertiesPanel.Controls.Add(this.label13);
+            this.v_mapPropertiesPanel.Controls.Add(this.label25);
+            this.v_mapPropertiesPanel.Controls.Add(this.label14);
+            this.v_mapPropertiesPanel.Controls.Add(this.textBox1);
+            this.v_mapPropertiesPanel.Controls.Add(this.textBox4);
+            this.v_mapPropertiesPanel.Controls.Add(this.comboBox2);
+            this.v_mapPropertiesPanel.Controls.Add(this.button3);
+            this.v_mapPropertiesPanel.Controls.Add(this.label90);
+            this.v_mapPropertiesPanel.Controls.Add(this.textBox7);
+            this.v_mapPropertiesPanel.Controls.Add(this.comboBox1);
+            this.v_mapPropertiesPanel.Controls.Add(this.button8);
+            this.v_mapPropertiesPanel.Controls.Add(this.button11);
+            this.v_mapPropertiesPanel.Controls.Add(this.panel4);
+            this.v_mapPropertiesPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.v_mapPropertiesPanel.Location = new System.Drawing.Point(3, 16);
+            this.v_mapPropertiesPanel.Name = "v_mapPropertiesPanel";
+            this.v_mapPropertiesPanel.Size = new System.Drawing.Size(557, 343);
+            this.v_mapPropertiesPanel.TabIndex = 13;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(63, 12);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(91, 13);
+            this.label12.TabIndex = 7;
+            this.label12.Text = "Initial Units Scale:";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(272, 146);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(63, 13);
+            this.label10.TabIndex = 4;
+            this.label10.Text = "Player Color";
+            this.toolTip1.SetToolTip(this.label10, "This column is where you enter the color for the player. It has to be a six digit" +
+                    " number like: #fbaa29");
+            // 
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(395, 98);
+            this.label26.Location = new System.Drawing.Point(388, 40);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(82, 13);
             this.label26.TabIndex = 12;
             this.label26.Text = "e. g. 2300,1250";
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(64, 98);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(65, 13);
+            this.label15.TabIndex = 7;
+            this.label15.Text = "Scroll Wrap:";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(257, 174);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(100, 20);
+            this.textBox2.TabIndex = 3;
+            this.textBox2.DoubleClick += new System.EventHandler(this.textBox2_DoubleClick);
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(64, 70);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(84, 13);
+            this.label13.TabIndex = 7;
+            this.label13.Text = "Has Relief Tiles:";
+            // 
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(395, 74);
+            this.label25.Location = new System.Drawing.Point(388, 14);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(64, 13);
             this.label25.TabIndex = 12;
             this.label25.Text = "e. g. 0.5625";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(64, 40);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(54, 13);
+            this.label14.TabIndex = 7;
+            this.label14.Text = "Map Size:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(96, 174);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(137, 20);
+            this.textBox1.TabIndex = 3;
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(160, 9);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(222, 20);
+            this.textBox4.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.textBox4, "This is where you enter the units scale amount. It has to be one of the menu opti" +
+                    "ons on the game like 0.5625, 0.75, or 1.00.");
             // 
             // comboBox2
             // 
@@ -235,120 +332,16 @@ namespace TripleA_Game_Creator
             this.comboBox2.Items.AddRange(new object[] {
             "True",
             "False"});
-            this.comboBox2.Location = new System.Drawing.Point(220, 147);
+            this.comboBox2.Location = new System.Drawing.Point(160, 93);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(88, 21);
+            this.comboBox2.Size = new System.Drawing.Size(109, 21);
             this.comboBox2.TabIndex = 11;
             this.toolTip1.SetToolTip(this.comboBox2, "Set this to true if you want the map to wrap-around when scrolling.");
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "True",
-            "False"});
-            this.comboBox1.Location = new System.Drawing.Point(220, 121);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(88, 21);
-            this.comboBox1.TabIndex = 11;
-            this.toolTip1.SetToolTip(this.comboBox1, "Set this to true if the map has relief tiles.");
-            // 
-            // panel4
-            // 
-            this.panel4.BackColor = System.Drawing.SystemColors.Control;
-            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel4.Location = new System.Drawing.Point(62, 177);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(450, 4);
-            this.panel4.TabIndex = 10;
-            // 
-            // button12
-            // 
-            this.button12.Location = new System.Drawing.Point(395, 41);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(75, 22);
-            this.button12.TabIndex = 9;
-            this.button12.Text = "Browse";
-            this.toolTip1.SetToolTip(this.button12, "Use this button to browse for the map folder.");
-            this.button12.UseVisualStyleBackColor = true;
-            this.button12.Click += new System.EventHandler(this.button12_Click);
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(220, 95);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(169, 20);
-            this.textBox7.TabIndex = 8;
-            this.toolTip1.SetToolTip(this.textBox7, "This is where you enter the size of the map image.");
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(220, 69);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(169, 20);
-            this.textBox4.TabIndex = 8;
-            this.toolTip1.SetToolTip(this.textBox4, "This is where you enter the units scale amount. It has to be one of the menu opti" +
-                    "ons on the game like 0.5625, 0.75, or 1.00.");
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(220, 41);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(169, 20);
-            this.textBox3.TabIndex = 8;
-            this.toolTip1.SetToolTip(this.textBox3, "This is where you enter the map folder containing all the units images the flag i" +
-                    "mages and the map image file.");
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(112, 152);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(65, 13);
-            this.label15.TabIndex = 7;
-            this.label15.Text = "Scroll Wrap:";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(112, 126);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(84, 13);
-            this.label13.TabIndex = 7;
-            this.label13.Text = "Has Relief Tiles:";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(112, 98);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(54, 13);
-            this.label14.TabIndex = 7;
-            this.label14.Text = "Map Size:";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(111, 72);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(91, 13);
-            this.label12.TabIndex = 7;
-            this.label12.Text = "Initial Units Scale:";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(111, 44);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(63, 13);
-            this.label11.TabIndex = 7;
-            this.label11.Text = "Map Folder:";
             // 
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(370, 226);
+            this.button3.Location = new System.Drawing.Point(363, 172);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(30, 23);
             this.button3.TabIndex = 6;
@@ -357,9 +350,40 @@ namespace TripleA_Game_Creator
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
+            // label90
+            // 
+            this.label90.AutoSize = true;
+            this.label90.Location = new System.Drawing.Point(129, 146);
+            this.label90.Name = "label90";
+            this.label90.Size = new System.Drawing.Size(67, 13);
+            this.label90.TabIndex = 4;
+            this.label90.Text = "Player Name";
+            this.toolTip1.SetToolTip(this.label90, "This column is where you enter the player name.");
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(160, 37);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(222, 20);
+            this.textBox7.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.textBox7, "This is where you enter the size of the map image.");
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "True",
+            "False"});
+            this.comboBox1.Location = new System.Drawing.Point(160, 65);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(109, 21);
+            this.comboBox1.TabIndex = 11;
+            this.toolTip1.SetToolTip(this.comboBox1, "Set this to true if the map has relief tiles.");
+            // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(406, 226);
+            this.button8.Location = new System.Drawing.Point(399, 172);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(71, 23);
             this.button8.TabIndex = 6;
@@ -370,7 +394,7 @@ namespace TripleA_Game_Creator
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(103, 255);
+            this.button11.Location = new System.Drawing.Point(96, 201);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(85, 23);
             this.button11.TabIndex = 5;
@@ -379,42 +403,43 @@ namespace TripleA_Game_Creator
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.button6_Click);
             // 
-            // label10
+            // panel4
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(279, 200);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(63, 13);
-            this.label10.TabIndex = 4;
-            this.label10.Text = "Player Color";
-            this.toolTip1.SetToolTip(this.label10, "This column is where you enter the color for the player. It has to be a six digit" +
-                    " number like: #fbaa29");
+            this.panel4.BackColor = System.Drawing.SystemColors.Control;
+            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel4.Location = new System.Drawing.Point(55, 123);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(450, 4);
+            this.panel4.TabIndex = 10;
             // 
-            // label9
+            // button12
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(136, 200);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(67, 13);
-            this.label9.TabIndex = 4;
-            this.label9.Text = "Player Name";
-            this.toolTip1.SetToolTip(this.label9, "This column is where you enter the player name.");
+            this.button12.Location = new System.Drawing.Point(496, 39);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(75, 22);
+            this.button12.TabIndex = 9;
+            this.button12.Text = "Browse";
+            this.toolTip1.SetToolTip(this.button12, "Use this button to browse for the map folder.");
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
-            // textBox1
+            // textBox3
             // 
-            this.textBox1.Location = new System.Drawing.Point(103, 228);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(137, 20);
-            this.textBox1.TabIndex = 3;
+            this.textBox3.Location = new System.Drawing.Point(77, 40);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(413, 20);
+            this.textBox3.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.textBox3, "This is where you enter the map folder containing all the units images the flag i" +
+                    "mages and the map image file.");
             // 
-            // textBox2
+            // label11
             // 
-            this.textBox2.Location = new System.Drawing.Point(264, 228);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 3;
-            this.textBox2.DoubleClick += new System.EventHandler(this.textBox2_DoubleClick);
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(8, 43);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(63, 13);
+            this.label11.TabIndex = 7;
+            this.label11.Text = "Map Folder:";
             // 
             // label20
             // 
@@ -547,7 +572,7 @@ namespace TripleA_Game_Creator
             this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.Location = new System.Drawing.Point(34, 51);
             this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(516, 299);
+            this.button9.Size = new System.Drawing.Size(516, 327);
             this.button9.TabIndex = 11;
             this.button9.Text = resources.GetString("button9.Text");
             this.button9.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -569,9 +594,9 @@ namespace TripleA_Game_Creator
             this.label17.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.Location = new System.Drawing.Point(79, 10);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(456, 18);
+            this.label17.Size = new System.Drawing.Size(452, 18);
             this.label17.TabIndex = 9;
-            this.label17.Text = "Placement Picker (Alternative: Auto-Placement Finder)";
+            this.label17.Text = "Placement Picker (Suggested: Auto-Placement Finder)";
             // 
             // tabPage6
             // 
@@ -692,9 +717,9 @@ namespace TripleA_Game_Creator
             this.button19.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control;
             this.button19.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button19.Location = new System.Drawing.Point(30, 53);
+            this.button19.Location = new System.Drawing.Point(30, 51);
             this.button19.Name = "button19";
-            this.button19.Size = new System.Drawing.Size(516, 299);
+            this.button19.Size = new System.Drawing.Size(516, 349);
             this.button19.TabIndex = 20;
             this.button19.Text = resources.GetString("button19.Text");
             this.button19.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -723,6 +748,7 @@ namespace TripleA_Game_Creator
             // tabPage9
             // 
             this.tabPage9.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.tabPage9.Controls.Add(this.button21);
             this.tabPage9.Controls.Add(this.button22);
             this.tabPage9.Controls.Add(this.label24);
@@ -770,6 +796,7 @@ namespace TripleA_Game_Creator
             // tabPage10
             // 
             this.tabPage10.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.tabPage10.Controls.Add(this.button23);
             this.tabPage10.Controls.Add(this.button4);
             this.tabPage10.Controls.Add(this.label28);
@@ -819,32 +846,33 @@ namespace TripleA_Game_Creator
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel2.Controls.Add(this.button2);
-            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.v_backButton);
+            this.panel2.Controls.Add(this.v_nextButton);
             this.panel2.Location = new System.Drawing.Point(182, 456);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(588, 37);
             this.panel2.TabIndex = 12;
             // 
-            // button2
+            // v_backButton
             // 
-            this.button2.Location = new System.Drawing.Point(186, 6);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(98, 23);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Back";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.v_backButton.Enabled = false;
+            this.v_backButton.Location = new System.Drawing.Point(186, 6);
+            this.v_backButton.Name = "v_backButton";
+            this.v_backButton.Size = new System.Drawing.Size(98, 23);
+            this.v_backButton.TabIndex = 0;
+            this.v_backButton.Text = "Back";
+            this.v_backButton.UseVisualStyleBackColor = true;
+            this.v_backButton.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button1
+            // v_nextButton
             // 
-            this.button1.Location = new System.Drawing.Point(290, 6);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(92, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Next";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.v_nextButton.Location = new System.Drawing.Point(290, 6);
+            this.v_nextButton.Name = "v_nextButton";
+            this.v_nextButton.Size = new System.Drawing.Size(92, 23);
+            this.v_nextButton.TabIndex = 0;
+            this.v_nextButton.Text = "Next";
+            this.v_nextButton.UseVisualStyleBackColor = true;
+            this.v_nextButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // label7
             // 
@@ -936,15 +964,15 @@ namespace TripleA_Game_Creator
             this.label8.TabIndex = 10;
             this.label8.Text = "9: Image Shrinker";
             // 
-            // label27
+            // label9
             // 
-            this.label27.AutoSize = true;
-            this.label27.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label27.Location = new System.Drawing.Point(12, 214);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(148, 14);
-            this.label27.TabIndex = 10;
-            this.label27.Text = "10: Halfway Finished!!";
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(12, 214);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(148, 14);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "10: Halfway Finished!!";
             // 
             // Form1
             // 
@@ -953,7 +981,7 @@ namespace TripleA_Game_Creator
             this.ClientSize = new System.Drawing.Size(769, 491);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.label27);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
@@ -975,6 +1003,9 @@ namespace TripleA_Game_Creator
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.v_mapPropertiesInformationGroupBox.ResumeLayout(false);
+            this.v_mapPropertiesPanel.ResumeLayout(false);
+            this.v_mapPropertiesPanel.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
@@ -1012,8 +1043,8 @@ namespace TripleA_Game_Creator
         private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.TabPage tabPage8;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button v_backButton;
+        private System.Windows.Forms.Button v_nextButton;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
@@ -1026,7 +1057,7 @@ namespace TripleA_Game_Creator
         public System.Windows.Forms.Label label6;
         private System.Windows.Forms.TabPage tabPage9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label90;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button11;
@@ -1067,11 +1098,13 @@ namespace TripleA_Game_Creator
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TabPage tabPage10;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Button button23;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.GroupBox v_mapPropertiesInformationGroupBox;
+        private System.Windows.Forms.Panel v_mapPropertiesPanel;
 
     }
 }

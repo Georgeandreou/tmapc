@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,117 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="button5.Text" xml:space="preserve">
-    <value>Before you use this program, make sure:
+  <data name="label2.Text" xml:space="preserve">
+    <value>The TripleA Map Creator is an open-source program created for TripleA that helps players create their own maps. It can also be used to load maps that are already made, making it simple to create new mods.
 
-A. The map's folder contains:
-    1. An image of the map in png or gif image format (Read 2nd note...)
-    2. A 'units' folder containing all the extra unit images in png format (Read 3rd note...)
-    3. A 'flags' folder containing all the extra flag images in gif format (Read 3rd note...)
+The program is divided into two parts. Part 1 is used to easily access the map utilities that come with TripleA. Part 2 guides the user through the various steps of creating the map xml file. 
 
-Note: The unit images must be saved in png format, the flag images in gif format, and the map image in png or gif format.
+There are also a few extra programs included which perform some additional tasks such as resizing a map or recreating the map image using the map's tiles.
 
-Note: When creating the map image, remember that the borders between territories must be completely black, the inside of land territories must be completely white, and the inside of sea territories must be colored.
-
-Note: The players that are included in TripleA by default are the following countries: Americans, Australians, British, Canadians, Chinese, Germans, Italians, Japanese, Neutral, Puppet_States, and Russians. Also note that the flags for those countries are already inlcuded, but the only units included are the following: aaGun, armour, artillery, battleship, battleship_hit, bomber, bomber_hb, bomber_lr, bomber_lr_hb, carrier, cruiser, destroyer, factory, factory_it, fighter, fighter_jp, fighter_lr, fighter_lr_jp, halftrack, infantry, marine, rockets, s_destroyer, submarine, submarine_ss, and transport. An image must be created for every unit that was not listed here.</value>
+For more information please vist: http: //code.google.com/p/tmapc/</value>
   </data>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="button14.Text" xml:space="preserve">
-    <value>                              Instructions for using the 'Center Picker' 
-
-When a window opens that asks you to select the map, select the image file for your map.
-
-When it asks for a polygons file, click "Cancel".
-
-When it displays the map, click on the center of every territory and name it by entering its name in the window that opens.
-
-When you've finished, save the centers file by selecting "Save Centers" in the "File" menu and selecting the map folder.
-
-
-Note: If you want to remove a territory center, right-click on the red dot shown at the territory center.</value>
-  </data>
-  <data name="button6.Text" xml:space="preserve">
-    <value>                              Instructions for using the 'Polygon Grabber'
-
-When a window opens that asks you to select a map, select the image file for your map.
-
-When it asks for a centers file, select the centers file for your map.
-
-When it displays the map, double-right-click on every territory and confirm it by pressing the space bar.
-
-When you've finished, save the file by selecting "Save Polygons" in the "File" menu and selecting the map folder.
-
-
-Note: If a territory has any black jut-outs in the territory boundary (A straight line sticking out of the outline into the territory, etc), the polygon grabber will report an error. To fix this, open the map's image file and remove all the jut-outs from every territory that the Polygon Grabber fails to grab.  </value>
-  </data>
-  <data name="button9.Text" xml:space="preserve">
-    <value>                              Instructions for using the 'Placement Picker'
-
-(Note: The Auto-Placement Finder is suggested over the Placement Picker. Unless you have reason for using the Placement Picker, please use the Auto-Placement Finder in the next step)
-
-When a window opens that asks you to select a map, select the image file for your map.
-
-When it asks for a polygons file, select the polygons file for your map.
-
-When it displays the map, left-click on every territory to select it and ctrl-click on every place within the territory where you want a placement added.
-
-When you've finished, save the file by clicking "File", "Save Placements", then select the map directory and click save.</value>
-  </data>
-  <data name="button15.Text" xml:space="preserve">
-    <value>                         Instructions for using the 'Auto-Placement Finder'
-
-When a window opens that asks you to enter the map name, type in 'temp'.
-
-If a window opens that asks you for the Unit's Scale, enter the scaling amount that will be used when drawing the unit images in TripleA. (Entered earlier in the map properties step)
-
-When a window opens that asks where to save 'place.txt', select the map's folder.</value>
-  </data>
-  <data name="button17.Text" xml:space="preserve">
-    <value>                         Instructions for using the 'Tile Image Breaker'
-
-When a window opens that says 'Where to save tile images', select the folder named 'baseTiles' located in your map's folder.
-
-When a window opens that asks you to select the map, select the map image file.
-
-Wait for the window to finish running and automatically close...</value>
-  </data>
-  <data name="button19.Text" xml:space="preserve">
-    <value>                         Instructions for using the 'Relief Image Breaker'
-
-(If you have not created a relief image for the map, proceed to the next step.)
-
-When a window opens that says 'Where to save relief images', go to the TripleA 'maps' folder, go to the 'temp' folder, and select the 'reliefTiles' folder.
-
-When a window opens that asks you to select the map, select the relief image file.
-
-When a window opens that asks you if it should process Sea Zones only, enter Y if you want the relief image to be displayed only over the water, or N if you want the relief image displayed over the land and sea territories.
-
-When a window opens that asks you to enter the map name, type in 'temp'.
-
-Wait for the window to finish running and automatically close...
-
-
-Note: The default location for the TripleA 'maps' folder is: "C:\Program Files\TripleA\&lt;triplea version&gt;\maps\"
-</value>
-  </data>
-  <data name="button21.Text" xml:space="preserve">
-    <value>                         Instructions for using the 'Image Shrinker'
-
-When a window opens that asks you to select the large image, select the map image file.
-
-When a window opens that asks for the scale, enter the scaling amount for the size of the small map image compared to the large map. For example, if you wanted the small map image displayed in TripleA at the top-right corner to be one-tenth the size if the map, enter .1 in the window. For the small map to be one-fifth the map size you would enter .2, and so on.
-</value>
-  </data>
-  <data name="button4.Text" xml:space="preserve">
-    <value>                            Congratulations!! You're about halfway done!!
-
-Now all you have to do is open Part 2 of the program and create the xml game file. You should find part 2 in the same folder as part 1.</value>
-  </data>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>46</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

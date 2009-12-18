@@ -41,7 +41,7 @@ namespace TripleA_Game_Creator
             CheckForUpdates();
         }
         PerformanceCounter availableMemoryRequester = new PerformanceCounter("Memory", "Available MBytes");
-        private Version usersVersion = new Version(1,0,1,2);
+        private Version usersVersion = new Version(1,0,1,3);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));
@@ -101,9 +101,9 @@ namespace TripleA_Game_Creator
         {
             try
             {
-                if (File.Exists(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf") && File.ReadAllText(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf").Contains("Java Heap Size=\""))
+                if (File.Exists(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.txt") && File.ReadAllText(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.txt").Contains("Java Heap Size=\""))
                 {
-                    string[] lines = File.ReadAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf");
+                    string[] lines = File.ReadAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.txt");
                     foreach (string cur in lines)
                     {
                         if (cur.Contains("Java Heap Size=\""))
@@ -121,7 +121,7 @@ namespace TripleA_Game_Creator
                             List<string> lines = new List<string>();
                             lines.Add("Stop Loading XML File When Error Is Found=\"false\"");
                             lines.Add("Java Heap Size=\"5000\"");
-                            File.WriteAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.inf", lines.ToArray());
+                            File.WriteAllLines(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory + "/Settings.txt", lines.ToArray());
                         }
                         catch(Exception ex) { exceptionViewerWindow.ShowInformationAboutException(ex, true); }
                     }
@@ -129,7 +129,7 @@ namespace TripleA_Game_Creator
             }
             catch (Exception ex)
             {
-                if (MessageBox.Show("An error occured when trying to load the settings file for the program. Please make sure the \"Settings.inf\" file contains no errors. Do you want to view the error message?", "Error loading settings file.", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                if (MessageBox.Show("An error occured when trying to load the settings file for the program. Please make sure the \"Settings.txt\" file contains no errors. Do you want to view the error message?", "Error loading settings file.", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
                     exceptionViewerWindow.ShowInformationAboutException(ex, true);
             }
         }
@@ -149,11 +149,21 @@ namespace TripleA_Game_Creator
         int oldStepIndex = 0;
         private void Back()
         {
+            if (stepIndex == 0)
+            {
+                v_backButton.Enabled = false;
+                v_nextButton.Enabled = true;
+            }
+            else
+            {
+                v_backButton.Enabled = true;
+                v_nextButton.Enabled = true;
+            }
             if (stepIndex == 5)
             {
                 Control oldControl = getControl("label" + stepIndex);
                 oldStepIndex = stepIndex;
-                if (stepIndex > 0)
+                if (stepIndex > 1)
                     stepIndex--;
                 Control newControl = getControl("label" + stepIndex);
                 oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
@@ -189,7 +199,7 @@ namespace TripleA_Game_Creator
                     newControl.Font = new Font(newControl.Font, FontStyle.Bold);
                     try
                     {
-                        if (Directory.Exists(cutPath))
+                        if (Directory.Exists(cutPath) && Directory.Exists(cutPath + "/reliefTiles/") && Directory.GetFiles(cutPath + "/reliefTiles/").Length > 0 && Directory.Exists(textBox3.Text + "/reliefTiles"))
                         {
                             Directory.Move(cutPath + "/reliefTiles/", textBox3.Text + "/reliefTiles");
                             Directory.Delete(cutPath);
@@ -302,28 +312,38 @@ namespace TripleA_Game_Creator
                     }
                 }
             }
-            if (tabControl1.SelectedIndex == 1)
+            foreach (Control cur in v_mapPropertiesPanel.Controls)
             {
-                if((filledFields > 0 && nonFilledFields != 0) || (!File.Exists(textBox3.Text + @"\map.properties") && nonFilledFields > 0))
+                if (cur is TextBox && cur.Name.ToLower() != "textbox3")
                 {
-                    MessageBox.Show("Supply the Map Folder before proceeding to the next step.", "Complete Current Step");
-                    return;
+                    if (!(cur.Text.Trim().Length > 0))
+                    {
+                        nonFilledFields++;
+                    }
+                    else
+                    {
+                        filledFields++;
+                    }
                 }
             }
-            else
+            if (tabControl1.SelectedIndex == 1)
             {
-                if (textBox3.Text.Trim().Length == 0 && tabControl1.SelectedIndex == 1)
+                if (textBox3.Text.Trim().Length == 0)
                 {
                     MessageBox.Show("Please supply the location of the map's folder before proceeding to the next step.", "Supply Map Folder");
                     return;
                 }
+                else if (!Directory.Exists(textBox3.Text.Trim()))
+                {
+                    MessageBox.Show("The map folder you supplied does not exist. Please supply the correct map folder and try again.", "Supply Valid Map Folder");
+                    return;
+                }
+                else if ((filledFields > 0 && nonFilledFields != 0) || (!File.Exists(textBox3.Text + @"\map.properties") && nonFilledFields > 0))
+                {
+                    MessageBox.Show("Please supply the rest of the required information before proceeding to the next step.", "Complete Current Step");
+                    return;
+                }
             }
-            if (!Directory.Exists(textBox3.Text.Trim()) && tabControl1.SelectedIndex == 1)
-            {
-                MessageBox.Show("The map folder you supplied does not exist. Please supply the correct map folder and try again.", "Supply Valid Map Folder");
-                return;
-            }
-
             if (filledFields > 0 && nonFilledFields == 0)
             {
                 enteredMapProperties = true;
@@ -335,7 +355,7 @@ namespace TripleA_Game_Creator
 
             Control oldControl = getControl("label" + stepIndex);
             oldStepIndex = stepIndex;
-            if (stepIndex < 10)
+            if (stepIndex < 9)
                 stepIndex++;
             Control newControl = getControl("label" + stepIndex);
             oldControl.Font = new Font(oldControl.Font, FontStyle.Regular);
@@ -364,13 +384,23 @@ namespace TripleA_Game_Creator
             {
                 try
                 {
-                    if (Directory.Exists(cutPath))
+                    if (Directory.Exists(cutPath) && Directory.Exists(cutPath + "/reliefTiles/") && Directory.Exists(textBox3.Text + "/reliefTiles"))
                     {
                         Directory.Move(cutPath + "/reliefTiles/", textBox3.Text + "/reliefTiles");
-                        Directory.Delete(cutPath, true);
+                        Directory.Delete(cutPath);
                     }
                 }
-                catch { }
+                catch (Exception ex) { exceptionViewerWindow.ShowInformationAboutException(ex, true); }
+            }
+            if (stepIndex == 9)
+            {
+                v_backButton.Enabled = true;
+                v_nextButton.Enabled = false;
+            }
+            else
+            {
+                v_backButton.Enabled = true;
+                v_nextButton.Enabled = true;
             }
             UpdateWindowText();
         }
@@ -411,6 +441,7 @@ namespace TripleA_Game_Creator
             panel2.Location = ((Rectangle)panel2.Tag).Location + new Size(change.Width / 2, change.Height);
             button5.Size = ((Rectangle)button5.Tag).Size + change;
             button14.Size = ((Rectangle)button14.Tag).Size + change;
+            button4.Size = ((Rectangle)button4.Tag).Size + change;
             button15.Size = ((Rectangle)button15.Tag).Size + change;
             button6.Size = ((Rectangle)button6.Tag).Size + change;
             button9.Size = ((Rectangle)button9.Tag).Size + change;
@@ -439,7 +470,7 @@ namespace TripleA_Game_Creator
             b1.Click += new EventHandler(b1_Click);
             b1.Tag = t1;
             toolTip1.SetToolTip(b1, "Select a color using the color chooser window.");
-            tabPage2.Controls.AddRange(new Control[] { new TextBox() { Size = textBox1.Size, Location = new Point(textBox1.Location.X, textBox1.Location.Y + change) },t1,b1});
+            v_mapPropertiesPanel.Controls.AddRange(new Control[] { new TextBox() { Size = textBox1.Size, Location = new Point(textBox1.Location.X, textBox1.Location.Y + change) },t1,b1});
         }
 
         void t1_TextChanged(object sender, EventArgs e)
@@ -457,15 +488,18 @@ namespace TripleA_Game_Creator
             chooser.AllowFullOpen = true;
             chooser.AnyColor = true;
             chooser.FullOpen = true;
-            chooser.SolidColorOnly = true;
             try
             {
                chooser.Color = ColorTranslator.FromHtml(((Button)sender).Text);
             }
             catch { }
+
             if (chooser.ShowDialog() != DialogResult.Cancel)
             {
-                ((TextBox)((Button)sender).Tag).Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+                if (!chooser.Color.IsNamedColor)
+                    ((TextBox)((Button)sender).Tag).Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+                else
+                    ((TextBox)((Button)sender).Tag).Text = ColorTranslator.ToHtml(Color.FromArgb(chooser.Color.R, chooser.Color.G, (chooser.Color.B < 255 ? chooser.Color.B + 1 : chooser.Color.B - 1))).ToString();
             }
         }
         void t1_DoubleClick(object sender, EventArgs e)
@@ -474,7 +508,6 @@ namespace TripleA_Game_Creator
             chooser.AllowFullOpen = true;
             chooser.AnyColor = true;
             chooser.FullOpen = true;
-            chooser.SolidColorOnly = true;
             try
             {
                 chooser.Color = ColorTranslator.FromHtml(((TextBox)sender).Text);
@@ -482,16 +515,19 @@ namespace TripleA_Game_Creator
             catch { }
             if (chooser.ShowDialog() != DialogResult.Cancel)
             {
+                if(!chooser.Color.IsNamedColor)
                 ((TextBox)sender).Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+                else
+                    ((TextBox)sender).Text = ColorTranslator.ToHtml(Color.FromArgb(chooser.Color.R, chooser.Color.G, (chooser.Color.B < 255 ? chooser.Color.B + 1 : chooser.Color.B - 1))).ToString();
             }
         }
         private void button7_Click(object sender, EventArgs e)
         {
             if (change > 0)
             {
-                tabPage2.Controls.RemoveAt(tabPage2.Controls.Count - 1);
-                tabPage2.Controls.RemoveAt(tabPage2.Controls.Count - 1);
-                tabPage2.Controls.RemoveAt(tabPage2.Controls.Count - 1);
+                v_mapPropertiesPanel.Controls.RemoveAt(v_mapPropertiesPanel.Controls.Count - 1);
+                v_mapPropertiesPanel.Controls.RemoveAt(v_mapPropertiesPanel.Controls.Count - 1);
+                v_mapPropertiesPanel.Controls.RemoveAt(v_mapPropertiesPanel.Controls.Count - 1);
                 change -= 25;
                 button8.Location += new Size(0, -25);
                 button11.Location += new Size(0, -25);
@@ -549,6 +585,7 @@ namespace TripleA_Game_Creator
         FolderBrowserDialog d = new FolderBrowserDialog();
         private void button12_Click(object sender, EventArgs e)
         {
+            d.Description = "Please select the map's folder which contains the map files.";
             d.ShowNewFolderButton = true;
             if (d.ShowDialog() == DialogResult.OK)
                 textBox3.Text = d.SelectedPath;
@@ -678,7 +715,8 @@ namespace TripleA_Game_Creator
             if (File.Exists(file))
             {
                 cutPath = Directory.GetParent(file.Substring(0, file.Replace("\\", "/").LastIndexOf("/"))).FullName + "/maps/temp/";
-                File.Create(textBox3.Text + "/place.txt").Close();
+                if(!File.Exists(textBox3.Text + "/place.txt"))
+                    File.Create(textBox3.Text + "/place.txt").Close();
                 Directory.CreateDirectory(cutPath);
                 foreach (string cur in Directory.GetFiles(textBox3.Text))
                 {
@@ -815,7 +853,6 @@ namespace TripleA_Game_Creator
             chooser.AllowFullOpen = true;
             chooser.AnyColor = true;
             chooser.FullOpen = true;
-            chooser.SolidColorOnly = true;
             try
             {
                 chooser.Color = ColorTranslator.FromHtml(textBox2.Text);
@@ -823,7 +860,10 @@ namespace TripleA_Game_Creator
             catch { }
             if (chooser.ShowDialog() != DialogResult.Cancel)
             {
-                textBox2.Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+                if (!chooser.Color.IsNamedColor)
+                    textBox2.Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+                else
+                    textBox2.Text = ColorTranslator.ToHtml(Color.FromArgb(chooser.Color.R, chooser.Color.G, (chooser.Color.B < 255 ? chooser.Color.B + 1 : chooser.Color.B - 1))).ToString();
             }
         }
 
@@ -841,7 +881,6 @@ namespace TripleA_Game_Creator
             chooser.AllowFullOpen = true;
             chooser.AnyColor = true;
             chooser.FullOpen = true;
-            chooser.SolidColorOnly = true;
             try
             {
                 chooser.Color = ColorTranslator.FromHtml(textBox2.Text);
@@ -849,7 +888,10 @@ namespace TripleA_Game_Creator
             catch { }
             if (chooser.ShowDialog() != DialogResult.Cancel)
             {
-                textBox2.Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+                if (!chooser.Color.IsNamedColor)
+                    textBox2.Text = ColorTranslator.ToHtml(chooser.Color).ToString();
+                else
+                    textBox2.Text = ColorTranslator.ToHtml(Color.FromArgb(chooser.Color.R, chooser.Color.G, (chooser.Color.B < 255 ? chooser.Color.B + 1 : chooser.Color.B - 1))).ToString();
             }
         }
 
@@ -862,7 +904,7 @@ namespace TripleA_Game_Creator
             }
             else
             {
-                MessageBox.Show("Unable to find Part 2 of the Map Creator.", "Cannot locate Part 2.");
+                MessageBox.Show("Unable to find Part 2 of the Map Creator.", "Cannot locate Part 2");
             }
         }
     }

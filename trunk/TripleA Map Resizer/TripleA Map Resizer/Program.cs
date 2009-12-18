@@ -13,13 +13,15 @@ namespace TripleA_Map_Resizer
         static void Main()
         {
             GC.Collect();
+            ExceptionViewer exViewer = null;
             try
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+                exViewer = new ExceptionViewer();
                 Application.Run(new Main());
             }
-            catch (Exception ex) { new ExceptionViewer().ShowInformationAboutException(ex, false); }
+            catch (Exception ex) {exViewer.ShowInformationAboutException(ex, false); }
             GC.Collect();
         }
     }
