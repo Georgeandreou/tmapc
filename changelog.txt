@@ -1,3 +1,41 @@
+Changes for 1.0.1.4
+
+* Update the autofill information to match the v3 rules. (SDW)
+
+* Make it so that the unit adding window remembers its size after being closed and keeps that size the next time it's opened. (SDW)
+
+* Fix problem where the combo-box selections for an auto-entered technology are incorrect. (SDW)
+
+* Update the exception viewers to display the base exception stack trace first and then the complete exception stack trace. (SDW)
+
+* Update the step title labels in part 2 so that the text is centered even when the window is resized. (SDW)
+
+* Update the territory connection panel in Part 2 to show the total connection count. (SDW)
+
+* Add an option to the connection scanner called "Perform Island Searching" that allows the program to search for island connections. (SDW)
+
+* Rename the "Automatic Connection Finder" to the "Territory Connection Scanner". (SDW)
+
+* Fix problem where territory labels 'slide' away after changing text. (SDW)
+
+* Fix errors that occur in Part 2 when the user tries to set the value of a number field to something higher than the maximum Int32 number. (SDW)
+
+* Update the title text of the unit adding window to be "Changing " + [territory name] + "'s Units". (SDW)
+
+* Fix problem with the unit adding window where the result text will begin with "," if the first unit was added using a NumUpDown. (SDW)
+
+* Fix error that sometimes occurs when the form is trying to resize when the window is first opened. (SDW)
+
+* Update Part 1 to use "\" instead of "/" or "//" throughout the entire program. (Except one necessary part) (SDW)
+
+* Add more information to Part 1 for the Center Picker that tells the users to make any sea zones that contain islands end with "Sea Zone". (SDW)
+
+* Make it so that the program waits for the relief image breaker process to finish before allowing the user to proceed to the next step. (Unless the user decides to override the warning) (SDW)
+
+* Make it so that Part 1 allows map utility run windows to remain open if the user holds control while pressing the button to run the map utility. (SDW)
+
+* Fix problem where Part 1 does not save the player colors for the map properties. (SDW)
+
 Changes for 1.0.1.3
 
 * Fix problem where Part 2 will not finish saving a map if there is an error saving the canals. (SDW)

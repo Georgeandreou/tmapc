@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -124,7 +124,7 @@ The program is divided into two parts. Part 1 is used to easily access the map u
 
 There are also a few extra programs included which perform some additional tasks such as resizing a map or recreating the map image using the map's tiles.
 
-For more information please vist: http: //code.google.com/p/tmapc/</value>
+For more information please visit: http: //code.google.com/p/tmapc/</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

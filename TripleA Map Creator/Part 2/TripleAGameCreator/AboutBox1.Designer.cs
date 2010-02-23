@@ -1,4 +1,4 @@
-﻿namespace TripleAGameCreator
+namespace TripleAGameCreator
 {
     partial class AboutBox1
     {
@@ -84,7 +84,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 13);
             this.label3.TabIndex = 3;
-            this.label3.Text = "Version 1.0.1.3";
+            this.label3.Text = "Version 1.0.1.4";
             // 
             // label4
             // 

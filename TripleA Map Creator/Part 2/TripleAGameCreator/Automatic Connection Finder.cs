@@ -25,11 +25,12 @@ namespace TripleAGameCreator
             if (!isScanningForConnections)
             {
                 button1.Text = "Cancel";
-                this.Text = "Automatic Connection Finder - Initializing...";
+                this.Text = "Territory Connection Scanner - Initializing...";
                 isScanningForConnections = true;
                 lineWidth = Convert.ToInt32(numericUpDown1.Text);
                 hasCanceled = false;
-                groupBox1.Enabled = false;
+                numericUpDown1.Enabled = false;
+                v_performIslandSearching.Enabled = false;
                 scanningThread.Start();
             }
             else
@@ -46,17 +47,20 @@ namespace TripleAGameCreator
             scanningThread = new Thread(new ThreadStart(startFindingConnections));
             scanningThread.Priority = ThreadPriority.Lowest;
             isScanningForConnections = false;
-            this.Text = "Automatic Connection Finder";
+            this.Text = "Territory Connection Scanner";
             button1.Text = "Start";
-            groupBox1.Enabled = true;
+            numericUpDown1.Enabled = true;
+            v_performIslandSearching.Enabled = true;
             toolStripProgressBar1.Value = 0;
         }
         public Thread scanningThread = null;
         public class Territory
         {
-            public List<Point> points = new List<Point>();
+            public GraphicsPath p_inflatedPolygon = null;
+            public Rectangle p_polygonBounds = new Rectangle(-1,-1,1,1);
+            public List<Point> p_originalPolygonPoints = new List<Point>();
             public string name = "";
-            public Rectangle polygonBounds = new Rectangle(-1,-1,1,1);
+            public Dictionary<string,string> p_neighbors = new Dictionary<string,string>();
         }
         public List<Territory> territories = new List<Territory>();
         public int lineWidth = 0;
@@ -137,7 +141,10 @@ namespace TripleAGameCreator
                         return;
                     }
                 }
-                int gcCollectCountdown = 35;
+                int gcCollectCountdown = 25;
+                bool addPoints = false;
+                if (!v_performIslandSearching.Checked)
+                    addPoints = MessageBox.Show("Do you want the program to increase the accuracy of the scan by adding reference points to the territory polygons?\r\n\r\nNote: The scan will take longer if you use this feature, but it will also allow the program to be able to find the connections between sea zones.", "Scanning Options", MessageBoxButtons.YesNo) == DialogResult.Yes;
                 foreach (string cur in full)
                 {
                     if (!cur.Contains("<"))
@@ -149,6 +156,7 @@ namespace TripleAGameCreator
                         int curPointIndex = 0;
                         Territory t = new Territory();
                         t.name = tName;
+                        List<Point> points = new List<Point>();
                         while (true)
                         {
                             try
@@ -158,7 +166,7 @@ namespace TripleAGameCreator
                                 {
                                     string curPointSubstring = cur.Substring(curPointIndex, cur.Substring(curPointIndex).IndexOf(")"));
                                     Point curPoint = new Point(Convert.ToInt32(curPointSubstring.Substring(1, curPointSubstring.IndexOf(",") - 1)), Convert.ToInt32(curPointSubstring.Substring(curPointSubstring.IndexOf(",") + 1, curPointSubstring.Length - (curPointSubstring.IndexOf(",") + 1))));
-                                    t.points.Add(curPoint);
+                                    points.Add(curPoint);
                                     curPointIndex += curPointSubstring.Length;
                                 }
                                 else
@@ -168,93 +176,124 @@ namespace TripleAGameCreator
                             }
                             catch { break; }
                         }
-                        if (increaseAccuracy.Checked && addPointsBeforeRunning.Checked && (!onlyAddPointsToSeaZones.Checked || Step2Info.territories[t.name].IsWater))
+                        if (!v_performIslandSearching.Checked && addPoints)
                         {
-                            t.points = FillInPointsBetweenListOfPoints(t.points);
+                            points = FillInPointsBetweenListOfPoints(points);
                             gcCollectCountdown--;
                             if (gcCollectCountdown <= 0)
                             {
                                 GC.Collect();
-                                gcCollectCountdown = 35;
+                                gcCollectCountdown = 50;
                             }
                         }
+                        GraphicsPath curPolygon = new GraphicsPath(points.ToArray(), getPolygonBytes(points));
+                        Rectangle inflatedPolygonBounds = Inflate(Rectangle.Round(curPolygon.GetBounds()), lineWidth);
+                        if (v_performIslandSearching.Checked)
+                        {
+                            curPolygon.Transform(new Matrix(curPolygon.GetBounds(), new PointF[] { new PointF(inflatedPolygonBounds.Left, inflatedPolygonBounds.Top), new PointF(inflatedPolygonBounds.Right, inflatedPolygonBounds.Top), new PointF(inflatedPolygonBounds.Left, inflatedPolygonBounds.Bottom) }));
+                        }
+                        t.p_originalPolygonPoints = points;
+                        t.p_inflatedPolygon = curPolygon;
+                        t.p_polygonBounds = inflatedPolygonBounds;
                         territories.Add(t);
                     }
                 }
                 List<string> lines = new List<string>();
                 toolStripProgressBar1.Minimum = 0;
                 toolStripProgressBar1.Maximum = territories.Count;
-                bool br = false;
-                gcCollectCountdown = 35;
-                while (territories.Count > 0)
+                int terIndex = 0;
+                int terNum = territories.Count;
+                while (terIndex < territories.Count)
                 {
-                    Territory cur = territories[0];
+                    Territory cur;
+                    if (!v_performIslandSearching.Checked)
+                        cur = territories[0];
+                    else
+                        cur = territories[terIndex];
                     toolStripProgressBar1.Value++;
-                    this.Text = String.Concat("Automatic Connection Finder - Processing ", toolStripProgressBar1.Value, " Of ", toolStripProgressBar1.Maximum);
-                    if (increaseAccuracy.Checked && !addPointsBeforeRunning.Checked && (!onlyAddPointsToSeaZones.Checked || Step2Info.territories[cur.name].IsWater))
-                    {
-                        cur.points = FillInPointsBetweenListOfPoints(cur.points);
-                        gcCollectCountdown--;
-                        if (gcCollectCountdown <= 0)
-                        {
-                            GC.Collect();
-                            gcCollectCountdown = 35;
-                        }
-                    }
+                    this.Text = String.Concat("Territory Connection Scanner - Processing ", toolStripProgressBar1.Value, " Of ", toolStripProgressBar1.Maximum);
                     int index = 0;
+                    bool br = false;
                     while (index < territories.Count)
                     {
                         Territory cur2 = territories[index];
                         if (cur2.name != cur.name)
                         {
-                            if (checkPolygonBounds.Checked)
+                            if (cur.p_polygonBounds.IntersectsWith(cur2.p_polygonBounds))
                             {
-                                if (cur.polygonBounds.X == -1 && cur.polygonBounds.Y == -1 && cur.polygonBounds.Width == 1 && cur.polygonBounds.Height == 1)
-                                    cur.polygonBounds = Inflate(Rectangle.Round(new GraphicsPath(cur.points.ToArray(), getPolygonBytes(cur.points)).GetBounds()), (int)numericUpDown1.Value);
-                                if (cur2.polygonBounds.X == -1 && cur2.polygonBounds.Y == -1 && cur2.polygonBounds.Width == 1 && cur2.polygonBounds.Height == 1)
-                                    cur2.polygonBounds = Inflate(Rectangle.Round(new GraphicsPath(cur2.points.ToArray(), getPolygonBytes(cur2.points)).GetBounds()), (int)numericUpDown1.Value);
-                            }
-                            if (!checkPolygonBounds.Checked || cur.polygonBounds.IntersectsWith(cur2.polygonBounds))
-                            {
-                                foreach (Point p in cur.points)
+                                if (v_performIslandSearching.Checked)
                                 {
-                                    foreach (Point p2 in cur2.points)
+                                    if (!cur.p_neighbors.ContainsKey(cur2.name))
                                     {
-                                        int xDiff = p.X - p2.X;
-                                        int yDiff = p.Y - p2.Y;
-                                        //if((xDiff > -33 && xDiff < 33 && yDiff > -33 && yDiff < 33))
-                                        //MessageBox.Show("Points: " + p.X + "," + p.Y + "|" + p2.X + "," + p2.Y + ". Diff: " + xDiff + "," + yDiff);
-                                        if (xDiff > -lineWidth && xDiff < lineWidth && yDiff > -lineWidth && yDiff < lineWidth)
+                                        foreach (Point point in cur2.p_originalPolygonPoints)
                                         {
-                                            connections.Add(new Connection() { t1 = cur, t2 = cur2 });
-                                            br = true;
-                                            break;
+                                            if (cur.p_inflatedPolygon.IsVisible(point))
+                                            {
+                                                connections.Add(new Connection() { t1 = cur, t2 = cur2 });
+                                                cur2.p_neighbors.Add(cur.name,cur.name);
+                                                break;
+                                            }
                                         }
                                     }
-                                    if (br)
+                                
+                                }
+                                else
+                                {
+                                    foreach (Point p in cur.p_originalPolygonPoints)
                                     {
-                                        br = false;
-                                        break;
+                                        foreach (Point p2 in cur2.p_originalPolygonPoints)
+                                        {
+                                            int xDiff = p.X - p2.X;
+                                            int yDiff = p.Y - p2.Y;
+                                            //if((xDiff > -33 && xDiff < 33 && yDiff > -33 && yDiff < 33))
+                                            //MessageBox.Show("Points: " + p.X + "," + p.Y + "|" + p2.X + "," + p2.Y + ". Diff: " + xDiff + "," + yDiff);
+                                            if (xDiff > -lineWidth && xDiff < lineWidth && yDiff > -lineWidth && yDiff < lineWidth)
+                                            {
+                                                connections.Add(new Connection() { t1 = cur, t2 = cur2 });
+                                                br = true;
+                                                break;
+                                            }
+                                        }
+                                        if (br)
+                                        {
+                                            br = false;
+                                            break;
+                                        }
                                     }
                                 }
                             }
                         }
                         index++;
                     }
-                    territories.Remove(cur);
+                    if (!v_performIslandSearching.Checked)
+                        territories.Remove(cur);
+                    else
+                        terIndex++;
                 }
                 toolStripProgressBar1.Value = 0;
-                this.Text = "Automatic Connection Finder";
+                this.Text = "Territory Connection Scanner";
                 isScanningForConnections = false;
                 button1.Text = "Start";
-                groupBox1.Enabled = true;
+                numericUpDown1.Enabled = true;
+                v_performIslandSearching.Enabled = true;
+                GC.Collect();
                 this.Close();
             }
             catch (ThreadAbortException ex)
             {
                 return;
             }
-            catch (Exception ex) { if (connections.Count == 0) if (MessageBox.Show("An error occured trying to find the connections. Make sure the polygons file for the map has no errors in it. (Like misspelling a territory name.) Do you want to view the error message", "Error Occured", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { SetUpForAnotherScan(); exceptionViewerWindow.ShowInformationAboutException(ex, true); } }
+            catch (Exception ex)
+            {
+                if (connections.Count == 0)
+                {
+                    if (MessageBox.Show("An error occured trying to find the connections. Make sure the polygons file for the map has no errors in it. (Like misspelling a territory name.) Do you want to view the error message", "Error Occured", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
+                    {
+                        exceptionViewerWindow.ShowInformationAboutException(ex, true);
+                        SetUpForAnotherScan();
+                    }
+                }
+            }
         }
         ExceptionViewer exceptionViewerWindow = new ExceptionViewer();
         private byte[] getPolygonBytes(List<Point> list)
@@ -392,7 +431,7 @@ namespace TripleAGameCreator
             if (isScanningForConnections)
             {
                 e.Cancel = true;
-                MessageBox.Show("Please wait for the Automatic Connection Finder to finish running.", "Still Running");
+                MessageBox.Show("Please wait for the Territory Connection Scanner to finish running.", "Still Running");
             }
             else
             {
@@ -400,13 +439,6 @@ namespace TripleAGameCreator
                 scanningThread = new Thread(new ThreadStart(startFindingConnections));
                 scanningThread.Priority = ThreadPriority.Lowest;
             }
-        }
-
-        private void increaseAccuracy_CheckedChanged(object sender, EventArgs e)
-        {
-            onlyAddPointsToSeaZones.Enabled = increaseAccuracy.Checked;
-            addPointsBeforeRunning.Enabled = increaseAccuracy.Checked;
-            //checkPolygonBounds.Enabled = increaseAccuracy.Checked;
         }
     }
 }

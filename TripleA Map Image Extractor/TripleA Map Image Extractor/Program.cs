@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
@@ -146,7 +146,7 @@ namespace TripleA_Map_Image_Extractor
         {
             Console.WriteLine(line);
         }
-        private static Version usersVersion = new Version(1,0,1,3);
+        private static Version usersVersion = new Version(1,0,1,4);
         public static void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));

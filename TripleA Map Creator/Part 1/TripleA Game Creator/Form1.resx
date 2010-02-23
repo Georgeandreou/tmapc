@@ -146,7 +146,9 @@ When it displays the map, click on the center of every territory and name it by 
 When you've finished, save the centers file by selecting "Save Centers" in the "File" menu and selecting the map folder.
 
 
-Note: If you want to remove a territory center, right-click on the red dot shown at the territory center.</value>
+Note: If you want to remove a territory center, right-click on the red dot shown at the territory center.
+
+Note: If your map contains sea zones with islands contained in them, the name of the sea zones must end with "Sea Zone" exactly for the islands to be clickable in the game.</value>
   </data>
   <data name="button6.Text" xml:space="preserve">
     <value>                              Instructions for using the 'Polygon Grabber'
@@ -208,7 +210,6 @@ When a window opens that asks you to enter the map name, type in 'temp'.
 
 Wait for the window to finish running and automatically close...
 
-
 Note: The default location for the TripleA 'maps' folder is: "C:\Program Files\TripleA\&lt;triplea version&gt;\maps\"
 </value>
   </data>
@@ -220,11 +221,9 @@ When a window opens that asks you to select the large image, select the map imag
 When a window opens that asks for the scale, enter the scaling amount for the size of the small map image compared to the large map. For example, if you wanted the small map image displayed in TripleA at the top-right corner to be one-tenth the size if the map, enter .1 in the window. For the small map to be one-fifth the map size you would enter .2, and so on.
 </value>
   </data>
-  <data name="button4.Text" xml:space="preserve">
-    <value>                            Congratulations!! You're about halfway done!!
-
-Now all you have to do is open Part 2 of the program and create the xml game file. You should find part 2 in the same folder as part 1.</value>
-  </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>46</value>
   </metadata>
