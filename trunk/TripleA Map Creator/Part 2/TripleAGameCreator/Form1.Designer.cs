@@ -436,6 +436,7 @@ namespace TripleAGameCreator
             this.mainTabControl.TabStop = false;
             this.mainTabControl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabControl1_Selecting);
             this.mainTabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
+            this.mainTabControl.Resize += new System.EventHandler(this.mainTabControl_Resize);
             // 
             // tabPage1
             // 
@@ -633,13 +634,14 @@ namespace TripleAGameCreator
             // 
             // label19
             // 
-            this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(228, 6);
+            this.label19.Location = new System.Drawing.Point(0, 5);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(130, 18);
+            this.label19.Size = new System.Drawing.Size(577, 20);
             this.label19.TabIndex = 1;
+            this.label19.Tag = "title";
             this.label19.Text = "Map Properties";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage2
             // 
@@ -659,9 +661,9 @@ namespace TripleAGameCreator
             this.panel4.AutoScroll = true;
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel4.Controls.Add(this.TerritoryDefinitionsImageDrawer);
-            this.panel4.Location = new System.Drawing.Point(6, 33);
+            this.panel4.Location = new System.Drawing.Point(0, 28);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(561, 308);
+            this.panel4.Size = new System.Drawing.Size(577, 319);
             this.panel4.TabIndex = 3;
             // 
             // TerritoryDefinitionsImageDrawer
@@ -676,13 +678,14 @@ namespace TripleAGameCreator
             // 
             // label20
             // 
-            this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.Location = new System.Drawing.Point(207, 10);
+            this.label20.Location = new System.Drawing.Point(0, 5);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(172, 18);
+            this.label20.Size = new System.Drawing.Size(577, 20);
             this.label20.TabIndex = 2;
+            this.label20.Tag = "title";
             this.label20.Text = "Territory Definitions";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage3
             // 
@@ -701,9 +704,9 @@ namespace TripleAGameCreator
             this.panel10.AutoScroll = true;
             this.panel10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel10.Controls.Add(this.TerritoryConnectionsImageDrawer);
-            this.panel10.Location = new System.Drawing.Point(6, 30);
+            this.panel10.Location = new System.Drawing.Point(0, 28);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(561, 311);
+            this.panel10.Size = new System.Drawing.Size(577, 319);
             this.panel10.TabIndex = 5;
             // 
             // TerritoryConnectionsImageDrawer
@@ -717,13 +720,14 @@ namespace TripleAGameCreator
             // 
             // label21
             // 
-            this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(203, 6);
+            this.label21.Location = new System.Drawing.Point(0, 5);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(183, 18);
+            this.label21.Size = new System.Drawing.Size(577, 20);
             this.label21.TabIndex = 3;
-            this.label21.Text = "Territory Connections";
+            this.label21.Tag = "title";
+            this.label21.Text = "Territory Connections (0)";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage4
             // 
@@ -825,13 +829,14 @@ namespace TripleAGameCreator
             // 
             // label22
             // 
-            this.label22.AutoSize = true;
             this.label22.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(197, 10);
+            this.label22.Location = new System.Drawing.Point(0, 5);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(183, 18);
+            this.label22.Size = new System.Drawing.Size(577, 20);
             this.label22.TabIndex = 4;
+            this.label22.Tag = "title";
             this.label22.Text = "Players And Alliances";
+            this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage5
             // 
@@ -933,13 +938,14 @@ namespace TripleAGameCreator
             // 
             // label23
             // 
-            this.label23.AutoSize = true;
             this.label23.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.Location = new System.Drawing.Point(207, 10);
+            this.label23.Location = new System.Drawing.Point(0, 5);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(137, 18);
+            this.label23.Size = new System.Drawing.Size(577, 20);
             this.label23.TabIndex = 5;
+            this.label23.Tag = "title";
             this.label23.Text = "Unit Definitions";
+            this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage6
             // 
@@ -1041,13 +1047,14 @@ namespace TripleAGameCreator
             // 
             // label24
             // 
-            this.label24.AutoSize = true;
             this.label24.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(202, 10);
+            this.label24.Location = new System.Drawing.Point(0, 5);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(182, 18);
+            this.label24.Size = new System.Drawing.Size(577, 20);
             this.label24.TabIndex = 6;
+            this.label24.Tag = "title";
             this.label24.Text = "Gameplay Sequences";
+            this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage7
             // 
@@ -1169,13 +1176,14 @@ namespace TripleAGameCreator
             // 
             // label25
             // 
-            this.label25.AutoSize = true;
             this.label25.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(205, 10);
+            this.label25.Location = new System.Drawing.Point(0, 5);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(151, 18);
+            this.label25.Size = new System.Drawing.Size(577, 20);
             this.label25.TabIndex = 7;
+            this.label25.Tag = "title";
             this.label25.Text = "Player Sequences";
+            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage8
             // 
@@ -1256,13 +1264,14 @@ namespace TripleAGameCreator
             // 
             // label61
             // 
-            this.label61.AutoSize = true;
             this.label61.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label61.Location = new System.Drawing.Point(187, 10);
+            this.label61.Location = new System.Drawing.Point(0, 5);
             this.label61.Name = "label61";
-            this.label61.Size = new System.Drawing.Size(195, 18);
+            this.label61.Size = new System.Drawing.Size(577, 20);
             this.label61.TabIndex = 34;
+            this.label61.Tag = "title";
             this.label61.Text = "Technology Definitions";
+            this.label61.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textBox16
             // 
@@ -1386,13 +1395,14 @@ namespace TripleAGameCreator
             // 
             // label64
             // 
-            this.label64.AutoSize = true;
             this.label64.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label64.Location = new System.Drawing.Point(204, 10);
+            this.label64.Location = new System.Drawing.Point(0, 5);
             this.label64.Name = "label64";
-            this.label64.Size = new System.Drawing.Size(172, 18);
+            this.label64.Size = new System.Drawing.Size(577, 20);
             this.label64.TabIndex = 34;
+            this.label64.Tag = "title";
             this.label64.Text = "Production Frontiers";
+            this.label64.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label28
             // 
@@ -1517,13 +1527,14 @@ namespace TripleAGameCreator
             // 
             // label62
             // 
-            this.label62.AutoSize = true;
             this.label62.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label62.Location = new System.Drawing.Point(202, 8);
+            this.label62.Location = new System.Drawing.Point(0, 5);
             this.label62.Name = "label62";
-            this.label62.Size = new System.Drawing.Size(161, 18);
+            this.label62.Size = new System.Drawing.Size(577, 20);
             this.label62.TabIndex = 46;
+            this.label62.Tag = "title";
             this.label62.Text = "Units Attachments";
+            this.label62.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label63
             // 
@@ -1561,9 +1572,9 @@ namespace TripleAGameCreator
             this.panel11.AutoScroll = true;
             this.panel11.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel11.Controls.Add(this.TerritoryProductionsImageDrawer);
-            this.panel11.Location = new System.Drawing.Point(6, 31);
+            this.panel11.Location = new System.Drawing.Point(0, 28);
             this.panel11.Name = "panel11";
-            this.panel11.Size = new System.Drawing.Size(561, 310);
+            this.panel11.Size = new System.Drawing.Size(577, 319);
             this.panel11.TabIndex = 14;
             // 
             // TerritoryProductionsImageDrawer
@@ -1577,13 +1588,14 @@ namespace TripleAGameCreator
             // 
             // label17
             // 
-            this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(203, 7);
+            this.label17.Location = new System.Drawing.Point(0, 5);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(178, 18);
+            this.label17.Size = new System.Drawing.Size(577, 20);
             this.label17.TabIndex = 13;
+            this.label17.Tag = "title";
             this.label17.Text = "Territory Productions";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label30
             // 
@@ -1626,13 +1638,14 @@ namespace TripleAGameCreator
             // 
             // label18
             // 
-            this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(258, 7);
+            this.label18.Location = new System.Drawing.Point(0, 5);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(63, 18);
+            this.label18.Size = new System.Drawing.Size(577, 20);
             this.label18.TabIndex = 16;
+            this.label18.Tag = "title";
             this.label18.Text = "Canals";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage13
             // 
@@ -1651,9 +1664,9 @@ namespace TripleAGameCreator
             this.panel13.AutoScroll = true;
             this.panel13.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel13.Controls.Add(this.TerritoryOwnershipImageDrawer);
-            this.panel13.Location = new System.Drawing.Point(6, 31);
+            this.panel13.Location = new System.Drawing.Point(0, 28);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(561, 310);
+            this.panel13.Size = new System.Drawing.Size(577, 319);
             this.panel13.TabIndex = 19;
             // 
             // TerritoryOwnershipImageDrawer
@@ -1667,13 +1680,14 @@ namespace TripleAGameCreator
             // 
             // label31
             // 
-            this.label31.AutoSize = true;
             this.label31.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label31.Location = new System.Drawing.Point(196, 6);
+            this.label31.Location = new System.Drawing.Point(0, 5);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(169, 18);
+            this.label31.Size = new System.Drawing.Size(577, 20);
             this.label31.TabIndex = 18;
+            this.label31.Tag = "title";
             this.label31.Text = "Territory Ownership";
+            this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage14
             // 
@@ -1708,13 +1722,14 @@ namespace TripleAGameCreator
             // 
             // label32
             // 
-            this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(202, 7);
+            this.label32.Location = new System.Drawing.Point(0, 5);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(142, 18);
+            this.label32.Size = new System.Drawing.Size(577, 20);
             this.label32.TabIndex = 20;
+            this.label32.Tag = "title";
             this.label32.Text = "Unit Placements";
+            this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label33
             // 
@@ -1878,13 +1893,14 @@ namespace TripleAGameCreator
             // 
             // label69
             // 
-            this.label69.AutoSize = true;
             this.label69.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label69.Location = new System.Drawing.Point(208, 7);
+            this.label69.Location = new System.Drawing.Point(0, 5);
             this.label69.Name = "label69";
-            this.label69.Size = new System.Drawing.Size(129, 18);
+            this.label69.Size = new System.Drawing.Size(577, 20);
             this.label69.TabIndex = 17;
+            this.label69.Tag = "title";
             this.label69.Text = "Game Settings";
+            this.label69.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage16
             // 
@@ -1930,13 +1946,14 @@ namespace TripleAGameCreator
             // 
             // label76
             // 
-            this.label76.AutoSize = true;
             this.label76.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label76.Location = new System.Drawing.Point(227, 10);
+            this.label76.Location = new System.Drawing.Point(0, 5);
             this.label76.Name = "label76";
-            this.label76.Size = new System.Drawing.Size(115, 18);
+            this.label76.Size = new System.Drawing.Size(577, 20);
             this.label76.TabIndex = 29;
+            this.label76.Tag = "title";
             this.label76.Text = "Map Finished";
+            this.label76.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label8
             // 
@@ -2218,10 +2235,8 @@ namespace TripleAGameCreator
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
             this.panel10.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
@@ -2247,10 +2262,8 @@ namespace TripleAGameCreator
             this.tabPage11.PerformLayout();
             this.panel11.ResumeLayout(false);
             this.tabPage12.ResumeLayout(false);
-            this.tabPage12.PerformLayout();
             this.panel12.ResumeLayout(false);
             this.tabPage13.ResumeLayout(false);
-            this.tabPage13.PerformLayout();
             this.panel13.ResumeLayout(false);
             this.tabPage14.ResumeLayout(false);
             this.tabPage14.PerformLayout();

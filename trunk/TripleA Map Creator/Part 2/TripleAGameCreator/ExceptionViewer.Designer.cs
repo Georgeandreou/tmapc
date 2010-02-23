@@ -43,8 +43,8 @@ namespace TripleAGameCreator
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(433, 37);
             this.label1.TabIndex = 0;
-            this.label1.Text = "An unhandled exeption has occured in the program. The following information can b" +
-                "e used to find the cause of the error:";
+            this.label1.Text = "An unhandled exception has occured in the program. The following information can " +
+                "be used to find the cause of the error:";
             // 
             // exceptionInformationTB
             // 

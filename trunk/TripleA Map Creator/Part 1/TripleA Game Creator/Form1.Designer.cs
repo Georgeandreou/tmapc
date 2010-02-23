@@ -41,11 +41,11 @@ namespace TripleA_Game_Creator
             this.label10 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.button3 = new System.Windows.Forms.Button();
@@ -88,7 +88,6 @@ namespace TripleA_Game_Creator
             this.button22 = new System.Windows.Forms.Button();
             this.label24 = new System.Windows.Forms.Label();
             this.tabPage10 = new System.Windows.Forms.TabPage();
-            this.button23 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.label28 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -105,6 +104,7 @@ namespace TripleA_Game_Creator
             this.label8 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.label9 = new System.Windows.Forms.Label();
+            this.button23 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -215,11 +215,11 @@ namespace TripleA_Game_Creator
             this.v_mapPropertiesPanel.Controls.Add(this.label10);
             this.v_mapPropertiesPanel.Controls.Add(this.label26);
             this.v_mapPropertiesPanel.Controls.Add(this.label15);
-            this.v_mapPropertiesPanel.Controls.Add(this.textBox2);
             this.v_mapPropertiesPanel.Controls.Add(this.label13);
             this.v_mapPropertiesPanel.Controls.Add(this.label25);
             this.v_mapPropertiesPanel.Controls.Add(this.label14);
             this.v_mapPropertiesPanel.Controls.Add(this.textBox1);
+            this.v_mapPropertiesPanel.Controls.Add(this.textBox2);
             this.v_mapPropertiesPanel.Controls.Add(this.textBox4);
             this.v_mapPropertiesPanel.Controls.Add(this.comboBox2);
             this.v_mapPropertiesPanel.Controls.Add(this.button3);
@@ -273,15 +273,6 @@ namespace TripleA_Game_Creator
             this.label15.TabIndex = 7;
             this.label15.Text = "Scroll Wrap:";
             // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(257, 174);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 3;
-            this.textBox2.DoubleClick += new System.EventHandler(this.textBox2_DoubleClick);
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
             // label13
             // 
             this.label13.AutoSize = true;
@@ -315,6 +306,15 @@ namespace TripleA_Game_Creator
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(137, 20);
             this.textBox1.TabIndex = 3;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(257, 174);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(100, 20);
+            this.textBox2.TabIndex = 3;
+            this.textBox2.DoubleClick += new System.EventHandler(this.textBox2_DoubleClick);
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // textBox4
             // 
@@ -472,9 +472,9 @@ namespace TripleA_Game_Creator
             this.button14.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control;
             this.button14.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button14.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button14.Location = new System.Drawing.Point(34, 51);
+            this.button14.Location = new System.Drawing.Point(34, 45);
             this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(516, 299);
+            this.button14.Size = new System.Drawing.Size(516, 353);
             this.button14.TabIndex = 5;
             this.button14.Text = resources.GetString("button14.Text");
             this.button14.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -482,7 +482,7 @@ namespace TripleA_Game_Creator
             // 
             // button13
             // 
-            this.button13.Location = new System.Drawing.Point(190, 404);
+            this.button13.Location = new System.Drawing.Point(190, 405);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(210, 29);
             this.button13.TabIndex = 4;
@@ -531,7 +531,7 @@ namespace TripleA_Game_Creator
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(190, 404);
+            this.button7.Location = new System.Drawing.Point(190, 405);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(210, 29);
             this.button7.TabIndex = 7;
@@ -580,7 +580,7 @@ namespace TripleA_Game_Creator
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(190, 404);
+            this.button10.Location = new System.Drawing.Point(190, 405);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(210, 29);
             this.button10.TabIndex = 10;
@@ -629,7 +629,7 @@ namespace TripleA_Game_Creator
             // 
             // button16
             // 
-            this.button16.Location = new System.Drawing.Point(186, 407);
+            this.button16.Location = new System.Drawing.Point(186, 405);
             this.button16.Name = "button16";
             this.button16.Size = new System.Drawing.Size(210, 29);
             this.button16.TabIndex = 13;
@@ -678,7 +678,7 @@ namespace TripleA_Game_Creator
             // 
             // button18
             // 
-            this.button18.Location = new System.Drawing.Point(186, 407);
+            this.button18.Location = new System.Drawing.Point(186, 405);
             this.button18.Name = "button18";
             this.button18.Size = new System.Drawing.Size(210, 29);
             this.button18.TabIndex = 16;
@@ -717,7 +717,7 @@ namespace TripleA_Game_Creator
             this.button19.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control;
             this.button19.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button19.Location = new System.Drawing.Point(30, 51);
+            this.button19.Location = new System.Drawing.Point(30, 48);
             this.button19.Name = "button19";
             this.button19.Size = new System.Drawing.Size(516, 349);
             this.button19.TabIndex = 20;
@@ -727,7 +727,7 @@ namespace TripleA_Game_Creator
             // 
             // button20
             // 
-            this.button20.Location = new System.Drawing.Point(186, 406);
+            this.button20.Location = new System.Drawing.Point(186, 405);
             this.button20.Name = "button20";
             this.button20.Size = new System.Drawing.Size(210, 29);
             this.button20.TabIndex = 19;
@@ -775,7 +775,7 @@ namespace TripleA_Game_Creator
             // 
             // button22
             // 
-            this.button22.Location = new System.Drawing.Point(188, 408);
+            this.button22.Location = new System.Drawing.Point(188, 405);
             this.button22.Name = "button22";
             this.button22.Size = new System.Drawing.Size(210, 29);
             this.button22.TabIndex = 22;
@@ -806,17 +806,6 @@ namespace TripleA_Game_Creator
             this.tabPage10.TabIndex = 9;
             this.tabPage10.Text = "tabPage10";
             // 
-            // button23
-            // 
-            this.button23.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button23.Location = new System.Drawing.Point(136, 368);
-            this.button23.Name = "button23";
-            this.button23.Size = new System.Drawing.Size(311, 50);
-            this.button23.TabIndex = 13;
-            this.button23.Text = "Open Part 2!!!";
-            this.button23.UseVisualStyleBackColor = true;
-            this.button23.Click += new System.EventHandler(this.button23_Click);
-            // 
             // button4
             // 
             this.button4.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
@@ -825,11 +814,13 @@ namespace TripleA_Game_Creator
             this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(32, 53);
+            this.button4.Location = new System.Drawing.Point(33, 45);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(516, 299);
             this.button4.TabIndex = 12;
-            this.button4.Text = resources.GetString("button4.Text");
+            this.button4.Text = "You have completed the first half of the map creation process.\r\n\r\nThe second half" +
+                " of your map will be completed in Part 2 which you can find in the same folder a" +
+                "s Part 1.";
             this.button4.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.button4.UseVisualStyleBackColor = true;
             // 
@@ -839,9 +830,9 @@ namespace TripleA_Game_Creator
             this.label28.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label28.Location = new System.Drawing.Point(205, 8);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(159, 18);
+            this.label28.Size = new System.Drawing.Size(147, 18);
             this.label28.TabIndex = 3;
-            this.label28.Text = "Halfway Finished!!";
+            this.label28.Text = "Halfway Finished";
             // 
             // panel2
             // 
@@ -970,9 +961,19 @@ namespace TripleA_Game_Creator
             this.label9.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.Location = new System.Drawing.Point(12, 214);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(148, 14);
+            this.label9.Size = new System.Drawing.Size(138, 14);
             this.label9.TabIndex = 10;
-            this.label9.Text = "10: Halfway Finished!!";
+            this.label9.Text = "10: Halfway Finished";
+            // 
+            // button23
+            // 
+            this.button23.Location = new System.Drawing.Point(188, 405);
+            this.button23.Name = "button23";
+            this.button23.Size = new System.Drawing.Size(210, 29);
+            this.button23.TabIndex = 23;
+            this.button23.Text = "Run Part 2";
+            this.button23.UseVisualStyleBackColor = true;
+            this.button23.Click += new System.EventHandler(this.button23_Click);
             // 
             // Form1
             // 
@@ -992,12 +993,15 @@ namespace TripleA_Game_Creator
             this.Controls.Add(this.label0);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(777, 525);
             this.Name = "Form1";
             this.Text = "TripleA Map Creator - Part 1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Resize += new System.EventHandler(this.Form1_Resize);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -1101,10 +1105,10 @@ namespace TripleA_Game_Creator
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TabPage tabPage10;
         private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.Button button23;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.GroupBox v_mapPropertiesInformationGroupBox;
         private System.Windows.Forms.Panel v_mapPropertiesPanel;
+        private System.Windows.Forms.Button button23;
 
     }
 }

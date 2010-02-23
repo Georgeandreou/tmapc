@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,7 +21,7 @@ namespace TripleA_Map_Resizer
             Main.CheckForIllegalCrossThreadCalls = false;
             CheckForUpdates();
         }
-        private Version usersVersion = new Version(1, 0, 1, 3);
+        private Version usersVersion = new Version(1, 0, 1, 4);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));

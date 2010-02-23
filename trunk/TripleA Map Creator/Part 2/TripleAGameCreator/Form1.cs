@@ -25,6 +25,7 @@ namespace TripleAGameCreator
             SetControlsInitialSizesAndLocations();
             RefreshSettings();
             CheckForUpdates();
+            m_finishedInit = true;
         }
 
         private void SetControlsInitialSizesAndLocations()
@@ -52,7 +53,7 @@ namespace TripleAGameCreator
             tabControl2.TabPages.Clear();
             tabControl3.TabPages.Clear();
         }
-        private Version usersVersion = new Version(1, 0, 1, 3);
+        private Version usersVersion = new Version(1, 0, 1, 4);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));
@@ -103,7 +104,7 @@ namespace TripleAGameCreator
                     }
                 }
             }
-            if (Convert.ToInt32(usersVersion.ToString().Replace(".", "")) < Convert.ToInt32(newestVersionAvailable.ToString().Replace(".", "")))
+            if (ConvertStringToValidInt32(usersVersion.ToString().Replace(".", "")) < ConvertStringToValidInt32(newestVersionAvailable.ToString().Replace(".", "")))
             {
                 MessageBox.Show("There is a newer version of the Map Creator available.\r\nYour version: " + usersVersion.ToString() + ".\r\nNewest Version: " + newestVersionAvailable.ToString() + ".\r\n\r\nTo download the latest version, please go to \"http://code.google.com/p/tmapc/downloads/list\" and click on the latest download.", "Checking For Updates");
             }
@@ -241,7 +242,7 @@ namespace TripleAGameCreator
                     }
                 case 15:
                     {
-                        this.Text = defaultWindowText + " (Completely Done With Part 2)";
+                        this.Text = defaultWindowText + " (Part 2 Completed)";
                         break;
                     }
             }
@@ -321,7 +322,28 @@ namespace TripleAGameCreator
             }
             return new Control();
         }
-
+        private int ConvertStringToValidInt32(string s)
+        {
+            s = s.Trim();
+            try
+            {
+                return Convert.ToInt32(s);
+            }
+            catch (OverflowException ex)
+            {
+                if (!s.StartsWith("-"))
+                    return Int32.MaxValue;
+                else
+                    return Int32.MinValue;
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                if (!s.StartsWith("-"))
+                    return Int32.MaxValue;
+                else
+                    return Int32.MinValue;
+            }
+        }
         private void button3_Click(object sender, EventArgs e)
         {
             if(stepIndex == 6)
@@ -365,7 +387,7 @@ namespace TripleAGameCreator
                 v_autoFillButton.Enabled = false;
                 autoFillInformationToolStripMenuItem.Enabled = false;
             }
-
+            ResizeTitleLabel();
             if (mainTabControl.SelectedIndex == 5 || mainTabControl.SelectedIndex == 7 || mainTabControl.SelectedIndex == 9 || mainTabControl.SelectedIndex == 14)
             {
                 v_availableChoicesButton.Enabled = true;
@@ -486,7 +508,7 @@ namespace TripleAGameCreator
                                 }
                                 else
                                 {
-                                    Step4Info.players.Add(toAddName, new Player() { Alliance = alliance, Name = toAddName, InitialResources = Convert.ToInt32(cur.Text)});
+                                    Step4Info.players.Add(toAddName, new Player() { Alliance = alliance, Name = toAddName, InitialResources = ConvertStringToValidInt32(cur.Text)});
                                     toAddName = "";
                                     alliance = "";
                                 }
@@ -523,7 +545,7 @@ namespace TripleAGameCreator
                                 }
                                 else
                                 {
-                                    Step5Info.units.Add(toAddName.ToLower(), new Unit() { Name = toAddName, cost = new Cost { cost = Convert.ToInt32(cost), ResourceType = Step1Info.ResourceName, result = new Result() { BuyQuantity = Convert.ToInt32(cur.Text), ResourceOrUnitName = toAddName } } });
+                                    Step5Info.units.Add(toAddName.ToLower(), new Unit() { Name = toAddName, cost = new Cost { cost = ConvertStringToValidInt32(cost), ResourceType = Step1Info.ResourceName, result = new Result() { BuyQuantity = ConvertStringToValidInt32(cur.Text), ResourceOrUnitName = toAddName } } });
                                     toAddName = "";
                                     cost = "";
                                 }
@@ -590,7 +612,7 @@ namespace TripleAGameCreator
                                         else
                                         {
                                             //MessageBox.Show(toAddName + "," + gameplaySequence + "," + _player + "," + cur.Text);
-                                            Step7Info.playerSequences.Add(toAddName, new PlayerSequence() { Name = toAddName, Delegate = Step6Info.gameplaySequences[gameplaySequence], player = Step4Info.players[_player], MaxRunCount = Convert.ToInt32(cur.Text) });
+                                            Step7Info.playerSequences.Add(toAddName, new PlayerSequence() { Name = toAddName, Delegate = Step6Info.gameplaySequences[gameplaySequence], player = Step4Info.players[_player], MaxRunCount = ConvertStringToValidInt32(cur.Text) });
                                             toAddName = "";
                                             gameplaySequence = "";
                                             _player = "";
@@ -695,7 +717,7 @@ namespace TripleAGameCreator
                         foreach (Control cur in TerritoryProductionsImageDrawer.Controls)
                         {
                             cur.Text = cur.Text.Trim();
-                            Step2Info.territories[(String)cur.Tag].Production = Convert.ToInt32(cur.Text);
+                            Step2Info.territories[(String)cur.Tag].Production = ConvertStringToValidInt32(cur.Text);
                         }
                     }
                     else if (oldStepIndex == 13)
@@ -716,14 +738,12 @@ namespace TripleAGameCreator
                         {
                             try
                             {
-                                if (cur.Name == "807" || cur.Name == "Superior")
-                                {
-                                    cur.Name = cur.Name;
-                                }
                                 string tag = ((string)cur.Tag).Trim();
                                 if (tag.Length == 0)
                                     continue;
                                 string tag1 = tag.Substring(0, ((string)cur.Tag).IndexOf("|"));
+                                if(!tag1.Trim().EndsWith(","))
+                                    tag1 = tag1 + ",";
                                 string tag2 = cur.Name;
                                 Step2Info.territories[cur.Name].Units.Clear();
                                 foreach (Unit cur2 in Step5Info.units.Values)
@@ -739,7 +759,7 @@ namespace TripleAGameCreator
                                             {
                                                 if (numLength > 0)
                                                 {
-                                                    int addAmount = Convert.ToInt32(tag1.Substring(numIndex, numLength).Trim());
+                                                    int addAmount = ConvertStringToValidInt32(tag1.Substring(numIndex, numLength).Trim());
                                                     if (addAmount > 0)
                                                         Step2Info.territories[tag2].Units.Add(new Unit() { Name = cur2.Name.ToString(), cost = new Cost() { cost = cur2.cost.cost, ResourceType = cur2.cost.ResourceType, result = new Result() { BuyQuantity = addAmount, ResourceOrUnitName = cur2.Name } }, attachment = cur2.attachment, unitOwner = new Player() { Name = cur.AccessibleName != null ? cur.AccessibleName : "" } });
                                                 }
@@ -748,7 +768,7 @@ namespace TripleAGameCreator
                                                     try
                                                     {
                                                         numLength = tag1.Substring(numIndex).Length;
-                                                        int addAmount = Convert.ToInt32(tag.Substring(numIndex, numLength).Trim());
+                                                        int addAmount = ConvertStringToValidInt32(tag.Substring(numIndex, numLength).Trim());
                                                         Unit unitTA = new Unit() { Name = cur2.Name.ToString(), cost = new Cost() { cost = cur2.cost.cost, ResourceType = cur2.cost.ResourceType, result = new Result() { BuyQuantity = addAmount, ResourceOrUnitName = cur2.Name } }, attachment = cur2.attachment, unitOwner = new Player() { Name = cur.AccessibleName != null ? cur.AccessibleName : "" } };
                                                         for (int i = 0; i < addAmount; i++)
                                                         {
@@ -794,11 +814,11 @@ namespace TripleAGameCreator
                                     }
                                     else if (minN == -1)
                                     {
-                                        minN = Convert.ToInt32(cur.Text);
+                                        minN = ConvertStringToValidInt32(cur.Text);
                                     }
                                     else
                                     {
-                                        Step15Info.Settings.Add(toAddName, new Setting() { Name = toAddName, Editable = (bool)editable, Value = value, IntMin = minN, IntMax = Convert.ToInt32(cur.Text) });
+                                        Step15Info.Settings.Add(toAddName, new Setting() { Name = toAddName, Editable = (bool)editable, Value = value, IntMin = minN, IntMax = ConvertStringToValidInt32(cur.Text) });
                                         toAddName = "";
                                         value = "";
                                         editable = null;
@@ -824,7 +844,7 @@ namespace TripleAGameCreator
                                 if (!Step2Info.territories.ContainsKey(name))
                                 {
                                     String sPoint = cur.Substring(cur.IndexOf('(') + 1, cur.LastIndexOf(")") - (cur.IndexOf("(") + 1));
-                                    Point point = new Point(Convert.ToInt32(sPoint.Substring(0, sPoint.IndexOf(","))), Convert.ToInt32(sPoint.Substring(sPoint.IndexOf(",") + 1, sPoint.Length - sPoint.IndexOf(",") - 1)));
+                                    Point point = new Point(ConvertStringToValidInt32(sPoint.Substring(0, sPoint.IndexOf(","))), ConvertStringToValidInt32(sPoint.Substring(sPoint.IndexOf(",") + 1, sPoint.Length - sPoint.IndexOf(",") - 1)));
                                     labels.Add(new Label() { Text = name.Trim(), BackColor = Step1Info.WaterTerritoryFilter.Trim().Length > 0 && name.Contains(Step1Info.WaterTerritoryFilter) ? Color.DodgerBlue : Color.LightGreen, Font = new Font(label1.Font, FontStyle.Bold), Location = new Point(point.X - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(name, new Font(label1.Font, FontStyle.Bold)).Width / 2), point.Y) });
                                 }
                             }
@@ -1128,7 +1148,7 @@ namespace TripleAGameCreator
                                     l = new Label() { Text = cur.Owner.Name, Tag = cur.Name, Font = cur.Label.Font, AutoSize = true, Location = cur.Label.Location };
                                     l.BackColor = GetOwnershipColor(cur.Owner);
                                 }
-                                l.Location = new Point((l.Location.X + ((int)(l.Size.Width / 2))) - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(l.Text, l.Font).Width / 2), l.Location.Y);
+                                l.Location = new Point((int)((l.Location.X + (l.Size.Width / 2)) - (Graphics.FromImage(new Bitmap(1, 1)).MeasureString(l.Text, l.Font).Width / 2)), l.Location.Y);
                                 l.Name = cur.Name;
                                 l.MouseClick += new MouseEventHandler(l_MouseClick);
                                 TerritoryOwnershipImageDrawer.Controls.Add(l);
@@ -1269,7 +1289,7 @@ namespace TripleAGameCreator
         }
         void c5_Click(object sender, EventArgs e)
         {
-            tabControl2.TabPages[tabControl2.SelectedIndex].Tag = Convert.ToInt32(tabControl2.TabPages[tabControl2.SelectedIndex].Tag) + 25;
+            tabControl2.TabPages[tabControl2.SelectedIndex].Tag = ConvertStringToValidInt32((string)tabControl2.TabPages[tabControl2.SelectedIndex].Tag) + 25;
             int change6 = (int)tabControl2.TabPages[tabControl2.SelectedIndex].Tag;
             Button remove = new Button();
             Button add = new Button();
@@ -1302,7 +1322,7 @@ namespace TripleAGameCreator
             int change6 = (int)tabControl2.TabPages[tabControl2.SelectedIndex].Tag;
             if (change6 > -25)
             {
-                tabControl2.TabPages[tabControl2.SelectedIndex].Tag = Convert.ToInt32(tabControl2.TabPages[tabControl2.SelectedIndex].Tag) - 25;
+                tabControl2.TabPages[tabControl2.SelectedIndex].Tag = ConvertStringToValidInt32((string)tabControl2.TabPages[tabControl2.SelectedIndex].Tag) - 25;
                 Button remove = new Button();
                 Button add = new Button();
                 int buttonindex = 0;
@@ -1329,7 +1349,7 @@ namespace TripleAGameCreator
         }
         void c7_Click(object sender, EventArgs e)
         {
-            tabControl3.TabPages[tabControl3.SelectedIndex].Tag = Convert.ToInt32(tabControl3.TabPages[tabControl3.SelectedIndex].Tag) + 25;
+            tabControl3.TabPages[tabControl3.SelectedIndex].Tag = ConvertStringToValidInt32((string)tabControl3.TabPages[tabControl3.SelectedIndex].Tag) + 25;
             int change6 = (int)tabControl3.TabPages[tabControl3.SelectedIndex].Tag;
             Button remove = new Button();
             Button add = new Button();
@@ -1361,7 +1381,7 @@ namespace TripleAGameCreator
             int change6 = (int)tabControl3.TabPages[tabControl3.SelectedIndex].Tag;
             if (change6 > 0)
             {
-                tabControl3.TabPages[tabControl3.SelectedIndex].Tag = Convert.ToInt32(tabControl3.TabPages[tabControl3.SelectedIndex].Tag) - 25;
+                tabControl3.TabPages[tabControl3.SelectedIndex].Tag = ConvertStringToValidInt32((string)tabControl3.TabPages[tabControl3.SelectedIndex].Tag) - 25;
                 Button remove = new Button();
                 Button add = new Button();
                 int buttonindex = 0;
@@ -1470,6 +1490,7 @@ namespace TripleAGameCreator
                                 Connection cur = ToRemove[i];
                                 Step3Info.connections.Remove(cur.t1.Name + "|" + cur.t2.Name);
                             }
+                            label21.Text = String.Concat("Territory Connections (", Step3Info.connections.Count, ")");
                         }
                     }
                 }
@@ -1490,6 +1511,7 @@ namespace TripleAGameCreator
                             if (L1.Text != L2.Text && !Step3Info.connections.ContainsKey(L1.Text + "|" + L2.Text))
                             {
                                 Step3Info.connections.Add(L1.Text + "|" + L2.Text, new Connection() { t1 = Step2Info.territories[L1.Text], t2 = Step2Info.territories[L2.Text] });
+                                label21.Text = String.Concat("Territory Connections (", Step3Info.connections.Count, ")");
                                 Graphics grphx = Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage);
                                 grphx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                                 grphx.DrawLine(new Pen(Color.Red, 1), L1.Location + new Size(L1.Size.Width / 2, 0), L2.Location + new Size(L2.Size.Width / 2, 0));
@@ -1514,6 +1536,7 @@ namespace TripleAGameCreator
                             Connection cur = ToRemove[i];
                             Step3Info.connections.Remove(cur.t1.Name + "|" + cur.t2.Name);
                         }
+                        label21.Text = String.Concat("Territory Connections (", Step3Info.connections.Count, ")");
                         Graphics grphx = Graphics.FromImage(TerritoryConnectionsImageDrawer.BackgroundImage);
                         grphx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                         foreach (Connection cur in Step3Info.connections.Values)
@@ -1528,12 +1551,12 @@ namespace TripleAGameCreator
                     if (e.Button == MouseButtons.Left)
                     {
                         String s;
-                        s = RetrieveString("Enter territory " + l.Tag.ToString() + "'s production amount.", Convert.ToInt32(l.Text)).Trim();
+                        s = RetrieveString("Enter territory " + l.Tag.ToString() + "'s production amount.", ConvertStringToValidInt32(l.Text)).Trim();
                         if (s.Length > 0)
                         {
                             try
                             {
-                                int i = Convert.ToInt32(s);
+                                int i = ConvertStringToValidInt32(s);
                                 l.Text = s;
                             }
                             catch (Exception ex) { MessageBox.Show("The value you entered is not a valid integer. Please enter another value.", "Invalid Value"); }
@@ -1641,7 +1664,7 @@ namespace TripleAGameCreator
                         String s = RetrieveString("Enter territory " + l.Tag + "'s new owner.", l.Text, getPlayersWithNeutral()).Trim();
                         if (s.Length > 0)
                         {
-                            l.Location = new Point((l.Location.X + ((int)(l.Size.Width / 2))) - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(s, l.Font).Width / 2), l.Location.Y);
+                            l.Location = new Point((int)((l.Location.X + (l.Size.Width / 2)) - (Graphics.FromImage(new Bitmap(1, 1)).MeasureString(s, l.Font).Width / 2)), l.Location.Y);
                             l.BackColor = GetOwnershipColor(s);
                             l.Text = s;
                         }
@@ -1659,6 +1682,7 @@ namespace TripleAGameCreator
                         //}
                         //catch { }
                         String s = ShowUnitAddingWindowAndRetrieveTerritorysUnits(Step2Info.territories[l.Name], l.Tag.ToString().Length > 0 ? l.Tag.ToString().Substring(0, l.Tag.ToString().IndexOf("|")) : "").Trim();
+                        s = ValidateUnits(s);
                         if (s.Trim().Length > 0)
                         {
                             string s2 = "";
@@ -1689,6 +1713,39 @@ namespace TripleAGameCreator
             catch (Exception ex) { exceptionViewerWindow.ShowInformationAboutException(ex, true); }
         }
 
+        private string ValidateUnits(string s)
+        {
+            StringBuilder builder = new StringBuilder();
+            int index = 0;
+            while (index < s.Length)
+            {
+                string cur = s.Substring(index);
+                if (!cur.Contains(","))
+                    cur = cur + ",";
+
+                if (cur.Contains(":"))
+                {
+                    int num = ConvertStringToValidInt32(cur.Substring(cur.IndexOf(":") + 1, cur.IndexOf(",") - 1 - cur.IndexOf(":")));
+                    if (num > 0)
+                    {
+                        if (num <= 1000)
+                            builder.Append(cur.Substring(0, cur.IndexOf(":") + 1) + num.ToString() + ",");
+                        else
+                            builder.Append(cur.Substring(0, cur.IndexOf(":") + 1) + "1000" + ",");
+                    }
+                    else
+                        builder.Append(cur.Substring(0, cur.IndexOf(":") + 1) + "0" + ",");
+                    index += cur.IndexOf(",") + 1;
+                }
+                else
+                    break;
+            }
+            if (builder.ToString().Trim().EndsWith(",") && builder.ToString().Length > 1)
+                return builder.ToString().Trim().Substring(0, builder.ToString().Trim().Length - 1);
+            else
+                return builder.ToString().Trim();
+        }
+
         private int CountUnits(string s)
         {
             int result = 0;
@@ -1696,14 +1753,14 @@ namespace TripleAGameCreator
             while (index < s.Length)
             {
                 string cur = s.Substring(index);
+                if (!cur.Contains(","))
+                    cur = cur + ",";
+
                 if (cur.Contains(":"))
                 {
-                    string numAndAfter = cur.Substring(cur.IndexOf(":") + 1);
-                    if (numAndAfter.Contains(","))
-                        result += Convert.ToInt32(numAndAfter.Substring(0, numAndAfter.IndexOf(",")).Trim());
-                    else
-                        result += Convert.ToInt32(numAndAfter.Trim());
-                    index += cur.IndexOf(":") + 1;
+                    string numT = cur.Substring(cur.IndexOf(":") + 1, cur.IndexOf(",") - 1 - cur.IndexOf(":"));
+                    result += ConvertStringToValidInt32(numT);
+                    index += cur.Substring(0, cur.IndexOf(",") + 1).Length;
                 }
                 else
                     break;
@@ -1752,9 +1809,12 @@ namespace TripleAGameCreator
         }
         public String ShowUnitAddingWindowAndRetrieveTerritorysUnits(Territory territory,string currentUnitsString)
         {
-            unitAddingWindow.Close();
-            unitAddingWindow.Dispose();
-            unitAddingWindow = new UnitAddingWindow();
+            if (unitAddingWindow.IsDisposed)
+            {
+                unitAddingWindow.Close();
+                unitAddingWindow.Dispose();
+                unitAddingWindow = new UnitAddingWindow();
+            }
             return unitAddingWindow.RetrieveUnitsString(territory,currentUnitsString);
         }
         StringRetriever sretriever = new StringRetriever();
@@ -1779,11 +1839,14 @@ namespace TripleAGameCreator
             sretriever.parent = this;
             return sretriever.RetrieveString(labelString,numberToDisplay);
         }
-        Size origSize;
+        bool m_finishedInit = false;
+        Size origSize = new Size(771, 445);
         private void Form1_Resize(object sender, EventArgs e)
         {
-            Size change = new Size(Size.Width - origSize.Width, Size.Height - origSize.Height);
+            if (!m_finishedInit)
+                return;
 
+            Size change = new Size(Size.Width - origSize.Width, Size.Height - origSize.Height);
 
             mainTabControl.Size = ((Size)mainTabControl.Tag); mainTabControl.Size += change;
             panel2.Location = ((Point)panel2.Tag); panel2.Location += new Size(change.Width / 2,change.Height);
@@ -1837,7 +1900,7 @@ namespace TripleAGameCreator
         {
             if (stepIndex == 1)
             {
-                MessageBox.Show("Map Name: The map name that is displayed in the New Game window in TripleA. Examples: Revised, Classic, Big World, and Great War\r\n\r\nMap Version: The version of the map's xml file. Examples: 0.0.1, 1.0.0.1, and 1.1\r\n\r\nResource Name: The name of the resource used in the map. Resources can be thought of as buying tokens or currency used to buy units, technology, etc. The current version of TripleA will only work with PUs. \r\n\r\nMap Image Location: The location of the map image. Example: C:/My Maps/Sleeping Giant/full_map.png\r\n\r\nMap Centers File: The location of the centers file produced by the 'Center Picker' program. The centers file is used to automatically add the map's territories. Example: C:/My Maps/Sleeping Giant/centers.txt\r\n\r\nWater Territory Filter: An optional setting that makes the program automatically apply the 'Is Water' property to every territory that contains the filter text. Examples: SZ, Sea Zone, Pacific, and Atlantic.", "Help For Current Step");
+                MessageBox.Show("Map Name: The map name that is displayed in the New Game window in TripleA. Examples: Revised, Classic, Big World, and Great War\r\n\r\nMap Version: The version of the map's xml file. Examples: 0.0.1, 1.0.0.1, and 1.1\r\n\r\nResource Name: The name of the resource used in the map. Resources can be thought of as buying tokens or currency used to buy units, technology, etc. 'IPCs' have recently been replaced by 'PUs'. 'IPCs' will no longer work as the map resource. \r\n\r\nMap Image Location: The location of the map image. Example: C:/My Maps/Sleeping Giant/full_map.png\r\n\r\nMap Centers File: The location of the centers file produced by the 'Center Picker' program. The centers file is used to automatically add the map's territories. Example: C:/My Maps/Sleeping Giant/centers.txt\r\n\r\nWater Territory Filter: An optional setting that makes the program automatically apply the 'Is Water' property to every territory that contains the filter text. Examples: SZ, Sea Zone, Pacific, and Atlantic.", "Help For Current Step");
             }
             else if (stepIndex == 2)
             {
@@ -2170,7 +2233,7 @@ namespace TripleAGameCreator
                             {
                                 try
                                 {
-                                    if (Convert.ToInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > Convert.ToInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
+                                    if (ConvertStringToValidInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > ConvertStringToValidInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
                                         newestTripleAVersion = cur;
                                 }
                                 catch { }
@@ -2240,7 +2303,7 @@ namespace TripleAGameCreator
                             {
                                 try
                                 {
-                                    if (Convert.ToInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > Convert.ToInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
+                                    if (ConvertStringToValidInt32(cur.Name.Substring(cur.Name.IndexOf("_")).Replace("_", "")) > ConvertStringToValidInt32(newestTripleAVersion.Name.Substring(newestTripleAVersion.Name.IndexOf("_")).Replace("_", "")) && File.Exists(cur.FullName + "/bin/triplea.jar"))
                                         newestTripleAVersion = cur;
                                 }
                                 catch { }
@@ -2288,7 +2351,7 @@ namespace TripleAGameCreator
                             {
                                 String name = centerText.Substring(0, centerText.IndexOf('('));
                                 String sPoint = centerText.Substring(centerText.IndexOf('(') + 1, centerText.LastIndexOf(")") - (centerText.IndexOf("(") + 1)).Trim();
-                                Point point = new Point(Convert.ToInt32(sPoint.Substring(0, sPoint.IndexOf(","))), Convert.ToInt32(sPoint.Substring(sPoint.IndexOf(",") + 1, sPoint.Length - sPoint.IndexOf(",") - 1)));
+                                Point point = new Point(ConvertStringToValidInt32(sPoint.Substring(0, sPoint.IndexOf(","))), ConvertStringToValidInt32(sPoint.Substring(sPoint.IndexOf(",") + 1, sPoint.Length - sPoint.IndexOf(",") - 1)));
                                 labels.Add(new Label() { Text = name.Trim(), BackColor = textBox8.Text.Trim().Length > 0 && name.Contains(textBox8.Text) ? Color.DodgerBlue : Color.LightGreen, Font = new Font(label1.Font, FontStyle.Bold), Location = new Point(point.X - (int)(Graphics.FromImage(new Bitmap(1, 1)).MeasureString(name, new Font(label1.Font, FontStyle.Bold)).Width / 2), point.Y) });
                             }
                             centersTextRem = centersTextRem.Remove(0,centerText.Length);
@@ -2442,7 +2505,7 @@ namespace TripleAGameCreator
                                         if (productionRuleUnitName_TA != "ignore")
                                         {
                                             string numTP = attributes["quantity"];
-                                            tunits[productionRuleUnitName_TA.ToLower()].cost.cost = Convert.ToInt32(numTP);
+                                            tunits[productionRuleUnitName_TA.ToLower()].cost.cost = ConvertStringToValidInt32(numTP);
                                         }
                                     }
                                     else if (name == "result" && attributes.ContainsKey("resourceOrUnit"))
@@ -2450,7 +2513,7 @@ namespace TripleAGameCreator
                                         if (productionRuleUnitName_TA != "ignore")
                                         {
                                             tunits[productionRuleUnitName_TA.ToLower()].cost.result.ResourceOrUnitName = productionRuleUnitName_TA;
-                                            tunits[productionRuleUnitName_TA.ToLower()].cost.result.BuyQuantity = Convert.ToInt32(attributes["quantity"]);
+                                            tunits[productionRuleUnitName_TA.ToLower()].cost.result.BuyQuantity = ConvertStringToValidInt32(attributes["quantity"]);
                                         }
                                     }
                                     else if (name == "attatchment" && attributes.ContainsKey("name") && attributes["name"] == "unitAttatchment")
@@ -2464,7 +2527,7 @@ namespace TripleAGameCreator
                                     else if (name == "resourceGiven" && attributes.ContainsKey("player"))
                                     {
                                         string num = attributes["quantity"];
-                                        tplayers[attributes["player"]].InitialResources = Convert.ToInt32(num);
+                                        tplayers[attributes["player"]].InitialResources = ConvertStringToValidInt32(num);
                                         AddPlayer(tplayers[attributes["player"]].Name, tplayers[attributes["player"]].Alliance, tplayers[attributes["player"]].InitialResources.ToString());
                                     }
                                     else if (name == "delegate" && attributes.ContainsKey("name") && !(attributes["name"].ToLower().Contains("init") || attributes["name"].ToLower().Contains("endround")))
@@ -2509,7 +2572,7 @@ namespace TripleAGameCreator
                                     }
                                     else if (name == "option" && attributes.ContainsKey("name") && attributes["name"] == "production")
                                     {
-                                        Step2Info.territories[tTName].Production = Convert.ToInt32(attributes["value"]);
+                                        Step2Info.territories[tTName].Production = ConvertStringToValidInt32(attributes["value"]);
                                     }
                                     else if (name == "option" && attributes.ContainsKey("name") && attributes["name"] == "capital")
                                     {
@@ -2583,7 +2646,7 @@ namespace TripleAGameCreator
                                             on = attributes["owner"];
                                         string ut = attributes["unitType"];
                                         string uq = attributes["quantity"];
-                                        int addAmount = Convert.ToInt32(uq);
+                                        int addAmount = ConvertStringToValidInt32(uq);
                                         for (int i = 0; i < addAmount; i++)
                                         {
                                             if (on.Trim().Length > 0)
@@ -2605,8 +2668,8 @@ namespace TripleAGameCreator
                                     }
                                     else if (name == "number" && attributes.ContainsKey("min"))//Current line to fix (Continue To Move Down)
                                     {
-                                        sta.IntMin = Convert.ToInt32(attributes["min"]);
-                                        sta.IntMax = Convert.ToInt32(attributes["max"]);
+                                        sta.IntMin = ConvertStringToValidInt32(attributes["min"]);
+                                        sta.IntMax = ConvertStringToValidInt32(attributes["max"]);
                                     }
                                     else if (name == "property" && attributes["name"].ToLower().Contains("notes") && attributes.ContainsKey("value"))
                                     {
@@ -2667,7 +2730,10 @@ namespace TripleAGameCreator
                 }
             }
             if (!canceled)
+            {
+                label21.Text = String.Concat("Territory Connections (", Step3Info.connections.Count, ")");
                 allowTerritoryRecreation = false;
+            }
             Stop();
         }
         private void ClearAllDataAndControls()
@@ -3153,7 +3219,7 @@ namespace TripleAGameCreator
             panel15.Size += new Size(0, 25);
             button23.Location += new Size(0, 25);
             button24.Location += new Size(0, 25);
-            ComboBox cb1 = new ComboBox() { Size = comboBox5.Size, Location = new Point(comboBox5.Location.X, comboBox5.Location.Y + change6) };
+            ComboBox cb1 = new ComboBox() { Size = comboBox5.Size, Location = new Point(comboBox5.Location.X, comboBox5.Location.Y + change6 - tabPage15.VerticalScroll.Value) };
             cb1.Items.AddRange(getTrueFalseItems());
             TextBox valueTB = new TextBox() { Size = textBox21.Size, Location = new Point(textBox21.Location.X, textBox21.Location.Y + change6 - tabPage15.VerticalScroll.Value) };
             valueTB.TextChanged += new EventHandler(valueTB_TextChanged);
@@ -3166,11 +3232,11 @@ namespace TripleAGameCreator
             TextBox senderTB = (TextBox)sender;
             foreach (Control cur in senderTB.Parent.Controls)
             {
-                if (cur is TextBox && cur.Location.X > senderTB.Location.X && cur.Location.Y == senderTB.Location.Y)
+                if (cur is TextBox && cur.Location.X > textBox21.Location.X && cur.Location.Y == senderTB.Location.Y)
                 {
                     try
                     {
-                        Convert.ToInt32(senderTB.Text);
+                        ConvertStringToValidInt32(senderTB.Text);
                         cur.Enabled = true;
                     }
                     catch
@@ -3599,6 +3665,7 @@ namespace TripleAGameCreator
         {
             if (MessageBox.Show("Are you sure you want to use the Auto-Fill feature? If you do so, the program will remove any information you entered in this step and will then enter information from earlier steps or some of the commonly used choices.", "Confirmation", MessageBoxButtons.YesNoCancel) == DialogResult.Yes)
             {
+                mainTabControl.SelectedTab.AutoScrollPosition = new Point(0, 0);
                 if (mainTabControl.SelectedIndex == 2)
                 {
                     finder.main = this;
@@ -3606,35 +3673,14 @@ namespace TripleAGameCreator
                     {
                         Step1Info.MapImageWL = new Bitmap(Step1Info.MapImage);
                         Step3Info.connections.Clear();
-                        //bool someOfTheTerritoriesDoesntExist = false;
-                        //StringBuilder builder = new StringBuilder();
-                        //Dictionary<string,string> territoriesNotFound = new Dictionary<string,string>();
                         foreach (Automatic_Connection_Finder.Connection cur in finder.connections)
                         {
                             bool t1Found = Step2Info.territories.ContainsKey(cur.t1.name);
                             bool t2Found = Step2Info.territories.ContainsKey(cur.t2.name);
-                            if(t1Found && t2Found && !Step3Info.connections.ContainsKey(cur.t1.name + "|" + cur.t2.name))
-                                Step3Info.connections.Add(String.Concat(cur.t1.name,"|",cur.t2.name), new Connection() { t1 = Step2Info.territories[cur.t1.name], t2 = Step2Info.territories[cur.t2.name] });
-                            /*else
-                            {
-                                someOfTheTerritoriesDoesntExist = true;
-                                if (!t1Found && !territoriesNotFound.ContainsKey(cur.t1.name))
-                                {
-                                    territoriesNotFound.Add(cur.t1.name, cur.t1.name);
-                                    builder.Append(String.Concat(cur.t1.name, ", "));
-                                }
-                                if (!t2Found && !territoriesNotFound.ContainsKey(cur.t2.name))
-                                {
-                                    territoriesNotFound.Add(cur.t2.name, cur.t2.name);
-                                    builder.Append(String.Concat(cur.t2.name, ", "));
-                                }
-                            }*/
+                            if (t1Found && t2Found && !Step3Info.connections.ContainsKey(cur.t1.name + "|" + cur.t2.name))
+                                Step3Info.connections.Add(String.Concat(cur.t1.name, "|", cur.t2.name), new Connection() { t1 = Step2Info.territories[cur.t1.name], t2 = Step2Info.territories[cur.t2.name] });
                         }
-                        /*if (someOfTheTerritoriesDoesntExist)
-                        {
-                            string builtString = builder.ToString();
-                            MessageBox.Show(String.Concat("Some of the territories that were in the polygons file do not exist in the territories that were in the 'Territory Definitions' step. The following is a list of the territories not found here: ",builtString.Remove(builtString.Length - 2,2)), "Missing Territories");
-                        }*/
+                        label21.Text = String.Concat("Territory Connections (", Step3Info.connections.Count, ")");
                         force = true;
                         stopTheRunningOfSendingOutOfInformationOfSteps = true;
                         tabControl1_Selecting(new object(), new TabControlCancelEventArgs(new TabPage(), 0, false, TabControlAction.Selecting));
@@ -3660,17 +3706,17 @@ namespace TripleAGameCreator
                     }
                     change2 = 0;
                     tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "infantry", Location = textBox9.Location, Size = textBox9.Size }, new TextBox() { Text = "3", Location = textBox10.Location, Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location, Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "artillery", Location = textBox9.Location + new Size(0, 25), Size = textBox9.Size }, new TextBox() { Text = "4", Location = textBox10.Location + new Size(0, 25), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 25), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "armour", Location = textBox9.Location + new Size(0, 50), Size = textBox9.Size }, new TextBox() { Text = "5", Location = textBox10.Location + new Size(0, 50), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 50), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "fighter", Location = textBox9.Location + new Size(0, 75), Size = textBox9.Size }, new TextBox() { Text = "10", Location = textBox10.Location + new Size(0, 75), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 75), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "bomber", Location = textBox9.Location + new Size(0, 100), Size = textBox9.Size }, new TextBox() { Text = "15", Location = textBox10.Location + new Size(0, 100), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 100), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "transport", Location = textBox9.Location + new Size(0, 125), Size = textBox9.Size }, new TextBox() { Text = "8", Location = textBox10.Location + new Size(0, 125), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 125), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "carrier", Location = textBox9.Location + new Size(0, 150), Size = textBox9.Size }, new TextBox() { Text = "16", Location = textBox10.Location + new Size(0, 150), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 150), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "destroyer", Location = textBox9.Location + new Size(0, 175), Size = textBox9.Size }, new TextBox() { Text = "12", Location = textBox10.Location + new Size(0, 175), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 175), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "battleship", Location = textBox9.Location + new Size(0, 200), Size = textBox9.Size }, new TextBox() { Text = "24", Location = textBox10.Location + new Size(0, 200), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 200), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "submarine", Location = textBox9.Location + new Size(0, 225), Size = textBox9.Size }, new TextBox() { Text = "8", Location = textBox10.Location + new Size(0, 225), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 225), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "factory", Location = textBox9.Location + new Size(0, 250), Size = textBox9.Size }, new TextBox() { Text = "15", Location = textBox10.Location + new Size(0, 250), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 250), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "aaGun", Location = textBox9.Location + new Size(0, 275), Size = textBox9.Size }, new TextBox() { Text = "5", Location = textBox10.Location + new Size(0, 275), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 275), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "armour", Location = textBox9.Location + new Size(0, 25), Size = textBox9.Size }, new TextBox() { Text = "5", Location = textBox10.Location + new Size(0, 25), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 25), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "fighter", Location = textBox9.Location + new Size(0, 50), Size = textBox9.Size }, new TextBox() { Text = "10", Location = textBox10.Location + new Size(0, 50), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 50), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "bomber", Location = textBox9.Location + new Size(0, 75), Size = textBox9.Size }, new TextBox() { Text = "12", Location = textBox10.Location + new Size(0, 75), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 75), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "transport", Location = textBox9.Location + new Size(0, 100), Size = textBox9.Size }, new TextBox() { Text = "7", Location = textBox10.Location + new Size(0, 100), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 100), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "battleship", Location = textBox9.Location + new Size(0, 125), Size = textBox9.Size }, new TextBox() { Text = "20", Location = textBox10.Location + new Size(0, 125), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 125), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "carrier", Location = textBox9.Location + new Size(0, 150), Size = textBox9.Size }, new TextBox() { Text = "14", Location = textBox10.Location + new Size(0, 150), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 150), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "submarine", Location = textBox9.Location + new Size(0, 175), Size = textBox9.Size }, new TextBox() { Text = "6", Location = textBox10.Location + new Size(0, 175), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 175), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "factory", Location = textBox9.Location + new Size(0, 200), Size = textBox9.Size }, new TextBox() { Text = "15", Location = textBox10.Location + new Size(0, 200), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 200), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "aaGun", Location = textBox9.Location + new Size(0, 225), Size = textBox9.Size }, new TextBox() { Text = "5", Location = textBox10.Location + new Size(0, 225), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 225), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "artillery", Location = textBox9.Location + new Size(0, 250), Size = textBox9.Size }, new TextBox() { Text = "4", Location = textBox10.Location + new Size(0, 250), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 250), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "destroyer", Location = textBox9.Location + new Size(0, 275), Size = textBox9.Size }, new TextBox() { Text = "8", Location = textBox10.Location + new Size(0, 275), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 275), Size = textBox11.Size } });
                     change2 += 275;
                     button9.Location = new Point(456, 52 + 275);
                     button10.Location = new Point(102, 82 + 275);
@@ -3845,36 +3891,74 @@ namespace TripleAGameCreator
                         tabPage8.Controls.Remove(toDelete[i]);
                     }
                     int ch = 0;
-                    object[] units = getUnits();
+                    object[] players = getPlayers();
                     foreach (Player cur in Step4Info.players.Values)
                     {
                         ComboBox cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
                         ComboBox cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
-                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "heavyBomber", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
-                        ch += 25;
-                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
-                        cb1.Items.AddRange(units);
-                        cb2.Items.AddRange(getTrueFalseItems());
-                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "jetPower", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
-                        ch += 25;
-                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
-                        cb1.Items.AddRange(units);
+                        cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "superSub", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
                         cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
-                        cb1.Items.AddRange(units);
+                        cb1.Items.AddRange(players);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "jetPower", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
+                        ch += 25;
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(players);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "aARadar", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
+                        ch += 25;
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(players);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "longRangeAir", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
+                        ch += 25;
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(players);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "heavyBomber", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
+                        ch += 25;
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(players);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "improvedArtillerySupport", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
+                        ch += 25;
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "rocket", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
                         cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
-                        cb1.Items.AddRange(units);
+                        cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
-                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "longRangeAir", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "paratroopers", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
+                        ch += 25;
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(players);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "increasedFactoryProduction", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
+                        ch += 25;
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(players);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "warBonds", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
+                        ch += 25;
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(players);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "mechanizedInfantry", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                     }
                     change5 = ch - 25;
@@ -3962,6 +4046,8 @@ namespace TripleAGameCreator
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "artillerySupportable", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isInfantry", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
                         }
                         else if (cur.Text.ToLower().Contains("artillery"))
                         {
@@ -4014,6 +4100,8 @@ namespace TripleAGameCreator
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isAir", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "transportCapacity", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "2", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
                         }
                         else if (cur.Text.ToLower().Contains("transport"))
                         {
@@ -4021,7 +4109,7 @@ namespace TripleAGameCreator
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "attack", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "0", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
-                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "defense", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "1", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "defense", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "0", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "transportCapacity", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "5", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
@@ -4043,6 +4131,21 @@ namespace TripleAGameCreator
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isTwoHit", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
                         }
+                        else if (cur.Text.ToLower().Contains("cruiser"))
+                        {
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "movement", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "2", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "attack", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "3", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "defense", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "3", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "canBombard", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isSea", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isTwoHit", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "false", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
+                        }
                         else if (cur.Text.ToLower().Contains("destroyer"))
                         {
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "movement", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "2", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
@@ -4062,7 +4165,7 @@ namespace TripleAGameCreator
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "attack", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "1", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
-                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "defense", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "3", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "defense", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "2", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isSea", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
@@ -4075,7 +4178,7 @@ namespace TripleAGameCreator
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "attack", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "2", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
-                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "defense", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "2", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "defense", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "1", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isSea", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
@@ -4118,32 +4221,246 @@ namespace TripleAGameCreator
                     int ch = 0;
                     ComboBox cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Honorable Surrender", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
 
+                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Low Luck", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
 
-                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Heavy Bomber Dice Rolls", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "2", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "10", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
-                    ch += 25;
                     cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
-                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Always on AA", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Tech Development", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
+
                     cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
-                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Battleships repair at end of round", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "LHTR Heavy Bombers", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
+
                     cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
-                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Territory Turn Limit", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Heavy Bomber Dice Rolls", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "2", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "2", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "3", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
+
                     cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
-                    tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = "Low Luck", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Always on AA", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
+
                     cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Kamikaze Airplanes", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Battleships repair at end of round", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Display Sea Names", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "WW2V3", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "WW2V3 Tech Model", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "All Rockets Attack", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Rockets Can Fly Over Impassables", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Blitz Through Factories And AA Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Roll AA Individually", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Choose AA Casualties", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "AA Territory Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Multiple AA Per Territory", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Random AA Casualties", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Partial Amphibious Retreat", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Shore Bombard Per Ground Unit Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Naval Bombard Casualties Return Fire Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Hari-Kari Units", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Allied Air Dependents", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Surviving Air Move To Land", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Air Attack Sub Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Ignore Transport In Movement", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Transport Casualties Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Unescorted Transport Dies", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Ignore Sub In Movement", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Defending Subs Sneak Attack", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Sub Retreat Before Battle", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Submersible Subs", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Sub Control Sea Zone Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Two hit battleship", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Produce fighters on carriers", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Produce new fighters on old carriers", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Move existing fighters to new carriers", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Unit Placement In Enemy Seas", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Territory Turn Limit", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "maxFactoriesPerTerritory", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "1", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Placement Restricted By Factory", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    /*cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "SBR Affects Unit Production", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;*/
+                    //Causes Problems In Game Because Factory Hit Rules Are Currently Incompatible With The Map Creator
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "neutralCharge", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "9999999", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Neutrals Are Impassable", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Neutrals Are Blitzable", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
                     foreach (Player cur in Step4Info.players.Values)
                     {
-                        tabPage15.Controls.AddRange(new Control[] { new TextBox() { Text = cur.Name + " bid", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }, new TextBox() { Text = "0", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size }, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                        tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = cur.Name + " bid", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "0", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size }, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "1000", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                         ch += 25;
+                    }
+                    foreach (Control cur in tabPage15.Controls)
+                    {
+                        if (cur is TextBox && cur.Location.X == textBox21.Location.X)
+                        {
+                            valueTB_TextChanged(cur, new EventArgs());
+                        }
                     }
                     change6 = ch - 25;
                     button23.Location = new Point(494, (52 + ch) - 25);
@@ -4152,6 +4469,11 @@ namespace TripleAGameCreator
                     panel16.Size = new Size(5, (36 + ch) - 25);
                 }
             }
+        }
+        public TextBox AplEvnt(TextBox txtbox)
+        {
+            txtbox.TextChanged += new EventHandler(valueTB_TextChanged);
+            return txtbox;
         }
         public string Cap(string s)
         {
@@ -4201,6 +4523,24 @@ namespace TripleAGameCreator
         private void autoFillInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             v_autoFillButton.PerformClick();
+        }
+
+        private void mainTabControl_Resize(object sender, EventArgs e)
+        {
+            ResizeTitleLabel();
+        }
+
+        private void ResizeTitleLabel()
+        {
+            foreach (Control control in mainTabControl.SelectedTab.Controls)
+            {
+                if (control is Label && control.Tag != null && control.Tag is string && control.Tag.ToString() == "title")
+                {
+                    control.Location = new Point(20, 5 + mainTabControl.SelectedTab.AutoScrollPosition.Y);
+                    control.Size = new Size(mainTabControl.Size.Width - 52, control.Size.Height);
+                }
+            }
+            mainTabControl.SelectedTab.PerformLayout();
         }
     }
     public class GrabPanel : Panel
