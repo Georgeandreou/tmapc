@@ -4056,9 +4056,9 @@ namespace TripleAGameCreator
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isInfantry", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
-                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isParatroop", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isParatroop", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "false", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
-                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isMechanized", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isMechanized", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "false", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "artillerySupportable", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
