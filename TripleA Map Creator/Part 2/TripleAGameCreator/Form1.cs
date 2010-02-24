@@ -1289,7 +1289,7 @@ namespace TripleAGameCreator
         }
         void c5_Click(object sender, EventArgs e)
         {
-            tabControl2.TabPages[tabControl2.SelectedIndex].Tag = ConvertStringToValidInt32((string)tabControl2.TabPages[tabControl2.SelectedIndex].Tag) + 25;
+            tabControl2.TabPages[tabControl2.SelectedIndex].Tag = ConvertStringToValidInt32(tabControl2.TabPages[tabControl2.SelectedIndex].Tag.ToString()) + 25;
             int change6 = (int)tabControl2.TabPages[tabControl2.SelectedIndex].Tag;
             Button remove = new Button();
             Button add = new Button();
@@ -1322,7 +1322,7 @@ namespace TripleAGameCreator
             int change6 = (int)tabControl2.TabPages[tabControl2.SelectedIndex].Tag;
             if (change6 > -25)
             {
-                tabControl2.TabPages[tabControl2.SelectedIndex].Tag = ConvertStringToValidInt32((string)tabControl2.TabPages[tabControl2.SelectedIndex].Tag) - 25;
+                tabControl2.TabPages[tabControl2.SelectedIndex].Tag = ConvertStringToValidInt32(tabControl2.TabPages[tabControl2.SelectedIndex].Tag.ToString()) - 25;
                 Button remove = new Button();
                 Button add = new Button();
                 int buttonindex = 0;
@@ -1349,7 +1349,7 @@ namespace TripleAGameCreator
         }
         void c7_Click(object sender, EventArgs e)
         {
-            tabControl3.TabPages[tabControl3.SelectedIndex].Tag = ConvertStringToValidInt32((string)tabControl3.TabPages[tabControl3.SelectedIndex].Tag) + 25;
+            tabControl3.TabPages[tabControl3.SelectedIndex].Tag = ConvertStringToValidInt32(tabControl3.TabPages[tabControl3.SelectedIndex].Tag.ToString()) + 25;
             int change6 = (int)tabControl3.TabPages[tabControl3.SelectedIndex].Tag;
             Button remove = new Button();
             Button add = new Button();
@@ -1381,7 +1381,7 @@ namespace TripleAGameCreator
             int change6 = (int)tabControl3.TabPages[tabControl3.SelectedIndex].Tag;
             if (change6 > 0)
             {
-                tabControl3.TabPages[tabControl3.SelectedIndex].Tag = ConvertStringToValidInt32((string)tabControl3.TabPages[tabControl3.SelectedIndex].Tag) - 25;
+                tabControl3.TabPages[tabControl3.SelectedIndex].Tag = ConvertStringToValidInt32(tabControl3.TabPages[tabControl3.SelectedIndex].Tag.ToString()) - 25;
                 Button remove = new Button();
                 Button add = new Button();
                 int buttonindex = 0;
@@ -3067,7 +3067,7 @@ namespace TripleAGameCreator
         }
         public object[] getTrueFalseItems()
         {
-            return new List<string>() { "True", "False" }.ToArray();
+            return new List<string>() { "true", "false" }.ToArray();
         }
         public void AddUnitAttachment(Unit unitWA)
         {
@@ -3208,7 +3208,7 @@ namespace TripleAGameCreator
                 panel16.Size += new Size(0, -25);
                 panel15.Size += new Size(0, -25);
                 button23.Location += new Size(0, -25);
-                button24.Location += new Size(0, -25);//
+                button24.Location += new Size(0, -25);
             }
         }
 
@@ -3323,6 +3323,7 @@ namespace TripleAGameCreator
                 lines.Add("        </map>");
                 lines.Add("        <resourceList>");
                 lines.Add("                <resource name=\"" + Step1Info.ResourceName + "\"/>");
+                lines.Add("                <resource name=\"techTokens\"/>");//Needed for v3 tech system to work
                 lines.Add("        </resourceList>");
                 lines.Add("        <playerList>");
                 lines.Add("                <!-- In turn order -->");
@@ -3714,13 +3715,14 @@ namespace TripleAGameCreator
                     tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "carrier", Location = textBox9.Location + new Size(0, 150), Size = textBox9.Size }, new TextBox() { Text = "14", Location = textBox10.Location + new Size(0, 150), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 150), Size = textBox11.Size } });
                     tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "submarine", Location = textBox9.Location + new Size(0, 175), Size = textBox9.Size }, new TextBox() { Text = "6", Location = textBox10.Location + new Size(0, 175), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 175), Size = textBox11.Size } });
                     tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "factory", Location = textBox9.Location + new Size(0, 200), Size = textBox9.Size }, new TextBox() { Text = "15", Location = textBox10.Location + new Size(0, 200), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 200), Size = textBox11.Size } });
-                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "aaGun", Location = textBox9.Location + new Size(0, 225), Size = textBox9.Size }, new TextBox() { Text = "5", Location = textBox10.Location + new Size(0, 225), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 225), Size = textBox11.Size } });
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "aaGun", Location = textBox9.Location + new Size(0, 225), Size = textBox9.Size }, new TextBox() { Text = "6", Location = textBox10.Location + new Size(0, 225), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 225), Size = textBox11.Size } });
                     tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "artillery", Location = textBox9.Location + new Size(0, 250), Size = textBox9.Size }, new TextBox() { Text = "4", Location = textBox10.Location + new Size(0, 250), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 250), Size = textBox11.Size } });
                     tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "destroyer", Location = textBox9.Location + new Size(0, 275), Size = textBox9.Size }, new TextBox() { Text = "8", Location = textBox10.Location + new Size(0, 275), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 275), Size = textBox11.Size } });
-                    change2 += 275;
-                    button9.Location = new Point(456, 52 + 275);
-                    button10.Location = new Point(102, 82 + 275);
-                    panel6.Size = new Size(5, 36 + 275);
+                    tabPage5.Controls.AddRange(new Control[] { new TextBox() { Text = "cruiser", Location = textBox9.Location + new Size(0, 300), Size = textBox9.Size }, new TextBox() { Text = "12", Location = textBox10.Location + new Size(0, 300), Size = textBox10.Size }, new TextBox() { Text = "1", Location = textBox11.Location + new Size(0, 300), Size = textBox11.Size } });
+                    change2 += 300;
+                    button9.Location = new Point(456, 52 + 300);
+                    button10.Location = new Point(102, 82 + 300);
+                    panel6.Size = new Size(5, 36 + 300);
                 }
                 else if (mainTabControl.SelectedIndex == 5)
                 {
@@ -3895,67 +3897,73 @@ namespace TripleAGameCreator
                     foreach (Player cur in Step4Info.players.Values)
                     {
                         ComboBox cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        ComboBox cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        ComboBox cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "superSub", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "jetPower", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb1.Items.AddRange(players);
+                        cb2.Items.AddRange(getTrueFalseItems());
+                        tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "shipyards", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
+                        ch += 25;
+                        cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "aARadar", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "longRangeAir", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "heavyBomber", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "improvedArtillerySupport", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "rocket", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "paratroopers", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "increasedFactoryProduction", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "warBonds", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
                         ch += 25;
                         cb1 = new ComboBox() { Text = cur.Name, Location = comboBox2.Location + new Size(0, ch), Size = comboBox2.Size };
-                        cb2 = new ComboBox() { Text = "False", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
+                        cb2 = new ComboBox() { Text = "false", Location = comboBox1.Location + new Size(0, ch), Size = comboBox1.Size };
                         cb1.Items.AddRange(players);
                         cb2.Items.AddRange(getTrueFalseItems());
                         tabPage8.Controls.AddRange(new Control[] { new TextBox() { Text = "mechanizedInfantry", Location = textBox16.Location + new Size(0, ch), Size = textBox16.Size }, cb1, cb2 });
@@ -4047,6 +4055,12 @@ namespace TripleAGameCreator
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "artillerySupportable", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isInfantry", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isParatroop", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isMechanized", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            ch += 25;
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "artillerySupportable", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
                         }
                         else if (cur.Text.ToLower().Contains("artillery"))
@@ -4150,9 +4164,9 @@ namespace TripleAGameCreator
                         {
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "movement", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "2", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
-                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "attack", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "3", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "attack", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "2", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
-                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "defense", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "3", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
+                            cur.Controls.AddRange(new Control[] { new TextBox() { Text = "defense", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "2", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
                             cur.Controls.AddRange(new Control[] { new TextBox() { Text = "isSea", Location = comboBox4.Location + new Size(0, ch), Size = comboBox4.Size }, new TextBox() { Text = "true", Location = textBox17.Location + new Size(0, ch), Size = textBox17.Size } });
                             ch += 25;
@@ -4219,240 +4233,254 @@ namespace TripleAGameCreator
                         tabPage15.Controls.Remove(toDelete[i]);
                     } 
                     int ch = 0;
-                    ComboBox cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    ComboBox cb1 = new ComboBox() { Text = "true", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Honorable Surrender", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "true", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Low Luck", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "true", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Tech Development", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "true", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "LHTR Heavy Bombers", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "true", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Heavy Bomber Dice Rolls", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "2", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "2", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "3", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "true", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Always on AA", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "true", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Kamikaze Airplanes", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "true", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
-                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Battleships repair at end of round", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Battleships repair at end of round", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "true", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Display Sea Names", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "WW2V3", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "WW2V3 Tech Model", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Use Shipyards", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "All Rockets Attack", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Rockets Can Fly Over Impassables", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Blitz Through Factories And AA Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Roll AA Individually", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Choose AA Casualties", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "AA Territory Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Multiple AA Per Territory", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Random AA Casualties", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Partial Amphibious Retreat", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Shore Bombard Per Ground Unit Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Naval Bombard Casualties Return Fire Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Hari-Kari Units", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Allied Air Dependents", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Surviving Air Move To Land", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Air Attack Sub Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Ignore Transport In Movement", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Transport Casualties Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Unescorted Transport Dies", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Ignore Sub In Movement", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Defending Subs Sneak Attack", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Sub Retreat Before Battle", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Submersible Subs", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Sub Control Sea Zone Restricted", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Previous Units Fight", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Two hit battleship", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Produce fighters on carriers", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Produce new fighters on old carriers", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Move existing fighters to new carriers", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1.Items.AddRange(getTrueFalseItems());
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Land existing fighters on new carriers", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
+
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Unit Placement In Enemy Seas", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Territory Turn Limit", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "maxFactoriesPerTerritory", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "1", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Placement Restricted By Factory", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    /*cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
-                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "SBR Affects Unit Production", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
-                    ch += 25;*/
-                    //Causes Problems In Game Because Factory Hit Rules Are Currently Incompatible With The Map Creator
+                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "SBR Affects Unit Production", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                    ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "neutralCharge", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "9999999", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Neutrals Are Impassable", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
-                    cb1 = new ComboBox() { Text = "False", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
+                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Neutrals Are Blitzable", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "false", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
                     foreach (Player cur in Step4Info.players.Values)
                     {
-                        tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = cur.Name + " bid", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "0", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, new ComboBox() { Text = "True", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size }, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "1000", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
+                        tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = cur.Name + " bid", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "0", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, new ComboBox() { Text = "true", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size }, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "1000", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                         ch += 25;
                     }
                     foreach (Control cur in tabPage15.Controls)
