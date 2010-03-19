@@ -53,7 +53,7 @@ namespace TripleAGameCreator
             tabControl2.TabPages.Clear();
             tabControl3.TabPages.Clear();
         }
-        private Version usersVersion = new Version(1, 0, 1, 4);
+        private Version usersVersion = new Version(1, 0, 1, 5);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));
@@ -3322,8 +3322,11 @@ namespace TripleAGameCreator
                 }
                 lines.Add("        </map>");
                 lines.Add("        <resourceList>");
+                if (Step1Info.ResourceName != "techTokens")
+                {
+                    lines.Add("                <resource name=\"techTokens\"/>");//Needed for v3 tech system to work
+                }
                 lines.Add("                <resource name=\"" + Step1Info.ResourceName + "\"/>");
-                lines.Add("                <resource name=\"techTokens\"/>");//Needed for v3 tech system to work
                 lines.Add("        </resourceList>");
                 lines.Add("        <playerList>");
                 lines.Add("                <!-- In turn order -->");
@@ -3476,10 +3479,13 @@ namespace TripleAGameCreator
                         lines.Add("			     <option name=\"landTerritories\" value=\"" + lt + "\"/>");
                         lines.Add("			 </attatchment>");
 
-                        lines.Add("			 <attatchment name=\"canalAttatchment" + index + "\" attatchTo=\"" + cur.CanalSeaNeighbors[1].Name + "\" javaClass=\"games.strategy.triplea.attatchments.CanalAttachment\" type=\"territory\">");
-                        lines.Add("			     <option name=\"canalName\" value=\"" + cur.Name + "\"/>");
-                        lines.Add("			     <option name=\"landTerritories\" value=\"" + lt + "\"/>");
-                        lines.Add("			 </attatchment>");
+                        if (cur.CanalSeaNeighbors.Count > 1)
+                        {
+                            lines.Add("			 <attatchment name=\"canalAttatchment" + index + "\" attatchTo=\"" + cur.CanalSeaNeighbors[1].Name + "\" javaClass=\"games.strategy.triplea.attatchments.CanalAttachment\" type=\"territory\">");
+                            lines.Add("			     <option name=\"canalName\" value=\"" + cur.Name + "\"/>");
+                            lines.Add("			     <option name=\"landTerritories\" value=\"" + lt + "\"/>");
+                            lines.Add("			 </attatchment>");
+                        }
                     }
                 }
                 catch (Exception ex) { if (MessageBox.Show("The map was saved successfully, but some or all of the canals were not written because errors occured. Please go back and make sure all the canals are valid. Do you want to view the error message?", "Error Writing Canals", MessageBoxButtons.YesNoCancel) == DialogResult.Yes) { exceptionViewerWindow.ShowInformationAboutException(ex, true); } canalError = true; }
@@ -4326,11 +4332,6 @@ namespace TripleAGameCreator
                     cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
                     cb1.Items.AddRange(getTrueFalseItems());
                     tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Multiple AA Per Territory", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
-                    ch += 25;
-
-                    cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };
-                    cb1.Items.AddRange(getTrueFalseItems());
-                    tabPage15.Controls.AddRange(new Control[] { AplEvnt(new TextBox() { Text = "Random AA Casualties", Location = textBox19.Location + new Size(0, ch), Size = textBox19.Size }), new TextBox() { Text = "true", Location = textBox21.Location + new Size(0, ch), Size = textBox21.Size }, cb1, new TextBox() { Text = "0", Location = textBox20.Location + new Size(0, ch), Size = textBox20.Size }, new TextBox() { Text = "0", Location = textBox22.Location + new Size(0, ch), Size = textBox22.Size } });
                     ch += 25;
 
                     cb1 = new ComboBox() { Text = "false", Location = comboBox5.Location + new Size(0, ch), Size = comboBox5.Size };

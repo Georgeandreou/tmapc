@@ -43,7 +43,7 @@ namespace TripleA_Game_Creator
         }
         bool m_finishedInit = false;
         PerformanceCounter availableMemoryRequester = new PerformanceCounter("Memory", "Available MBytes");
-        private Version usersVersion = new Version(1, 0, 1, 4);
+        private Version usersVersion = new Version(1, 0, 1, 5);
         public void CheckForUpdates()
         {
             Thread t = new Thread(new ThreadStart(update));

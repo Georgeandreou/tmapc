@@ -122,10 +122,10 @@
 
 A. The map's folder contains:
     1. An image of the map in png or gif image format (Read 2nd note...)
-    2. A 'units' folder containing all the extra unit images in png format (Read 3rd note...)
-    3. A 'flags' folder containing all the extra flag images in gif format (Read 3rd note...)
+    2. A 'units' folder containing all the unit images in png format (Read 3rd note...)
+    3. A 'flags' folder containing all the flag images in gif or png format (Read 3rd note...)
 
-Note: The unit images must be saved in png format, the flag images in gif format, and the map image in png or gif format.
+Note: The unit images must be saved in png format, the flag images in png or gif format, and the map image in png or gif format.
 
 Note: When creating the map image, remember that the borders between territories must be completely black, the inside of land territories must be completely white, and the inside of sea territories must be colored.
 
@@ -221,9 +221,6 @@ When a window opens that asks you to select the large image, select the map imag
 When a window opens that asks for the scale, enter the scaling amount for the size of the small map image compared to the large map. For example, if you wanted the small map image displayed in TripleA at the top-right corner to be one-tenth the size if the map, enter .1 in the window. For the small map to be one-fifth the map size you would enter .2, and so on.
 </value>
   </data>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>46</value>
   </metadata>

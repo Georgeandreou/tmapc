@@ -27,7 +27,10 @@ namespace TripleAGameCreator
                 button1.Text = "Cancel";
                 this.Text = "Territory Connection Scanner - Initializing...";
                 isScanningForConnections = true;
-                lineWidth = Convert.ToInt32(numericUpDown1.Text);
+                if (v_performIslandSearching.Checked)
+                    lineWidth = (Convert.ToInt32(numericUpDown1.Text) * 2) - 1;//Lines with widths more than 1 pixel tend to need more polygon enlarging
+                else
+                    lineWidth = Convert.ToInt32(numericUpDown1.Text);
                 hasCanceled = false;
                 numericUpDown1.Enabled = false;
                 v_performIslandSearching.Enabled = false;

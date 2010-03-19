@@ -1,3 +1,15 @@
+Changes for 1.0.1.5
+
+* Fix some of the problems with map canals. (SDW)
+
+* Fix problem with Territory Connection Scanner not working completely with island setting on maps with lines thicker than 1 pixel. (SDW)
+
+* Update the program instructions for player flags. (SDW)
+
+* Remove "Random AA Casualties" from the auto-fill list of game settings. (SDW)
+
+* Fix problem where the map resource name is ruined when the user re-opens the map. (SDW)
+
 Changes for 1.0.1.4
 
 * Update the autofill information to match the v3 rules. (SDW)
