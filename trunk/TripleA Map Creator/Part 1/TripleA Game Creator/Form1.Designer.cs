@@ -88,6 +88,7 @@ namespace TripleA_Game_Creator
             this.button22 = new System.Windows.Forms.Button();
             this.label24 = new System.Windows.Forms.Label();
             this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.button23 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.label28 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -104,7 +105,6 @@ namespace TripleA_Game_Creator
             this.label8 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.label9 = new System.Windows.Forms.Label();
-            this.button23 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -164,7 +164,7 @@ namespace TripleA_Game_Creator
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.button5.Location = new System.Drawing.Point(6, 45);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(569, 386);
+            this.button5.Size = new System.Drawing.Size(569, 384);
             this.button5.TabIndex = 2;
             this.button5.Text = resources.GetString("button5.Text");
             this.button5.TextAlign = System.Drawing.ContentAlignment.TopLeft;
@@ -806,6 +806,16 @@ namespace TripleA_Game_Creator
             this.tabPage10.TabIndex = 9;
             this.tabPage10.Text = "tabPage10";
             // 
+            // button23
+            // 
+            this.button23.Location = new System.Drawing.Point(188, 405);
+            this.button23.Name = "button23";
+            this.button23.Size = new System.Drawing.Size(210, 29);
+            this.button23.TabIndex = 23;
+            this.button23.Text = "Run Part 2";
+            this.button23.UseVisualStyleBackColor = true;
+            this.button23.Click += new System.EventHandler(this.button23_Click);
+            // 
             // button4
             // 
             this.button4.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
@@ -964,16 +974,6 @@ namespace TripleA_Game_Creator
             this.label9.Size = new System.Drawing.Size(138, 14);
             this.label9.TabIndex = 10;
             this.label9.Text = "10: Halfway Finished";
-            // 
-            // button23
-            // 
-            this.button23.Location = new System.Drawing.Point(188, 405);
-            this.button23.Name = "button23";
-            this.button23.Size = new System.Drawing.Size(210, 29);
-            this.button23.TabIndex = 23;
-            this.button23.Text = "Run Part 2";
-            this.button23.UseVisualStyleBackColor = true;
-            this.button23.Click += new System.EventHandler(this.button23_Click);
             // 
             // Form1
             // 
