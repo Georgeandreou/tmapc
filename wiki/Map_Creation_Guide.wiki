@@ -26,7 +26,7 @@ This document is a guide to how to create a map using the map creator.
 
 Note: The players that are included with TripleA do not contain the images for all the different types of units. Any unit that is not included will have to be made manually. The following units are the ones already included with TripleA: aaGun, armour, artillery, battleship, battleship_hit, bomber, bomber_hb, bomber_lr, bomber_lr_hb, carrier, cruiser, destroyer, factory, factory_it, fighter, fighter_jp, fighter_lr, fighter_lr_jp, halftrack, infantry, marine, rockets, s_destroyer, submarine, submarine_ss, and transport.
 
-6. Open the part 1 of the map creator program.
+6. Open part 1 of the map creator program.
 
 7. Make sure that the instructions shown were followed and click the ’Next’ button.
 
