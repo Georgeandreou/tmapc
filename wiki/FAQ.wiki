@@ -1,4 +1,4 @@
-#summary A list of frequently asked questions about the Map Creator.
+#summary A list of frequently asked questions about the map creator.
 
 = Frequently Asked Questions =
 
